@@ -2,18 +2,19 @@ import { Component, inject, NgZone } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { Auth } from '@angular/fire/auth';
+import { DropdownComponent } from './components/ui-components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, DropdownComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'star-ducks';
   protected appInitializing: boolean = true;
-  private readonly authService: AuthService = inject(AuthService);
+  protected readonly authService: AuthService = inject(AuthService);
   private readonly auth: Auth = inject(Auth);
   private readonly ngZone: NgZone = inject(NgZone);
   private readonly router: Router = inject(Router);
