@@ -1,1 +1,50 @@
-<p>login-or-sign-up works!</p>
+<h1>Login or Sign Up</h1>
+
+<form
+  [formGroup]="loginForm"
+  (ngSubmit)="submitLogin()"
+  class="form-section login-form"
+>
+  <h2>Existing User</h2>
+  <input type="email" placeholder="email" formControlName="email" />
+  <input type="password" placeholder="Password" formControlName="password" />
+  <sub>*Passwords must be at least 6 characters long.</sub>
+
+  <div class="button-section">
+    <div class="button">
+      <button mat-button color="primary" (click)="forgotPassword()">
+        I forgot my password
+      </button>
+    </div>
+
+    <div class="button">
+      <button type="submit">Login</button>
+    </div>
+  </div>
+</form>
+
+<form
+  [formGroup]="signUpForm"
+  (ngSubmit)="submitSignUp()"
+  class="form-section sign-up-form"
+>
+  <h2>Create Account</h2>
+  <input type="email" placeholder="email" formControlName="email" />
+  <input type="password" placeholder="Password" formControlName="password" />
+  <sub>*Passwords must be at least 6 characters long.</sub>
+  <input
+    type="text"
+    placeholder="Your username"
+    formControlName="displayName"
+  />
+</form>
+
+@if(error) {
+<p class="error">
+  {{ error }}
+</p>
+} @if (message) {
+<p class="message">
+  {{ message }}
+</p>
+}

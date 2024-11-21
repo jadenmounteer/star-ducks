@@ -61,6 +61,18 @@ export class LoginOrSignUpComponent {
     }
   }
 
+  protected submitSignUp() {
+    if (this.signUpForm.valid) {
+      this.signUp(
+        this.signUpForm.value.email,
+        this.signUpForm.value.password,
+        this.signUpForm.value.displayName
+      );
+    } else {
+      this.error = 'Invalid email or password';
+    }
+  }
+
   protected login(email: string, password: string) {
     this.authService
       .login(email, password)
