@@ -20,11 +20,28 @@ export class DropdownComponent {
   public isOpen = false;
   public selectedItem: string | null = null;
 
-  toggleDropdown() {
+  public ngOnInit(): void {
+    document.addEventListener('click', this.onDocumentClick.bind(this));
+  }
+
+  public ngOnDestroy() {
+    document.removeEventListener('click', this.onDocumentClick.bind(this));
+  }
+
+  private onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const dropdown = document.querySelector('.dropdown'); // Adjust the selector as necessary
+
+    if (dropdown && !dropdown.contains(target)) {
+      this.toggleDropdown();
+    }
+  }
+
+  public toggleDropdown(): void {
     this.isOpen = !this.isOpen;
   }
 
-  selectItem(item: string) {
+  public selectItem(item: string): void {
     this.selectedItem = item;
     this.isOpen = false;
     this.selected.emit(item);
