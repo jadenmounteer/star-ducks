@@ -7,9 +7,13 @@
 }
 
 [dropdown-item]:hover {
-  background-color: #ddd;
+  background-color: $menu-background-color-darker;
 }
 
 [dropdown-button] {
   cursor: pointer;
+}
+
+.dropdown-menu {
+  background-color: $menu-background-color;
 }
