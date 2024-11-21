@@ -1,11 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  input,
-  InputSignal,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-dropdown',
@@ -15,7 +9,6 @@ import {
   styleUrl: './dropdown.component.scss',
 })
 export class DropdownComponent {
-  public items: InputSignal<string[]> = input.required();
   @Output() selected = new EventEmitter<string>();
   public isOpen = false;
   public selectedItem: string | null = null;
@@ -33,7 +26,7 @@ export class DropdownComponent {
     const dropdown = document.querySelector('.dropdown'); // Adjust the selector as necessary
 
     if (dropdown && !dropdown.contains(target)) {
-      this.toggleDropdown();
+      this.isOpen = false;
     }
   }
 
