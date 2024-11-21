@@ -59,6 +59,8 @@ export class AuthService {
     // it also accepts an extra attributes, we will handle later
     return defer(res);
   }
+
+  // Comment this back in if you wish to add login with Google
   // LoginGoogle(): Observable<any> {
   //   const provider = new GoogleAuthProvider(); // from @angular/fire/auth
   //   const res = () => signInWithPopup(this.auth, provider);
