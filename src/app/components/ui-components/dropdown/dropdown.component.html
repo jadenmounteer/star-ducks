@@ -1,18 +1,6 @@
 <div class="dropdown" [class.show]="isOpen">
-  <button
-    class="btn btn-secondary dropdown-toggle"
-    type="button"
-    (click)="toggleDropdown()"
-  >
-    Select an option
-  </button>
+  <ng-content select="[dropdown-button]"></ng-content>
   <div class="dropdown-menu" [class.show]="isOpen">
-    <a
-      class="dropdown-item"
-      *ngFor="let item of items()"
-      (click)="selectItem(item)"
-    >
-      {{ item }}
-    </a>
+    <ng-content select="[dropdown-item]"></ng-content>
   </div>
 </div>

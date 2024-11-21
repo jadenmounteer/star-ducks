@@ -2,12 +2,12 @@ import { Component, inject, NgZone } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { Auth } from '@angular/fire/auth';
-import { DropdownComponent } from './components/ui-components/dropdown/dropdown.component';
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, DropdownComponent],
+  imports: [RouterOutlet, UserMenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
