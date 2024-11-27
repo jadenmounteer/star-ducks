@@ -10,4 +10,8 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class HomeComponent {
   protected authService: AuthService = inject(AuthService);
+
+  protected createNewStarship(): void {
+    // FIXME show a modal asking for the starship name.
+  }
 }
