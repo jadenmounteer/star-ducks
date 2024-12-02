@@ -8,8 +8,12 @@
 
 <!-- Resign service button to change ships -->
 
-<!-- If they are not currently serving on a starship, show create starship button -->
-<button (click)="createNewStarship()">Create Starship</button>
+<div class="host-game-section">
+  <button (click)="createNewStarship()">Host Game</button>
+</div>
 
 <!-- If they are not currently serving on a starship, show join starship button. Join with a code -->
-<input placeholder="Type game code here..." [(ngModel)]="gameCode" />
+<div class="join-game-section">
+  <label>Join Game</label>
+  <input placeholder="Type game code here..." [(ngModel)]="gameCode" />
+</div>
