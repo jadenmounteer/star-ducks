@@ -1,8 +1,9 @@
 import { Role } from './role';
-import { User } from './user';
 
 export interface Officer {
-  userDetails: User;
-  starshipId: string;
+  id: string;
+  userId: string;
+  name: string;
   role: Role;
+  // accessLevel: 'A' | 'B' | 'C';
 }
