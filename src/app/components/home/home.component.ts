@@ -15,7 +15,7 @@ export class HomeComponent {
   protected starDate: string = this.starDateService.getCurrentStarDate();
   protected gameCode = '';
 
-  protected createNewStarship(): void {
-    // FIXME show a modal asking for the starship name.
+  protected createNewGame(): void {
+    // This takes the user to the mission lobby page. That page has the game code and a section to choose a mission.
   }
 }
