@@ -1,27 +1,28 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import {
-  Firestore,
-  doc,
-  setDoc,
-  onSnapshot,
-  deleteDoc,
-} from '@angular/fire/firestore';
+import { inject, Injectable, OnDestroy } from '@angular/core';
+import { Firestore, doc, setDoc, deleteDoc } from '@angular/fire/firestore';
 import { PlayerPresence } from '../../models/player-presence';
+import { PlayerSessionService } from '../player-session/player-session';
 
 /**
- * This service is used to track if a player is online or offline
+ * This service is used to track the player's presence in the game session.
  */
 @Injectable({
   providedIn: 'root',
 })
-export class PlayerPresenceService implements OnDestroy {
+export class PresenceService implements OnDestroy {
   private heartbeatInterval: any;
   private presenceRef: any;
   private readonly OFFLINE_THRESHOLD = 30000; // 30 seconds
 
-  constructor(private firestore: Firestore) {}
+  private playerSessionService: PlayerSessionService =
+    inject(PlayerSessionService);
+  private firestore: Firestore = inject(Firestore);
 
-  async initializePresence(playerId: string, gameSessionId: string) {
+  constructor() {}
+
+  async initializePresence(gameSessionId: string) {
+    const playerId = this.playerSessionService.getPlayerId();
+
     // Create presence document reference
     this.presenceRef = doc(this.firestore, `player-presence/${playerId}`);
 
@@ -35,6 +36,8 @@ export class PlayerPresenceService implements OnDestroy {
     window.addEventListener('beforeunload', () => {
       this.setOffline();
     });
+
+    return playerId;
   }
 
   private async updatePresence(playerId: string, gameSessionId: string) {

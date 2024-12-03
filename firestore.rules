@@ -1,9 +1,24 @@
-rules_version = '2';
-
+rules_version = '3';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+    match /presence/{playerId} {
+      allow read: if true;
+      allow create, update: if 
+        // Ensure required fields exist
+        request.resource.data.keys().hasAll(['playerId', 'gameSessionId', 'lastSeen', 'isOnline']) &&
+        // Ensure playerId in document matches the document ID
+        request.resource.data.playerId == playerId &&
+        // Basic data validation
+        request.resource.data.lastSeen is number &&
+        request.resource.data.isOnline is bool;
+      allow delete: if true;
+    }
+
+    match /game-sessions/{sessionId} {
+      allow read: if true;
+      allow write: if 
+        // Add any game session specific validation rules
+        request.resource.data.keys().hasAll(['playerIds', 'entranceCode', 'createdAt', 'lastActive']);
     }
   }
 }

@@ -19,6 +19,15 @@ export class HomeComponent {
 
   protected createNewGame(): void {
     // This takes the user to the mission lobby page. That page has the game code and a section to choose a mission.
+
+    // TODO We will need to initialize the player presence when the user joins the game.
+    // constructor(private presenceService: PresenceService) {}
+
+    // async joinGame(gameSessionId: string, playerId: string) {
+    //   await this.presenceService.initializePresence(playerId, gameSessionId);
+    //   // ... rest of your join game logic
+    // }
+
     this.gameSessionService.createNewGameSession();
   }
 }
