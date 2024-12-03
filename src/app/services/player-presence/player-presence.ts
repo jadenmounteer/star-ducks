@@ -10,18 +10,42 @@ import { PlayerSessionService } from '../player-session/player-session';
   providedIn: 'root',
 })
 export class PresenceService implements OnDestroy {
+  private firestore: Firestore = inject(Firestore);
+
   private heartbeatInterval: any;
   private presenceRef: any;
   private readonly OFFLINE_THRESHOLD = 30000; // 30 seconds
+  private currentGameSessionId: string | null = null;
 
   private playerSessionService: PlayerSessionService =
     inject(PlayerSessionService);
-  private firestore: Firestore = inject(Firestore);
 
-  constructor() {}
+  constructor() {
+    // Add visibility change listener
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && this.currentGameSessionId) {
+        // Reinitialize presence when returning to the app
+        this.initializePresence(this.currentGameSessionId);
+      } else if (document.visibilityState === 'hidden') {
+        // Clean up when leaving the app
+        this.setOffline();
+        if (this.heartbeatInterval) {
+          clearInterval(this.heartbeatInterval);
+          this.heartbeatInterval = null;
+        }
+      }
+    });
+  }
 
   async initializePresence(gameSessionId: string) {
     const playerId = this.playerSessionService.getPlayerId();
+    this.currentGameSessionId = gameSessionId;
+
+    // Clear any existing heartbeat
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
 
     // Create presence document reference
     this.presenceRef = doc(this.firestore, `player-presence/${playerId}`);
@@ -69,5 +93,15 @@ export class PresenceService implements OnDestroy {
       clearInterval(this.heartbeatInterval);
     }
     this.setOffline();
+  }
+
+  // TODO call this when the player leaves the game session
+  public async leaveGame() {
+    await this.setOffline();
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+      this.heartbeatInterval = null;
+    }
+    this.currentGameSessionId = null;
   }
 }
