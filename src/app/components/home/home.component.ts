@@ -27,6 +27,7 @@ export class HomeComponent {
 
     // Update game session with the host's player ID
     await this.gameSessionService.updateGameSession(gameSessionId, {
+      id: gameSessionId,
       playerIds: [playerId],
       entranceCode: '1234',
       createdAt: Date.now(),
