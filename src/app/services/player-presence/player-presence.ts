@@ -23,7 +23,7 @@ export class PlayerPresenceService implements OnDestroy {
 
   async initializePresence(playerId: string, gameSessionId: string) {
     // Create presence document reference
-    this.presenceRef = doc(this.firestore, `presence/${playerId}`);
+    this.presenceRef = doc(this.firestore, `player-presence/${playerId}`);
 
     // Set initial presence
     await this.updatePresence(playerId, gameSessionId);
