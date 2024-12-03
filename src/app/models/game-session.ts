@@ -1,6 +1,7 @@
 export interface GameSession {
-  //   id: string;
-  // mission:
-  //   playerIDs: string[];
-  //   entranceCode: string;
+  id?: string;
+  playerIds: string[];
+  entranceCode: string;
+  createdAt: number;
+  lastActive: number;
 }
