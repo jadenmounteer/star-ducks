@@ -25,7 +25,10 @@ export class ModalService {
     this.setupModalContainer();
   }
 
-  open<T, R = any>(component: Type<T>): Promise<R> {
+  open<T, R = any>(
+    component: Type<T>,
+    inputs?: Record<string, any>
+  ): Promise<R> {
     return new Promise((resolve) => {
       this.modalClosedResolver = resolve;
       this.setupModalContainer();
@@ -50,6 +53,13 @@ export class ModalService {
         environmentInjector: this.injector,
         hostElement: modalContentElement,
       });
+
+      // Set inputs if provided
+      if (inputs) {
+        Object.entries(inputs).forEach(([key, value]) => {
+          (this.contentComponentRef!.instance as any)[key] = value;
+        });
+      }
 
       // Enable pointer events when modal is shown
       if (this.modalContainer) {

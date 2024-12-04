@@ -13,6 +13,7 @@ import {
   entranceCodeModalComponent,
   entranceCodeModalResult,
 } from '../modals/game-code-modal/game-code-modal.component';
+import { AlertModalComponent } from '../modals/alert-modal/alert-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -88,6 +89,10 @@ export class HomeComponent {
         //   lastActive: Date.now(),
         // });
         // Navigate to game lobby or wherever needed
+      } else {
+        this.modalService.open(AlertModalComponent, {
+          message: 'Game not found',
+        });
       }
     }
   }
