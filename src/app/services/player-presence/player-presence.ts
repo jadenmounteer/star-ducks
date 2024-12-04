@@ -73,7 +73,7 @@ export class PresenceService implements OnDestroy {
   private async updatePresence(
     playerId: string,
     gameSessionId: string,
-    playerName: string = ''
+    playerName: string
   ) {
     const presence: PlayerPresence = {
       playerId,
@@ -89,7 +89,7 @@ export class PresenceService implements OnDestroy {
   private startHeartbeat(playerId: string, gameSessionId: string) {
     // Update presence every 20 seconds
     this.heartbeatInterval = setInterval(() => {
-      this.updatePresence(playerId, gameSessionId);
+      this.updatePresence(playerId, gameSessionId, this.playerName ?? '');
     }, 20000);
   }
 
