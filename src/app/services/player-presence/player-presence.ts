@@ -95,7 +95,11 @@ export class PresenceService implements OnDestroy {
 
   private async setOffline() {
     if (this.presenceRef) {
-      await deleteDoc(this.presenceRef);
+      const presence: Partial<PlayerPresence> = {
+        isOnline: false,
+        lastSeen: Date.now(),
+      };
+      await setDoc(this.presenceRef, presence, { merge: true });
     }
   }
 
