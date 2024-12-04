@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GameCodeModalComponent } from './game-code-modal.component';
+import { entranceCodeModalComponent } from './game-code-modal.component';
 
-describe('GameCodeModalComponent', () => {
-  let component: GameCodeModalComponent;
-  let fixture: ComponentFixture<GameCodeModalComponent>;
+describe('entranceCodeModalComponent', () => {
+  let component: entranceCodeModalComponent;
+  let fixture: ComponentFixture<entranceCodeModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GameCodeModalComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(GameCodeModalComponent);
+      imports: [entranceCodeModalComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(entranceCodeModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,5 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import {
+  doc,
+  Firestore,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from '@angular/fire/firestore';
 import { addDoc, collection } from '@angular/fire/firestore';
 import { GameSession } from '../models/game-session';
 
@@ -38,13 +46,22 @@ export class GameSessionService {
     await setDoc(gameSessionRef, gameSession);
   }
 
-  public async getGameSession(gameSessionId: string): Promise<GameSession> {
-    const gameSessionRef = doc(
-      this.firestore,
-      `game-sessions/${gameSessionId}`
-    );
-    const gameSessionSnapshot = await getDoc(gameSessionRef);
-    return gameSessionSnapshot.data() as GameSession;
+  public async getGameSession(
+    entranceCode: string
+  ): Promise<GameSession | null> {
+    // Get reference to the collection
+    const gamesCollection = collection(this.firestore, 'game-sessions');
+
+    // Query for the document where entranceCode matches
+    const q = query(gamesCollection, where('entranceCode', '==', entranceCode));
+    const querySnapshot = await getDocs(q);
+
+    // Return the first matching document or null if none found
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    return querySnapshot.docs[0].data() as GameSession;
   }
 
   public generateEntranceCode(): string {
