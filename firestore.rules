@@ -1,11 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /presence/{playerId} {
+    match /player-presence/{playerId} {
       allow read: if true;
       allow create, update: if 
         // Ensure required fields exist
-        request.resource.data.keys().hasAll(['playerId', 'gameSessionId', 'lastSeen', 'isOnline']) &&
+        request.resource.data.keys().hasAll(['playerId', 'playerName', 'gameSessionId', 'lastSeen', 'isOnline']) &&
         // Ensure playerId in document matches the document ID
         request.resource.data.playerId == playerId &&
         // Basic data validation

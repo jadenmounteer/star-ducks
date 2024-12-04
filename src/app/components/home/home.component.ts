@@ -34,41 +34,43 @@ export class HomeComponent {
       PlayerNameModalResult
     >(PlayerNameModalComponent);
 
-    console.log(result);
-    // const playerId = await this.presenceService.initializePresence(
-    //   gameSessionId
-    // );
-
-    // // Update game session with the host's player ID
-    // await this.gameSessionService.updateGameSession(gameSessionId, {
-    //   id: gameSessionId,
-    //   playerIds: [playerId],
-    //   entranceCode: '1234',
-    //   createdAt: Date.now(),
-    //   lastActive: Date.now(),
-    // });
-
-    // Navigate to game lobby or wherever needed
-  }
-
-  protected async joinGame(gameCode: string): Promise<void> {
-    // Verify game exists and is joinable
-    const gameSession = await this.gameSessionService.getGameSession(gameCode);
-    if (gameSession && gameSession.id) {
+    if (result && result.playerName) {
       const playerId = await this.presenceService.initializePresence(
-        gameSession.id
+        gameSessionId,
+        result.playerName
       );
 
-      // Add player to game session
-      const updatedPlayerIds = [...gameSession.playerIds, playerId];
-      await this.gameSessionService.updateGameSession(gameSession.id, {
-        playerIds: updatedPlayerIds,
-        entranceCode: gameSession.entranceCode,
-        createdAt: gameSession.createdAt,
+      // Update game session with the host's player ID
+      await this.gameSessionService.updateGameSession(gameSessionId, {
+        id: gameSessionId,
+        playerIds: [playerId],
+        entranceCode: '1234',
+        createdAt: Date.now(),
         lastActive: Date.now(),
       });
 
-      // Navigate to game lobby or wherever needed
+      // TODO Navigate to game lobby or wherever needed
     }
   }
+
+  // protected async joinGame(gameCode: string): Promise<void> {
+  //   // Verify game exists and is joinable
+  //   const gameSession = await this.gameSessionService.getGameSession(gameCode);
+  //   if (gameSession && gameSession.id) {
+  //     const playerId = await this.presenceService.initializePresence(
+  //       gameSession.id
+  //     );
+
+  //     // Add player to game session
+  //     const updatedPlayerIds = [...gameSession.playerIds, playerId];
+  //     await this.gameSessionService.updateGameSession(gameSession.id, {
+  //       playerIds: updatedPlayerIds,
+  //       entranceCode: gameSession.entranceCode,
+  //       createdAt: gameSession.createdAt,
+  //       lastActive: Date.now(),
+  //     });
+
+  //     // Navigate to game lobby or wherever needed
+  //   }
+  // }
 }

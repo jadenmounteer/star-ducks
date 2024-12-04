@@ -16,6 +16,7 @@ export class PresenceService implements OnDestroy {
   private presenceRef: any;
   private readonly OFFLINE_THRESHOLD = 30000; // 30 seconds
   private currentGameSessionId: string | null = null;
+  private playerName: string | null = null;
 
   private playerSessionService: PlayerSessionService =
     inject(PlayerSessionService);
@@ -24,8 +25,12 @@ export class PresenceService implements OnDestroy {
     // Add visibility change listener
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && this.currentGameSessionId) {
-        // Reinitialize presence when returning to the app
-        this.initializePresence(this.currentGameSessionId);
+        if (this.playerName) {
+          // Reinitialize presence when returning to the app
+          this.initializePresence(this.currentGameSessionId, this.playerName);
+        } else {
+          throw new Error('Player name is required to initialize presence');
+        }
       } else if (document.visibilityState === 'hidden') {
         // Clean up when leaving the app
         this.setOffline();
@@ -37,7 +42,8 @@ export class PresenceService implements OnDestroy {
     });
   }
 
-  async initializePresence(gameSessionId: string) {
+  async initializePresence(gameSessionId: string, playerName: string) {
+    this.playerName = playerName;
     const playerId = this.playerSessionService.getPlayerId();
     this.currentGameSessionId = gameSessionId;
 
@@ -51,7 +57,7 @@ export class PresenceService implements OnDestroy {
     this.presenceRef = doc(this.firestore, `player-presence/${playerId}`);
 
     // Set initial presence
-    await this.updatePresence(playerId, gameSessionId);
+    await this.updatePresence(playerId, gameSessionId, playerName);
 
     // Start heartbeat
     this.startHeartbeat(playerId, gameSessionId);

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../services/modal-service/modal-service';
 
 export interface PlayerNameModalResult {
-  playerName: string;
+  playerName: string | undefined;
 }
 
 @Component({
