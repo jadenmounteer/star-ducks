@@ -10,4 +10,8 @@ input {
 button {
   margin-top: 10px;
   padding: 5px 15px;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
