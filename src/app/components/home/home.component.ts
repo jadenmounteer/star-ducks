@@ -8,6 +8,7 @@ import {
   PlayerNameModalComponent,
   PlayerNameModalResult,
 } from '../modals/player-name-modal/player-name-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +22,7 @@ export class HomeComponent {
   private gameSessionService: GameSessionService = inject(GameSessionService);
   private presenceService: PresenceService = inject(PresenceService);
   private modalService: ModalService = inject(ModalService);
-
+  private router: Router = inject(Router);
   protected starDate: string = this.starDateService.getCurrentStarDate();
 
   protected async createNewGame(): Promise<void> {
@@ -49,6 +50,7 @@ export class HomeComponent {
       });
 
       // TODO Navigate to game lobby or wherever needed
+      this.router.navigate(['/game-lobby', gameSessionId]);
     }
   }
 
