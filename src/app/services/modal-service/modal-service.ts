@@ -15,7 +15,7 @@ export class ModalService {
   private modalComponentRef: ComponentRef<ModalComponent> | null = null;
   private contentComponentRef: ComponentRef<any> | null = null;
   private modalContainer: HTMLElement | null = null;
-  private modalResult: any;
+
   private modalClosedResolver: ((value: any) => void) | null = null;
 
   constructor(
