@@ -40,7 +40,7 @@ export class ModalService {
     // Create the content component with the modal content as the host
     const modalContentElement =
       this.modalComponentRef.location.nativeElement.querySelector(
-        '.modal-content'
+        '.modal-content-container'
       );
     this.contentComponentRef = createComponent(component, {
       environmentInjector: this.injector,
