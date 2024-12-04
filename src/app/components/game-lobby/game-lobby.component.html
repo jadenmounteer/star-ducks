@@ -12,4 +12,14 @@
   }
 </div>
 
+<div class="missions-section">
+  <h2>Select a mission</h2>
+  <app-dropdown #dropdown>
+    <button dropdown-button (click)="dropdown.toggleDropdown()">
+      {{ selectedMission }}
+    </button>
+    <span dropdown-item>Rebels on Kolath</span>
+  </app-dropdown>
+</div>
+
 <button>Launch Mission</button>

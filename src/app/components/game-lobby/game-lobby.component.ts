@@ -4,11 +4,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { GameSessionService } from '../../services/game-session.service';
 import { PresenceService } from '../../services/player-presence/player-presence';
 import { PlayerPresence } from '../../models/player-presence';
+import { DropdownComponent } from '../ui-components/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-game-lobby',
   standalone: true,
-  imports: [],
+  imports: [DropdownComponent],
   templateUrl: './game-lobby.component.html',
   styleUrl: './game-lobby.component.scss',
 })
@@ -20,6 +21,8 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
 
   protected players = signal<PlayerPresence[]>([]);
   protected gameSessionId: string | null = null;
+
+  protected selectedMission = 'Trouble on Moon Colony';
 
   ngOnInit() {
     // Get the game session ID from the route
