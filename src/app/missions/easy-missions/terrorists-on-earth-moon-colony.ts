@@ -5,8 +5,7 @@ import { Mission } from '../mission';
 export class TerroristsOnEarthMoonColonyMission extends Mission {
   id = 'terrorists-on-earth-moon-colony';
   name = 'Terrorists on Earth Moon Colony';
-  description =
-    'Negotiate with terrorists on Earth Moon Colony while avoiding detection';
+  description = 'Negotiate with a group of terrorists on Earth Moon Colony.';
   briefing =
     "A group of colonists have taken control of a mining facility on Earth's Moon. Your mission is to negotiate with them and resolve the situation peacefully.";
   difficulty: MissionDifficulty = 'Easy';
