@@ -141,6 +141,7 @@ export class PresenceService implements OnDestroy {
   }
 
   public async updatePlayerRoles(roles: Role[]) {
+    this.playerRoles = roles;
     if (this.presenceRef) {
       await setDoc(this.presenceRef, { roles }, { merge: true });
     }
