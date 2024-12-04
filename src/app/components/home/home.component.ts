@@ -44,7 +44,7 @@ export class HomeComponent {
       await this.gameSessionService.updateGameSession(gameSessionId, {
         id: gameSessionId,
         playerIds: [playerId],
-        entranceCode: '1234',
+        entranceCode: this.gameSessionService.generateEntranceCode(),
         createdAt: Date.now(),
         lastActive: Date.now(),
       });

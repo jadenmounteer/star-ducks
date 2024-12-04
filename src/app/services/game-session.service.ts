@@ -46,4 +46,19 @@ export class GameSessionService {
     const gameSessionSnapshot = await getDoc(gameSessionRef);
     return gameSessionSnapshot.data() as GameSession;
   }
+
+  public generateEntranceCode(): string {
+    let code = '';
+
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    for (let i = 0; i < 2; i++) {
+      const randomIndex = Math.floor(Math.random() * alphabet.length);
+      code += alphabet[randomIndex];
+    }
+
+    // Add a random 3 digit number to the code
+    code += Math.floor(Math.random() * 3000);
+
+    return code;
+  }
 }
