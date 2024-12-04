@@ -80,11 +80,16 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
   protected canLaunchMission(): boolean {
     const mission = this.selectedMission();
     const playerCount = this.players().length;
+    const selectedRoles = this.players().flatMap((player) => player.roles);
 
     return (
+      // Check player count requirements
       playerCount >= mission.minimumPlayers &&
       playerCount <= mission.maximumPlayers &&
-      this.players().every((player) => player.roles.length > 0)
+      // Check that every player has selected a role
+      this.players().every((player) => player.roles.length > 0) &&
+      // Check that all required roles are filled
+      mission.availableRoles.every((role) => selectedRoles.includes(role))
     );
   }
 
@@ -141,5 +146,9 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  protected isRoleFilled(role: Role): boolean {
+    return this.players().some((player) => player.roles.includes(role));
   }
 }

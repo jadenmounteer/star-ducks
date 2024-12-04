@@ -26,6 +26,18 @@
       >
       <span>Difficulty: {{ selectedMission().difficulty }}</span>
     </div>
+    <!-- Add required roles section -->
+    <div class="required-roles">
+      <h3>Required Roles:</h3>
+      @for (role of selectedMission().availableRoles; track role) {
+      <span class="role-status" [class.filled]="isRoleFilled(role)">
+        {{ role }}
+        <span class="status-indicator">{{
+          isRoleFilled(role) ? "✓" : "×"
+        }}</span>
+      </span>
+      }
+    </div>
   </div>
 </div>
 
