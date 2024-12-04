@@ -15,6 +15,8 @@ export class ModalService {
   private modalComponentRef: ComponentRef<ModalComponent> | null = null;
   private contentComponentRef: ComponentRef<any> | null = null;
   private modalContainer: HTMLElement | null = null;
+  private modalResult: any;
+  private modalClosedResolver: ((value: any) => void) | null = null;
 
   constructor(
     private applicationRef: ApplicationRef,
@@ -23,48 +25,56 @@ export class ModalService {
     this.setupModalContainer();
   }
 
-  open<T>(component: Type<T>): ComponentRef<T> {
-    this.setupModalContainer();
+  open<T, R = any>(component: Type<T>): Promise<R> {
+    return new Promise((resolve) => {
+      this.modalClosedResolver = resolve;
+      this.setupModalContainer();
 
-    // Clean up any existing modal
-    if (this.modalComponentRef || this.contentComponentRef) {
-      this.close();
-    }
+      // Clean up any existing modal
+      if (this.modalComponentRef || this.contentComponentRef) {
+        this.close();
+      }
 
-    // Create the modal wrapper component
-    this.modalComponentRef = createComponent(ModalComponent, {
-      environmentInjector: this.injector,
-      hostElement: this.modalContainer!,
+      // Create the modal wrapper component
+      this.modalComponentRef = createComponent(ModalComponent, {
+        environmentInjector: this.injector,
+        hostElement: this.modalContainer!,
+      });
+
+      // Create the content component
+      const modalContentElement =
+        this.modalComponentRef.location.nativeElement.querySelector(
+          '.modal-content'
+        );
+      this.contentComponentRef = createComponent(component, {
+        environmentInjector: this.injector,
+        hostElement: modalContentElement,
+      });
+
+      // Enable pointer events when modal is shown
+      if (this.modalContainer) {
+        this.modalContainer.style.pointerEvents = 'auto';
+      }
+
+      // Attach views to the application
+      this.applicationRef.attachView(this.modalComponentRef.hostView);
+      this.applicationRef.attachView(this.contentComponentRef.hostView);
+
+      // Listen for modal close
+      this.modalComponentRef.instance.modalClosed.subscribe(() => {
+        this.close();
+      });
+
+      return this.contentComponentRef;
     });
-
-    // Create the content component with the modal content as the host
-    const modalContentElement =
-      this.modalComponentRef.location.nativeElement.querySelector(
-        '.modal-content-container'
-      );
-    this.contentComponentRef = createComponent(component, {
-      environmentInjector: this.injector,
-      hostElement: modalContentElement,
-    });
-
-    // Enable pointer events when modal is shown
-    if (this.modalContainer) {
-      this.modalContainer.style.pointerEvents = 'auto';
-    }
-
-    // Attach views to the application
-    this.applicationRef.attachView(this.modalComponentRef.hostView);
-    this.applicationRef.attachView(this.contentComponentRef.hostView);
-
-    // Listen for modal close
-    this.modalComponentRef.instance.modalClosed.subscribe(() => {
-      this.close();
-    });
-
-    return this.contentComponentRef;
   }
 
-  close(): void {
+  close(result?: any): void {
+    if (this.modalClosedResolver) {
+      this.modalClosedResolver(result);
+      this.modalClosedResolver = null;
+    }
+
     // Detach and destroy modal component
     if (this.modalComponentRef) {
       this.applicationRef.detachView(this.modalComponentRef.hostView);

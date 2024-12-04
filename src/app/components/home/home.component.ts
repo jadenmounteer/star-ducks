@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { GameSessionService } from '../../services/game-session.service';
 import { PresenceService } from '../../services/player-presence/player-presence';
 import { ModalService } from '../../services/modal-service/modal-service';
-import { PlayerNameModalComponent } from '../modals/player-name-modal/player-name-modal.component';
+import {
+  PlayerNameModalComponent,
+  PlayerNameModalResult,
+} from '../modals/player-name-modal/player-name-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -26,8 +29,12 @@ export class HomeComponent {
     const gameSessionId = await this.gameSessionService.createNewGameSession();
 
     // Open a modal to get the player's name
-    const modalRef = this.modalService.open(PlayerNameModalComponent);
+    const result = await this.modalService.open<
+      PlayerNameModalComponent,
+      PlayerNameModalResult
+    >(PlayerNameModalComponent);
 
+    console.log(result);
     // const playerId = await this.presenceService.initializePresence(
     //   gameSessionId
     // );

@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../services/modal-service/modal-service';
 
+export interface PlayerNameModalResult {
+  playerName: string;
+}
+
 @Component({
   selector: 'app-player-name-modal',
   standalone: true,
@@ -16,6 +20,6 @@ export class PlayerNameModalComponent {
 
   submit() {
     // Do something with the player name
-    this.modalService.close();
+    this.modalService.close({ playerName: this.playerName });
   }
 }
