@@ -5,12 +5,13 @@ service cloud.firestore {
       allow read: if true;
       allow create, update: if 
         // Ensure required fields exist
-        request.resource.data.keys().hasAll(['playerId', 'playerName', 'gameSessionId', 'lastSeen', 'isOnline']) &&
+        request.resource.data.keys().hasAll(['playerId', 'playerName', 'gameSessionId', 'lastSeen', 'isOnline', 'roles']) &&
         // Ensure playerId in document matches the document ID
         request.resource.data.playerId == playerId &&
         // Basic data validation
         request.resource.data.lastSeen is number &&
-        request.resource.data.isOnline is bool;
+        request.resource.data.isOnline is bool &&
+        request.resource.data.roles is list;
       allow delete: if true;
     }
 

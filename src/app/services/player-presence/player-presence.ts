@@ -12,6 +12,7 @@ import {
 import { PlayerPresence } from '../../models/player-presence';
 import { PlayerSessionService } from '../player-session/player-session';
 import { Observable } from 'rxjs';
+import { Role } from '../../models/role';
 
 /**
  * This service is used to track the player's presence in the game session.
@@ -27,6 +28,7 @@ export class PresenceService implements OnDestroy {
   private readonly OFFLINE_THRESHOLD = 30000; // 30 seconds
   private currentGameSessionId: string | null = null;
   private playerName: string | null = null;
+  private playerRoles: Role[] = [];
 
   private playerSessionService: PlayerSessionService =
     inject(PlayerSessionService);
@@ -37,7 +39,11 @@ export class PresenceService implements OnDestroy {
       if (document.visibilityState === 'visible' && this.currentGameSessionId) {
         if (this.playerName) {
           // Reinitialize presence when returning to the app
-          this.initializePresence(this.currentGameSessionId, this.playerName);
+          this.initializePresence(
+            this.currentGameSessionId,
+            this.playerName,
+            this.playerRoles
+          );
         } else {
           throw new Error('Player name is required to initialize presence');
         }
@@ -78,8 +84,13 @@ export class PresenceService implements OnDestroy {
     });
   }
 
-  public async initializePresence(gameSessionId: string, playerName: string) {
+  public async initializePresence(
+    gameSessionId: string,
+    playerName: string,
+    playerRoles: Role[]
+  ) {
     this.playerName = playerName;
+    this.playerRoles = playerRoles;
     const playerId = this.playerSessionService.getPlayerId();
     this.currentGameSessionId = gameSessionId;
 
@@ -93,7 +104,12 @@ export class PresenceService implements OnDestroy {
     this.presenceRef = doc(this.firestore, `player-presence/${playerId}`);
 
     // Set initial presence
-    await this.updatePresence(playerId, gameSessionId, playerName);
+    await this.updatePresence(
+      playerId,
+      gameSessionId,
+      playerName,
+      this.playerRoles
+    );
 
     // Start heartbeat
     this.startHeartbeat(playerId, gameSessionId);
@@ -109,7 +125,8 @@ export class PresenceService implements OnDestroy {
   private async updatePresence(
     playerId: string,
     gameSessionId: string,
-    playerName: string
+    playerName: string,
+    roles: Role[]
   ) {
     const presence: PlayerPresence = {
       playerId,
@@ -117,15 +134,27 @@ export class PresenceService implements OnDestroy {
       gameSessionId,
       lastSeen: Date.now(),
       isOnline: true,
+      roles,
     };
 
     await setDoc(this.presenceRef, presence);
   }
 
+  public async updatePlayerRoles(roles: Role[]) {
+    if (this.presenceRef) {
+      await setDoc(this.presenceRef, { roles }, { merge: true });
+    }
+  }
+
   private startHeartbeat(playerId: string, gameSessionId: string) {
     // Update presence every 20 seconds
     this.heartbeatInterval = setInterval(() => {
-      this.updatePresence(playerId, gameSessionId, this.playerName ?? '');
+      this.updatePresence(
+        playerId,
+        gameSessionId,
+        this.playerName ?? '',
+        this.playerRoles
+      );
     }, 20000);
   }
 

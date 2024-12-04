@@ -42,7 +42,8 @@ export class HomeComponent {
     if (result && result.playerName) {
       const playerId = await this.presenceService.initializePresence(
         gameSessionId,
-        result.playerName
+        result.playerName,
+        []
       );
 
       // Update game session with the host's player ID
@@ -80,7 +81,8 @@ export class HomeComponent {
         if (playerNameResult && playerNameResult.playerName) {
           const playerId = await this.presenceService.initializePresence(
             gameSession.id,
-            playerNameResult.playerName
+            playerNameResult.playerName,
+            []
           );
           // Add player to game session
           const updatedPlayerIds = [...gameSession.playerIds, playerId];

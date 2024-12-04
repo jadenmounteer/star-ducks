@@ -4,10 +4,24 @@
   <h2>Crew Members</h2>
   @for (player of players(); track player.playerId) {
   <div class="player-item">
-    <span class="player-name">{{ player.playerName }}</span>
-    <span class="player-status" [class.online]="player.isOnline">
-      {{ player.isOnline ? "Online" : "Offline" }}
-    </span>
+    <div class="player-info">
+      <span class="player-name">{{ player.playerName }}</span>
+      <span class="player-status" [class.online]="player.isOnline">
+        {{ player.isOnline ? "Online" : "Offline" }}
+      </span>
+    </div>
+    <div class="role-selection">
+      @for (role of roles; track role) {
+      <button
+        class="role-button"
+        [class.selected]="isRoleSelected(player, role)"
+        [disabled]="player.playerId !== playerSessionService.getPlayerId()"
+        (click)="toggleRole(player, role)"
+      >
+        {{ role }}
+      </button>
+      }
+    </div>
   </div>
   }
 </div>
