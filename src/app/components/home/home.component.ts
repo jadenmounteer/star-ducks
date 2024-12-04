@@ -9,6 +9,10 @@ import {
   PlayerNameModalResult,
 } from '../modals/player-name-modal/player-name-modal.component';
 import { Router } from '@angular/router';
+import {
+  GameCodeModalComponent,
+  GameCodeModalResult,
+} from '../modals/game-code-modal/game-code-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -54,24 +58,29 @@ export class HomeComponent {
     }
   }
 
-  // protected async joinGame(gameCode: string): Promise<void> {
-  //   // Verify game exists and is joinable
-  //   const gameSession = await this.gameSessionService.getGameSession(gameCode);
-  //   if (gameSession && gameSession.id) {
-  //     const playerId = await this.presenceService.initializePresence(
-  //       gameSession.id
-  //     );
+  protected async joinGame(): Promise<void> {
+    const gameCodeResult = await this.modalService.open<
+      GameCodeModalComponent,
+      GameCodeModalResult
+    >(GameCodeModalComponent);
 
-  //     // Add player to game session
-  //     const updatedPlayerIds = [...gameSession.playerIds, playerId];
-  //     await this.gameSessionService.updateGameSession(gameSession.id, {
-  //       playerIds: updatedPlayerIds,
-  //       entranceCode: gameSession.entranceCode,
-  //       createdAt: gameSession.createdAt,
-  //       lastActive: Date.now(),
-  //     });
-
-  //     // Navigate to game lobby or wherever needed
-  //   }
-  // }
+    if (gameCodeResult && gameCodeResult.gameCode) {
+      // Verify game exists and is joinable
+      // Verify game exists and is joinable
+      // const gameSession = await this.gameSessionService.getGameSession(gameCode);
+      // if (gameSession && gameSession.id) {
+      //   const playerId = await this.presenceService.initializePresence(
+      //     gameSession.id
+      //   );
+      //   // Add player to game session
+      //   const updatedPlayerIds = [...gameSession.playerIds, playerId];
+      //   await this.gameSessionService.updateGameSession(gameSession.id, {
+      //     playerIds: updatedPlayerIds,
+      //     entranceCode: gameSession.entranceCode,
+      //     createdAt: gameSession.createdAt,
+      //     lastActive: Date.now(),
+      //   });
+      // Navigate to game lobby or wherever needed
+    }
+  }
 }

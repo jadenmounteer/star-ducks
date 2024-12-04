@@ -18,8 +18,7 @@ export class PlayerNameModalComponent {
 
   constructor(private modalService: ModalService) {}
 
-  submit() {
-    // Do something with the player name
+  public submit() {
     this.modalService.close({ playerName: this.playerName });
   }
 }
