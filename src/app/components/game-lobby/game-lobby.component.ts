@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { GameSessionService } from '../../services/game-session.service';
 import { PresenceService } from '../../services/player-presence/player-presence';
 import { PlayerPresence } from '../../models/player-presence';
@@ -17,7 +17,7 @@ import { PlayerSessionService } from '../../services/player-session/player-sessi
 })
 export class GameLobbyComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
-  private gameSessionService = inject(GameSessionService);
+  protected gameSessionService = inject(GameSessionService);
   private presenceService = inject(PresenceService);
   protected playerSessionService = inject(PlayerSessionService);
   private destroy$ = new Subject<void>();
@@ -27,11 +27,21 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
   protected roles = Object.values(Role);
   protected selectedMission = 'Trouble on Moon Colony';
 
-  ngOnInit() {
+  protected entranceCode = signal<string | null>(null);
+
+  public async ngOnInit() {
     // Get the game session ID from the route
     this.gameSessionId = this.route.snapshot.paramMap.get('gameSessionId');
 
     if (this.gameSessionId) {
+      // Get the game session to display the entrance code
+      const gameSession = await firstValueFrom(
+        this.gameSessionService.getGameSessionById(this.gameSessionId)
+      );
+      if (gameSession) {
+        this.entranceCode.set(gameSession.entranceCode);
+      }
+
       // Subscribe to player presence updates
       this.presenceService
         .getPlayersInSession(this.gameSessionId)

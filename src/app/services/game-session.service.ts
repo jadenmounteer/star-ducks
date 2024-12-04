@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import {
   doc,
+  docData,
   Firestore,
   getDoc,
   getDocs,
@@ -10,6 +11,7 @@ import {
 } from '@angular/fire/firestore';
 import { addDoc, collection } from '@angular/fire/firestore';
 import { GameSession } from '../models/game-session';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -77,5 +79,12 @@ export class GameSessionService {
     code += Math.floor(Math.random() * 3000);
 
     return code;
+  }
+
+  public getGameSessionById(
+    gameSessionId: string
+  ): Observable<GameSession | null> {
+    const docRef = doc(this.firestore, `game-sessions/${gameSessionId}`);
+    return docData(docRef) as Observable<GameSession>;
   }
 }

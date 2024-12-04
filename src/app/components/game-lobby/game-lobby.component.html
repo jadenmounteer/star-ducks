@@ -1,5 +1,9 @@
 <h1>Mission Launch</h1>
 
+<div class="entrance-code-container">
+  <span>Entrance Code: {{ entranceCode() }}</span>
+</div>
+
 <div class="player-list">
   <h2>Crew Members</h2>
   @for (player of players(); track player.playerId) {
