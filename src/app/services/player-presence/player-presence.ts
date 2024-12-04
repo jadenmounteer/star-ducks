@@ -1,7 +1,17 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import { Firestore, doc, setDoc, deleteDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  doc,
+  setDoc,
+  deleteDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from '@angular/fire/firestore';
 import { PlayerPresence } from '../../models/player-presence';
 import { PlayerSessionService } from '../player-session/player-session';
+import { Observable } from 'rxjs';
 
 /**
  * This service is used to track the player's presence in the game session.
@@ -42,7 +52,33 @@ export class PresenceService implements OnDestroy {
     });
   }
 
-  async initializePresence(gameSessionId: string, playerName: string) {
+  public getPlayersInSession(
+    gameSessionId: string
+  ): Observable<PlayerPresence[]> {
+    return new Observable<PlayerPresence[]>((observer) => {
+      const presenceRef = collection(this.firestore, 'player-presence');
+      const q = query(presenceRef, where('gameSessionId', '==', gameSessionId));
+
+      // Set up real-time listener
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const players = snapshot.docs.map(
+            (doc) => doc.data() as PlayerPresence
+          );
+          observer.next(players);
+        },
+        (error) => {
+          observer.error(error);
+        }
+      );
+
+      // Clean up listener when unsubscribed
+      return () => unsubscribe();
+    });
+  }
+
+  public async initializePresence(gameSessionId: string, playerName: string) {
     this.playerName = playerName;
     const playerId = this.playerSessionService.getPlayerId();
     this.currentGameSessionId = gameSessionId;

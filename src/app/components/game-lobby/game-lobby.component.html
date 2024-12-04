@@ -1,5 +1,15 @@
 <h1>Mission Launch</h1>
 
-<div class="player-list"></div>
+<div class="player-list">
+  <h2>Crew Members</h2>
+  @for (player of players(); track player.playerId) {
+  <div class="player-item">
+    <span class="player-name">{{ player.playerName }}</span>
+    <span class="player-status" [class.online]="player.isOnline">
+      {{ player.isOnline ? "Online" : "Offline" }}
+    </span>
+  </div>
+  }
+</div>
 
 <button>Launch Mission</button>

@@ -1,0 +1,35 @@
+.player-list {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+}
+
+.player-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.player-status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  background-color: #ff4444;
+  color: white;
+
+  &.online {
+    background-color: #00c851;
+  }
+}
