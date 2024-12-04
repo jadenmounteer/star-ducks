@@ -77,18 +77,22 @@ export class HomeComponent {
           PlayerNameModalResult
         >(PlayerNameModalComponent);
 
-        // const playerId = await this.presenceService.initializePresence(
-        //   gameSession.id
-        // );
-        // Add player to game session
-        // const updatedPlayerIds = [...gameSession.playerIds, playerId];
-        // await this.gameSessionService.updateGameSession(gameSession.id, {
-        //   playerIds: updatedPlayerIds,
-        //   entranceCode: gameSession.entranceCode,
-        //   createdAt: gameSession.createdAt,
-        //   lastActive: Date.now(),
-        // });
-        // Navigate to game lobby or wherever needed
+        if (playerNameResult && playerNameResult.playerName) {
+          const playerId = await this.presenceService.initializePresence(
+            gameSession.id,
+            playerNameResult.playerName
+          );
+          // Add player to game session
+          const updatedPlayerIds = [...gameSession.playerIds, playerId];
+          await this.gameSessionService.updateGameSession(gameSession.id, {
+            playerIds: updatedPlayerIds,
+            entranceCode: gameSession.entranceCode,
+            createdAt: gameSession.createdAt,
+            lastActive: Date.now(),
+          });
+          // Navigate to game lobby or wherever needed
+          this.router.navigate(['/game-lobby', gameSession.id]);
+        }
       } else {
         this.modalService.open(AlertModalComponent, {
           message: 'Game not found',
