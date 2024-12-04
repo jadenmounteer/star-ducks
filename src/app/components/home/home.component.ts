@@ -3,6 +3,8 @@ import { StarDateService } from '../../services/star-date.service';
 import { FormsModule } from '@angular/forms';
 import { GameSessionService } from '../../services/game-session.service';
 import { PresenceService } from '../../services/player-presence/player-presence';
+import { ModalService } from '../../services/modal-service/modal-service';
+import { PlayerNameModalComponent } from '../modals/player-name-modal/player-name-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -15,24 +17,29 @@ export class HomeComponent {
   private starDateService: StarDateService = inject(StarDateService);
   private gameSessionService: GameSessionService = inject(GameSessionService);
   private presenceService: PresenceService = inject(PresenceService);
+  private modalService: ModalService = inject(ModalService);
 
   protected starDate: string = this.starDateService.getCurrentStarDate();
   protected gameCode = '';
 
   protected async createNewGame(): Promise<void> {
     const gameSessionId = await this.gameSessionService.createNewGameSession();
-    const playerId = await this.presenceService.initializePresence(
-      gameSessionId
-    );
 
-    // Update game session with the host's player ID
-    await this.gameSessionService.updateGameSession(gameSessionId, {
-      id: gameSessionId,
-      playerIds: [playerId],
-      entranceCode: '1234',
-      createdAt: Date.now(),
-      lastActive: Date.now(),
-    });
+    // Open a modal to get the player's name
+    const modalRef = this.modalService.open(PlayerNameModalComponent);
+
+    // const playerId = await this.presenceService.initializePresence(
+    //   gameSessionId
+    // );
+
+    // // Update game session with the host's player ID
+    // await this.gameSessionService.updateGameSession(gameSessionId, {
+    //   id: gameSessionId,
+    //   playerIds: [playerId],
+    //   entranceCode: '1234',
+    //   createdAt: Date.now(),
+    //   lastActive: Date.now(),
+    // });
 
     // Navigate to game lobby or wherever needed
   }
