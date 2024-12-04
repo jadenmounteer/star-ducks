@@ -7,6 +7,8 @@ import { PlayerPresence } from '../../models/player-presence';
 import { DropdownComponent } from '../ui-components/dropdown/dropdown.component';
 import { Role } from '../../models/role';
 import { PlayerSessionService } from '../../services/player-session/player-session';
+import { MissionRegistryService } from '../../services/mission-registry.service';
+import { Mission } from '../../missions/mission';
 
 @Component({
   selector: 'app-game-lobby',
@@ -20,12 +22,15 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
   protected gameSessionService = inject(GameSessionService);
   private presenceService = inject(PresenceService);
   protected playerSessionService = inject(PlayerSessionService);
+  private missionRegistry = inject(MissionRegistryService);
+
   private destroy$ = new Subject<void>();
 
+  protected availableMissions = this.missionRegistry.getAllMissions();
   protected players = signal<PlayerPresence[]>([]);
   protected gameSessionId: string | null = null;
   protected roles = Object.values(Role);
-  protected selectedMission = 'Trouble on Moon Colony';
+  protected selectedMission = signal<Mission>(this.availableMissions[0]);
 
   protected entranceCode = signal<string | null>(null);
 
@@ -50,6 +55,55 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
           this.players.set(players);
         });
     }
+  }
+
+  // Computed property for available roles based on selected mission
+  protected get availableRoles(): Role[] {
+    return this.selectedMission()?.availableRoles || [];
+  }
+
+  protected selectMission(mission: Mission) {
+    this.selectedMission.set(mission);
+    // Clear invalid roles from players
+    this.players().forEach((player) => {
+      if (player.playerId === this.playerSessionService.getPlayerId()) {
+        const validRoles = player.roles.filter((role) =>
+          mission.availableRoles.includes(role)
+        );
+        if (validRoles.length !== player.roles.length) {
+          this.presenceService.updatePlayerRoles(validRoles);
+        }
+      }
+    });
+  }
+
+  protected canLaunchMission(): boolean {
+    const mission = this.selectedMission();
+    const playerCount = this.players().length;
+
+    return (
+      playerCount >= mission.minimumPlayers &&
+      playerCount <= mission.maximumPlayers &&
+      this.players().every((player) => player.roles.length > 0)
+    );
+  }
+
+  protected async launchMission() {
+    if (!this.gameSessionId || !this.canLaunchMission()) return;
+
+    const mission = this.selectedMission();
+    mission.initializeMission();
+
+    await this.gameSessionService.updateGameSession(this.gameSessionId, {
+      playerIds: this.players().map((p) => p.playerId),
+      entranceCode: this.entranceCode() || '',
+      createdAt: Date.now(),
+      lastActive: Date.now(),
+      missionId: mission.id,
+      missionState: mission.getMissionState(),
+    });
+
+    // TODO: Navigate to mission screen
   }
 
   protected isRoleTakenByOtherPlayer(

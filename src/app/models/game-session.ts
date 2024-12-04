@@ -6,5 +6,6 @@ export interface GameSession {
   entranceCode: string;
   createdAt: number;
   lastActive: number;
+  missionId?: string;
   missionState?: MissionState;
 }

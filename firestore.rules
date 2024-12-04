@@ -19,7 +19,7 @@ service cloud.firestore {
       allow read: if true;
       allow write: if 
         // Add any game session specific validation rules
-        request.resource.data.keys().hasAll(['playerIds', 'entranceCode', 'createdAt', 'lastActive']);
+        request.resource.data.keys().hasAll(['playerIds', 'entranceCode', 'createdAt', 'lastActive', 'missionId', 'missionState']);
     }
   }
 }

@@ -4,6 +4,31 @@
   <span>Entrance Code: {{ entranceCode() }}</span>
 </div>
 
+<div class="missions-section">
+  <h2>Select a mission</h2>
+  <app-dropdown #dropdown>
+    <button dropdown-button (click)="dropdown.toggleDropdown()">
+      {{ selectedMission().name }}
+    </button>
+    @for (mission of availableMissions; track mission.id) {
+    <span dropdown-item (click)="selectMission(mission)">
+      {{ mission.name }}
+    </span>
+    }
+  </app-dropdown>
+
+  <div class="mission-info">
+    <p class="mission-description">{{ selectedMission().description }}</p>
+    <div class="mission-requirements">
+      <span
+        >Players: {{ selectedMission().minimumPlayers }} -
+        {{ selectedMission().maximumPlayers }}</span
+      >
+      <span>Difficulty: {{ selectedMission().difficulty }}</span>
+    </div>
+  </div>
+</div>
+
 <div class="player-list">
   <h2>Crew Members</h2>
   @for (player of players(); track player.playerId) {
@@ -15,7 +40,7 @@
       </span>
     </div>
     <div class="role-selection">
-      @for (role of roles; track role) {
+      @for (role of availableRoles; track role) {
       <button
         class="role-button"
         [class.selected]="isRoleSelected(player, role)"
@@ -33,14 +58,10 @@
   }
 </div>
 
-<div class="missions-section">
-  <h2>Select a mission</h2>
-  <app-dropdown #dropdown>
-    <button dropdown-button (click)="dropdown.toggleDropdown()">
-      {{ selectedMission }}
-    </button>
-    <span dropdown-item>Rebels on Kolath</span>
-  </app-dropdown>
-</div>
-
-<button>Launch Mission</button>
+<button
+  class="launch-button"
+  [disabled]="!canLaunchMission()"
+  (click)="launchMission()"
+>
+  Launch Mission
+</button>
