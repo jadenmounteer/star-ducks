@@ -64,9 +64,14 @@ export class PresenceService implements OnDestroy {
     return playerId;
   }
 
-  private async updatePresence(playerId: string, gameSessionId: string) {
+  private async updatePresence(
+    playerId: string,
+    gameSessionId: string,
+    playerName: string = ''
+  ) {
     const presence: PlayerPresence = {
       playerId,
+      playerName,
       gameSessionId,
       lastSeen: Date.now(),
       isOnline: true,

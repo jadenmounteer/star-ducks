@@ -3,6 +3,7 @@
  */
 export interface PlayerPresence {
   playerId: string;
+  playerName: string;
   gameSessionId: string;
   lastSeen: number;
   isOnline: boolean;
