@@ -23,7 +23,6 @@ export class HomeComponent {
   private modalService: ModalService = inject(ModalService);
 
   protected starDate: string = this.starDateService.getCurrentStarDate();
-  protected gameCode = '';
 
   protected async createNewGame(): Promise<void> {
     const gameSessionId = await this.gameSessionService.createNewGameSession();
