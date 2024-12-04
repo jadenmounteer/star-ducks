@@ -19,7 +19,10 @@
       <button
         class="role-button"
         [class.selected]="isRoleSelected(player, role)"
-        [disabled]="player.playerId !== playerSessionService.getPlayerId()"
+        [disabled]="
+          player.playerId !== playerSessionService.getPlayerId() ||
+          isRoleTakenByOtherPlayer(role, player)
+        "
         (click)="toggleRole(player, role)"
       >
         {{ role }}

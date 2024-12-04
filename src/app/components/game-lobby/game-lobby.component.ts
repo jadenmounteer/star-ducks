@@ -52,6 +52,17 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected isRoleTakenByOtherPlayer(
+    role: Role,
+    currentPlayer: PlayerPresence
+  ): boolean {
+    return this.players().some(
+      (player) =>
+        player.playerId !== currentPlayer.playerId &&
+        player.roles?.includes(role)
+    );
+  }
+
   protected async toggleRole(player: PlayerPresence, role: Role) {
     if (player.playerId !== this.playerSessionService.getPlayerId()) {
       return; // Only allow players to modify their own roles
