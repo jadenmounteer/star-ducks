@@ -16,7 +16,7 @@ export class FlightControlComponent {
       name: 'Earth',
       type: 'planet',
       coordinates: { x: 100, y: 100 },
-      sprite: 'assets/sprites/earth.png',
+      sprite: 'assets/sprites/space-objects/earth.png',
       animationFrames: 8,
       description: 'Home planet of humanity',
     },
