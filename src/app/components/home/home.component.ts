@@ -14,11 +14,12 @@ import {
   entranceCodeModalResult,
 } from '../modals/game-code-modal/game-code-modal.component';
 import { AlertModalComponent } from '../modals/alert-modal/alert-modal.component';
+import { FlightControlComponent } from '../terminals/flight-control/flight-control/flight-control.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, FlightControlComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
