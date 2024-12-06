@@ -29,8 +29,8 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
   public isFullScreen = false;
 
   private stars: Star[] = [];
-  private readonly NUM_STARS = 100;
-  private readonly NUM_PARTICLES = 50;
+  private readonly NUM_STARS = 200;
+  private readonly NUM_PARTICLES = 1000;
   private animationFrameId: number | null = null;
 
   ngOnInit(): void {}
