@@ -18,8 +18,13 @@ service cloud.firestore {
     match /game-sessions/{sessionId} {
       allow read: if true;
       allow write: if 
-        // Add any game session specific validation rules
-        request.resource.data.keys().hasAll(['playerIds', 'entranceCode', 'createdAt', 'lastActive', 'missionId', 'missionState']);
+         // Only require the mandatory fields
+        request.resource.data.keys().hasAll(['playerIds', 'entranceCode', 'createdAt', 'lastActive']) &&
+        // Type validation
+        request.resource.data.playerIds is list &&
+        request.resource.data.entranceCode is string &&
+        request.resource.data.createdAt is number &&
+        request.resource.data.lastActive is number;
     }
   }
 }
