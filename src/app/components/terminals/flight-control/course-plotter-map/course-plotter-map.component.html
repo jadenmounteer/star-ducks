@@ -1,0 +1,21 @@
+<div class="course-plotter" [class.fullscreen]="isFullScreen">
+  <canvas
+    #canvasElement
+    (click)="handleClick($event)"
+    [style.cursor]="'crosshair'"
+  >
+  </canvas>
+
+  <div class="fullscreen-toggle" (click)="toggleFullScreen()">
+    <i
+      class="fas"
+      [class.fa-expand]="!isFullScreen"
+      [class.fa-compress]="isFullScreen"
+    ></i>
+  </div>
+
+  <div class="object-info" *ngIf="selectedObject">
+    <h3>{{ selectedObject?.name }}</h3>
+    <p>{{ selectedObject?.description }}</p>
+  </div>
+</div>

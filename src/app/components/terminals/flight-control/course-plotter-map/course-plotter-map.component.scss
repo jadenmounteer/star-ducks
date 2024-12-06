@@ -1,0 +1,56 @@
+.course-plotter {
+  position: relative;
+  background: #000;
+  border: 1px solid #444;
+
+  &.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+  }
+
+  canvas {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+
+  .fullscreen-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #666;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  .object-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #666;
+    padding: 10px;
+    border-radius: 4px;
+    color: #fff;
+
+    h3 {
+      margin: 0 0 10px 0;
+      color: #00ff00;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9em;
+    }
+  }
+}
