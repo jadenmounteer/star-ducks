@@ -9,6 +9,7 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { SpaceObject } from '../../../../models/space-object';
+import { Star } from './stars/star';
 
 @Component({
   standalone: true,
@@ -27,11 +28,58 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
   public selectedObject: SpaceObject | null = null;
   public isFullScreen = false;
 
+  private stars: Star[] = [];
+  private readonly NUM_STARS = 100;
+  private readonly NUM_PARTICLES = 50;
+  private animationFrameId: number | null = null;
+
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.initializeCanvas();
+    this.initStarField();
     this.startAnimation();
+  }
+
+  private initStarField(): void {
+    const canvas = this.canvasRef.nativeElement;
+    this.stars = [];
+
+    // Create background stars (slower, larger)
+    for (let i = 0; i < this.NUM_STARS; i++) {
+      this.stars.push(
+        new Star(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          Math.random() * 1.5 + 0.5, // Size between 0.5 and 2
+          Math.random() * 0.5 + 0.5, // Initial brightness
+          0.1 // Slow movement
+        )
+      );
+    }
+
+    // Create particle stars (faster, smaller)
+    for (let i = 0; i < this.NUM_PARTICLES; i++) {
+      this.stars.push(
+        new Star(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          Math.random() * 0.5 + 0.1, // Smaller size
+          Math.random() * 0.3 + 0.7, // Brighter
+          Math.random() * 0.5 + 0.5 // Faster movement
+        )
+      );
+    }
+  }
+
+  private drawStarField(): void {
+    const canvas = this.canvasRef.nativeElement;
+
+    // Update and draw all stars
+    this.stars.forEach((star) => {
+      star.update(canvas.width, canvas.height);
+      star.draw(this.ctx);
+    });
   }
 
   private initializeCanvas(): void {
@@ -42,13 +90,24 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
 
   private resizeCanvas(): void {
     const canvas = this.canvasRef.nativeElement;
+    const container = canvas.parentElement as HTMLElement;
+
+    if (!container) {
+      console.error('Canvas container not found');
+      return;
+    }
+
     if (this.isFullScreen) {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     } else {
-      canvas.width = 400;
-      canvas.height = 300;
+      // Now TypeScript knows container is HTMLElement which has clientWidth/Height
+      canvas.width = container.clientWidth;
+      canvas.height = container.clientHeight;
     }
+
+    // Reinitialize star field when canvas is resized
+    this.initStarField();
   }
 
   private startAnimation(): void {
@@ -59,13 +118,19 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
         this.canvasRef.nativeElement.width,
         this.canvasRef.nativeElement.height
       );
+
+      // Draw star field first (background layer)
+      this.drawStarField();
+
+      // Draw grid on top of star field
       this.drawGrid();
 
+      // Draw space objects last
       this.spaceObjects.forEach((object) => {
         this.drawSpaceObject(object);
       });
 
-      requestAnimationFrame(animate);
+      this.animationFrameId = requestAnimationFrame(animate);
     };
 
     animate();
@@ -174,5 +239,11 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
   public toggleFullScreen(): void {
     this.isFullScreen = !this.isFullScreen;
     this.resizeCanvas();
+  }
+
+  ngOnDestroy(): void {
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
   }
 }
