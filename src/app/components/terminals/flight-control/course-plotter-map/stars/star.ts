@@ -10,7 +10,9 @@ export class Star {
 
   update(width: number, height: number) {
     // Update star position
-    this.y += this.speed;
+    // This gives a cool effect, but not what we're going for. Maybe something like this
+    // for warp speed main view effect?
+    // this.y += this.speed;
 
     // Reset position if star goes off screen
     if (this.y > height) {
