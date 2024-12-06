@@ -14,8 +14,10 @@
     ></i>
   </div>
 
-  <div class="object-info" *ngIf="selectedObject">
-    <h3>{{ selectedObject?.name }}</h3>
-    <p>{{ selectedObject?.description }}</p>
+  @if(selectedObject) {
+  <div class="object-info">
+    <h3>{{ selectedObject.name }}</h3>
+    <p>{{ selectedObject.description }}</p>
   </div>
+  }
 </div>
