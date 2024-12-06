@@ -21,6 +21,8 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
   @Input() spaceObjects: SpaceObject[] = [];
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
 
+  private spriteCache: { [key: string]: HTMLImageElement } = {};
+
   private ctx!: CanvasRenderingContext2D;
   public selectedObject: SpaceObject | null = null;
   public isFullScreen = false;
@@ -92,24 +94,54 @@ export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private drawSpaceObject(object: SpaceObject): void {
-    const sprite = new Image();
-    sprite.src = object.sprite;
+  private async loadSprite(spritePath: string): Promise<HTMLImageElement> {
+    if (this.spriteCache[spritePath]) {
+      return Promise.resolve(this.spriteCache[spritePath]);
+    }
 
-    const frameWidth = sprite.width / object.animationFrames;
-    const currentFrame = Math.floor(Date.now() / 100) % object.animationFrames;
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        this.spriteCache[spritePath] = img;
+        resolve(img);
+      };
+      img.onerror = reject;
+      img.src = spritePath;
+    });
+  }
 
-    this.ctx.drawImage(
-      sprite,
-      currentFrame * frameWidth,
-      0,
-      frameWidth,
-      sprite.height,
-      object.coordinates.x,
-      object.coordinates.y,
-      frameWidth,
-      sprite.height
-    );
+  private async drawSpaceObject(object: SpaceObject): Promise<void> {
+    try {
+      const sprite = await this.loadSprite(object.sprite);
+
+      // Calculate dimensions based on your sprite sheet
+      const FRAME_WIDTH = sprite.width / object.animationFrames; // 640px / 2 = 320px per frame
+      const FRAME_HEIGHT = sprite.height; // 320px
+
+      // Define the display size you want (scaled down from original)
+      const DISPLAY_SIZE = 32; // or whatever size you want the planet to appear as
+
+      // Calculate current frame
+      const currentFrame =
+        Math.floor(Date.now() / 200) % object.animationFrames;
+
+      // Disable image smoothing for crisp pixels
+      this.ctx.imageSmoothingEnabled = false;
+
+      this.ctx.drawImage(
+        sprite,
+        currentFrame * FRAME_WIDTH, // Source X (0 or 320 depending on frame)
+        0, // Source Y
+        FRAME_WIDTH, // Source Width (320px)
+        FRAME_HEIGHT, // Source Height (320px)
+        object.coordinates.x, // Destination X
+        object.coordinates.y, // Destination Y
+        DISPLAY_SIZE, // Destination Width (scaled down)
+        DISPLAY_SIZE // Destination Height (scaled down)
+      );
+    } catch (error) {
+      console.error('Failed to load sprite:', error);
+    }
   }
 
   public handleClick(event: MouseEvent): void {
