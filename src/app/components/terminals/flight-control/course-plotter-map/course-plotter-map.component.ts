@@ -11,11 +11,12 @@ import {
 import { SpaceObject } from '../../../../models/space-object';
 
 @Component({
-  selector: 'app-course-plotter',
+  standalone: true,
+  selector: 'app-course-plotter-map',
   templateUrl: './course-plotter-map.component.html',
   styleUrls: ['./course-plotter-map.component.scss'],
 })
-export class CoursePlotterComponent implements OnInit, AfterViewInit {
+export class CoursePlotterMapComponent implements OnInit, AfterViewInit {
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() spaceObjects: SpaceObject[] = [];
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
