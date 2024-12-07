@@ -27,10 +27,10 @@ export class CoursePlotterMapComponent
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() spaceObjects: SpaceObject[] = [];
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
+  @Output() close = new EventEmitter<void>(); // Add this
 
   private ctx!: CanvasRenderingContext2D;
   public selectedObject: SpaceObject | null = null;
-  public isFullScreen = false;
   private animationFrameId: number | null = null;
   private destroyFn: (() => void) | null = null;
 
@@ -56,18 +56,8 @@ export class CoursePlotterMapComponent
 
   private resizeCanvas(): void {
     const canvas = this.canvasRef.nativeElement;
-    const container = canvas.parentElement as HTMLElement;
-
-    if (!container) return;
-
-    if (this.isFullScreen) {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    } else {
-      canvas.width = container.clientWidth;
-      canvas.height = container.clientHeight;
-    }
-
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     this.starFieldService.initStarField(canvas.width, canvas.height);
   }
 
@@ -98,11 +88,7 @@ export class CoursePlotterMapComponent
       this.resizeCanvas();
     });
 
-    const container = this.canvasRef.nativeElement.parentElement;
-    if (container) {
-      resizeObserver.observe(container);
-    }
-
+    resizeObserver.observe(window.document.body);
     this.destroyFn = () => resizeObserver.disconnect();
   }
 
@@ -119,12 +105,12 @@ export class CoursePlotterMapComponent
     if (clickedObject) {
       this.selectedObject = clickedObject;
       this.destinationSelected.emit(clickedObject);
+      this.closeMap(); // Automatically close after selection
     }
   }
 
-  public toggleFullScreen(): void {
-    this.isFullScreen = !this.isFullScreen;
-    this.resizeCanvas();
+  public closeMap(): void {
+    this.close.emit();
   }
 
   ngOnDestroy(): void {
@@ -134,5 +120,6 @@ export class CoursePlotterMapComponent
     if (this.destroyFn) {
       this.destroyFn();
     }
+    document.body.style.overflow = ''; // Restore scrolling
   }
 }

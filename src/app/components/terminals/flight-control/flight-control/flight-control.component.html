@@ -1,7 +1,12 @@
 <div class="flight-control-container">
+  <button (click)="showMap()" class="open-map-button">Open Star Map</button>
+
+  @if(isMapVisible) {
   <app-course-plotter-map
     [spaceObjects]="spaceObjects"
     (destinationSelected)="onDestinationSelected($event)"
+    (close)="hideMap()"
   >
   </app-course-plotter-map>
+  }
 </div>

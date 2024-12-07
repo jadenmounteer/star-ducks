@@ -10,6 +10,7 @@ import { CoursePlotterMapComponent } from '../course-plotter-map/course-plotter-
   styleUrl: './flight-control.component.scss',
 })
 export class FlightControlComponent {
+  protected isMapVisible = false;
   protected spaceObjects: SpaceObject[] = [
     {
       id: '1',
@@ -23,8 +24,18 @@ export class FlightControlComponent {
     // Add more space objects...
   ];
 
+  protected showMap(): void {
+    this.isMapVisible = true;
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when map is open
+  }
   protected onDestinationSelected(destination: SpaceObject): void {
     console.log('New destination selected:', destination);
-    // Handle destination selection
+    this.isMapVisible = false;
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+
+  protected hideMap(): void {
+    this.isMapVisible = false;
+    document.body.style.overflow = ''; // Restore scrolling
   }
 }

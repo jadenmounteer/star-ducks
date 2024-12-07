@@ -1,4 +1,4 @@
-<div class="course-plotter" [class.fullscreen]="isFullScreen">
+<div class="course-plotter">
   <canvas
     #canvasElement
     (click)="handleClick($event)"
@@ -6,13 +6,9 @@
   >
   </canvas>
 
-  <div class="fullscreen-toggle" (click)="toggleFullScreen()">
-    <i
-      class="fas"
-      [class.fa-expand]="!isFullScreen"
-      [class.fa-compress]="isFullScreen"
-    ></i>
-  </div>
+  <button class="close-button" (click)="closeMap()">
+    <i class="fas fa-times"></i>
+  </button>
 
   @if(selectedObject) {
   <div class="object-info">
