@@ -91,7 +91,6 @@ export class CoursePlotterMapComponent
     resizeObserver.observe(window.document.body);
     this.destroyFn = () => resizeObserver.disconnect();
   }
-
   public handleClick(event: MouseEvent): void {
     const canvas = this.canvasRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
@@ -105,7 +104,8 @@ export class CoursePlotterMapComponent
     if (clickedObject) {
       this.selectedObject = clickedObject;
       this.destinationSelected.emit(clickedObject);
-      this.closeMap(); // Automatically close after selection
+      // Remove this line that was closing the map
+      // this.closeMap();
     }
   }
 

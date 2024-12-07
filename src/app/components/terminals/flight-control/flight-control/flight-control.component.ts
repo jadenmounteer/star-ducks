@@ -30,8 +30,6 @@ export class FlightControlComponent {
   }
   protected onDestinationSelected(destination: SpaceObject): void {
     console.log('New destination selected:', destination);
-    this.isMapVisible = false;
-    document.body.style.overflow = ''; // Restore scrolling
   }
 
   protected hideMap(): void {
