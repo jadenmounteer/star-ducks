@@ -11,7 +11,7 @@
   </button>
 
   @if(selectedObject) {
-  <div class="object-info-container">
+  <div class="object-info-container" (click)="handleContainerClick($event)">
     <div class="object-info">
       <button class="info-close-button" (click)="selectedObject = null">
         ×

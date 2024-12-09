@@ -42,8 +42,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    pointer-events: none;
+    pointer-events: auto; // Change from 'none' to 'auto'
     z-index: 10000;
+    background: rgba(0, 0, 0, 0.5); // Add semi-transparent background
   }
 
   .object-info {

@@ -152,6 +152,17 @@ export class CoursePlotterMapComponent
     animate();
   }
 
+  public handleContainerClick(event: MouseEvent): void {
+    // Check if the click was directly on the container (not its children)
+    if (event.target === event.currentTarget) {
+      this.selectedObject = null;
+      if (this.previewAnimationFrameId) {
+        cancelAnimationFrame(this.previewAnimationFrameId);
+        this.previewAnimationFrameId = null;
+      }
+    }
+  }
+
   public closeMap(): void {
     this.close.emit();
   }
