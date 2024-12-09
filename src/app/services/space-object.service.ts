@@ -26,7 +26,7 @@ export class SpaceObjectService {
   async drawSpaceObject(
     ctx: CanvasRenderingContext2D,
     object: SpaceObject,
-    displaySize: number = 32,
+    displaySize: number = 48,
     frameRate: number = 500
   ): Promise<void> {
     try {
@@ -58,7 +58,7 @@ export class SpaceObjectService {
     x: number,
     y: number,
     object: SpaceObject,
-    size: number = 32
+    size: number = 48
   ): boolean {
     return (
       x >= object.coordinates.x &&

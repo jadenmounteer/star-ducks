@@ -11,7 +11,7 @@ export class CanvasService {
     viewportX: number,
     viewportY: number
   ): void {
-    const gridSize = 32;
+    const gridSize = 48;
     const offsetX = viewportX % gridSize;
     const offsetY = viewportY % gridSize;
 
