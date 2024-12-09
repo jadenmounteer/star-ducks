@@ -11,9 +11,4 @@ export interface Territory {
   };
 }
 
-export type TerritoryId =
-  | 'federation'
-  | 'klingon'
-  | 'romulan'
-  | 'cardassian'
-  | 'neutral';
+export type TerritoryId = 'federation' | 'neutral';

@@ -5,65 +5,37 @@ import { TerritoryId, Territory } from '../../models/territory';
   providedIn: 'root',
 })
 export class TerritoryService {
+  private readonly SPACE_BOUNDS = {
+    minX: -1000,
+    maxX: 3000,
+    minY: -1000,
+    maxY: 3000,
+  };
+
   private territories: Record<TerritoryId, Territory> = {
     federation: {
       id: 'federation',
-      name: 'United Federation of Planets',
+      name: 'United Federation of Ducks',
       color: 'rgba(0, 0, 255, 0.1)',
       borderColor: 'rgba(0, 0, 255, 0.5)',
       bounds: {
         minX: -500,
-        maxX: 500,
-        minY: -500,
-        maxY: 500,
-      },
-    },
-    klingon: {
-      id: 'klingon',
-      name: 'Klingon Empire',
-      color: 'rgba(255, 0, 0, 0.1)',
-      borderColor: 'rgba(255, 0, 0, 0.5)',
-      bounds: {
-        minX: 500,
         maxX: 1000,
         minY: -500,
-        maxY: 500,
-      },
-    },
-    romulan: {
-      id: 'romulan',
-      name: 'Romulan Star Empire',
-      color: 'rgba(0, 255, 0, 0.1)',
-      borderColor: 'rgba(0, 255, 0, 0.5)',
-      bounds: {
-        minX: -500,
-        maxX: 500,
-        minY: 500,
         maxY: 1000,
       },
     },
-    cardassian: {
-      id: 'cardassian',
-      name: 'Cardassian Union',
-      color: 'rgba(128, 128, 128, 0.1)',
-      borderColor: 'rgba(128, 128, 128, 0.5)',
-      bounds: {
-        minX: 500,
-        maxX: 1000,
-        minY: 500,
-        maxY: 1000,
-      },
-    },
+
     neutral: {
       id: 'neutral',
       name: 'Neutral Space',
       color: 'rgba(200, 200, 200, 0.1)',
       borderColor: 'rgba(200, 200, 200, 0.5)',
       bounds: {
-        minX: -1000,
-        maxX: 1000,
-        minY: -1000,
-        maxY: 1000,
+        minX: this.SPACE_BOUNDS.minX,
+        maxX: this.SPACE_BOUNDS.maxX,
+        minY: this.SPACE_BOUNDS.minY,
+        maxY: this.SPACE_BOUNDS.maxY,
       },
     },
   };
