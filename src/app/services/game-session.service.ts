@@ -55,18 +55,18 @@ export class GameSessionService {
   }
 
   public async createNewGameSession(): Promise<string> {
-    // create a new game session
     const gameSession: GameSession = {
       playerIds: [],
       entranceCode: '',
       createdAt: Date.now(),
       lastActive: Date.now(),
+      starshipState: {
+        currentLocation: { x: 100, y: 100 }, // Earth's coordinates
+        isMoving: false,
+      },
     };
     const collectionRef = collection(this.firestore, 'game-sessions');
-
     const result = await addDoc(collectionRef, gameSession);
-
-    console.log('Document reference', result);
     return result.id;
   }
 

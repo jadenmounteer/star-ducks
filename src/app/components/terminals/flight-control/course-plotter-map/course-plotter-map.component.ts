@@ -38,7 +38,24 @@ export class CoursePlotterMapComponent
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Input() spaceObjects: SpaceObject[] = [];
-  @Input() starshipState!: StarshipState;
+  @Input() set starshipState(state: StarshipState) {
+    if (state) {
+      this.starship.coordinates = state.currentLocation;
+      this.isMoving = state.isMoving;
+
+      if (state.destinationLocation) {
+        this.destinationObject =
+          this.spaceObjects.find(
+            (obj) =>
+              obj.coordinates.x === state.destinationLocation?.x &&
+              obj.coordinates.y === state.destinationLocation?.y
+          ) || null;
+      } else {
+        this.destinationObject = null;
+      }
+    }
+  }
+
   @Input() gameSessionId!: string;
 
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
