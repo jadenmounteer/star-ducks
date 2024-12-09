@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { SpaceObject } from '../../../../models/space-object';
 import { CoursePlotterMapComponent } from '../course-plotter-map/course-plotter-map.component';
+import { ActivatedRoute } from '@angular/router';
+import { GameSessionService } from '../../../../services/game-session.service';
+import { Subject, takeUntil } from 'rxjs';
+import { StarshipState } from '../../../../models/starship-state';
 
 @Component({
   selector: 'app-flight-control',
@@ -9,7 +13,16 @@ import { CoursePlotterMapComponent } from '../course-plotter-map/course-plotter-
   templateUrl: './flight-control.component.html',
   styleUrl: './flight-control.component.scss',
 })
-export class FlightControlComponent {
+export class FlightControlComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private gameSessionService = inject(GameSessionService);
+  private destroy$ = new Subject<void>();
+  protected gameSessionId = signal<string | null>(null);
+  protected starshipState = signal<StarshipState>({
+    currentLocation: { x: 100, y: 100 }, // Earth's coordinates
+    isMoving: false,
+  });
+
   protected isMapVisible = false;
   protected spaceObjects: SpaceObject[] = [
     {
@@ -49,12 +62,38 @@ export class FlightControlComponent {
     // Add more space objects...
   ];
 
+  public ngOnInit(): void {
+    this.gameSessionId.set(this.route.snapshot.paramMap.get('gameSessionId'));
+
+    if (this.gameSessionId()) {
+      this.gameSessionService
+        .getStarshipState(this.gameSessionId()!)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((state) => {
+          this.starshipState.set(state);
+        });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   protected showMap(): void {
     this.isMapVisible = true;
     document.body.style.overflow = 'hidden'; // Prevent scrolling when map is open
   }
-  protected onDestinationSelected(destination: SpaceObject): void {
-    console.log('New destination selected:', destination);
+  protected async onDestinationSelected(
+    destination: SpaceObject
+  ): Promise<void> {
+    if (!this.gameSessionId()) return;
+
+    await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
+      ...this.starshipState(),
+      destinationLocation: destination.coordinates,
+      isMoving: true,
+    });
   }
 
   protected hideMap(): void {

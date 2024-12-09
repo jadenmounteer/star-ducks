@@ -1,4 +1,5 @@
 import { MissionState } from './mission-models';
+import { StarshipState } from './starship-state';
 
 export interface GameSession {
   id?: string;
@@ -8,4 +9,5 @@ export interface GameSession {
   lastActive: number;
   missionId?: string;
   missionState?: MissionState;
+  starshipState?: StarshipState;
 }

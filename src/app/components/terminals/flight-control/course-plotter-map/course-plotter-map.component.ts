@@ -18,6 +18,8 @@ import { CanvasService } from '../../../../services/animations/canvas.service';
 import { TerritoryService } from '../../../../services/territory/territory.service';
 import { StarshipIcon } from '../../../../models/starship-icon';
 import { StarshipIconService } from '../../../../services/starship-icon/starship-icon.service';
+import { StarshipState } from '../../../../models/starship-state';
+import { GameSessionService } from '../../../../services/game-session.service';
 
 @Component({
   standalone: true,
@@ -30,9 +32,15 @@ export class CoursePlotterMapComponent
 {
   private territoryService = inject(TerritoryService);
   private starshipIconService = inject(StarshipIconService);
+  private gameSessionService = inject(GameSessionService);
+
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
+
   @Input() spaceObjects: SpaceObject[] = [];
+  @Input() starshipState!: StarshipState;
+  @Input() gameSessionId!: string;
+
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
   @Output() close = new EventEmitter<void>();
 
@@ -71,12 +79,22 @@ export class CoursePlotterMapComponent
     private spaceObjectService: SpaceObjectService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.starship.coordinates = this.starshipState.currentLocation;
+  }
 
   ngAfterViewInit(): void {
     this.initializeCanvas();
     this.startAnimation();
     this.setupResizeObserver();
+  }
+
+  private async updateStarshipLocation() {
+    await this.gameSessionService.updateStarshipState(this.gameSessionId, {
+      currentLocation: this.starship.coordinates,
+      destinationLocation: this.destinationObject?.coordinates,
+      isMoving: this.isMoving,
+    });
   }
 
   protected setDestinationCourse(): void {
@@ -184,6 +202,7 @@ export class CoursePlotterMapComponent
         if (hasArrived) {
           this.isMoving = false;
           this.destinationObject = null;
+          this.updateStarshipLocation();
         }
       }
 

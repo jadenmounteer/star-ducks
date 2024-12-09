@@ -6,6 +6,8 @@
   @if(isMapVisible) {
   <app-course-plotter-map
     [spaceObjects]="spaceObjects"
+    [starshipState]="starshipState()"
+    [gameSessionId]="gameSessionId()!"
     (destinationSelected)="onDestinationSelected($event)"
     (close)="hideMap()"
   >
