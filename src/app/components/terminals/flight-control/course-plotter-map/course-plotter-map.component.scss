@@ -129,3 +129,17 @@
     background: rgba(0, 0, 0, 0.8);
   }
 }
+
+.set-course-button {
+  background: rgba(0, 255, 0, 0.2);
+  border: 1px solid #0f0;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: #0f0;
+  cursor: pointer;
+  margin-top: 10px;
+
+  &:hover {
+    background: rgba(0, 255, 0, 0.4);
+  }
+}

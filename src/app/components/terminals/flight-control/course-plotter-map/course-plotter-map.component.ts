@@ -16,6 +16,8 @@ import { SpaceObjectService } from '../../../../services/space-object.service';
 import { StarFieldService } from './stars/star-field.service';
 import { CanvasService } from '../../../../services/animations/canvas.service';
 import { TerritoryService } from '../../../../services/territory/territory.service';
+import { StarshipIcon } from '../../../../models/starship-icon';
+import { StarshipIconService } from '../../../../services/starship-icon/starship-icon.service';
 
 @Component({
   standalone: true,
@@ -27,7 +29,7 @@ export class CoursePlotterMapComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   private territoryService = inject(TerritoryService);
-
+  private starshipIconService = inject(StarshipIconService);
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() spaceObjects: SpaceObject[] = [];
@@ -42,6 +44,16 @@ export class CoursePlotterMapComponent
   private destroyFn: (() => void) | null = null;
 
   protected showTerritories = false;
+
+  private starship: StarshipIcon = {
+    coordinates: { x: 0, y: 0 },
+    sprite: 'assets/sprites/star-ships/enterprise.png',
+    animationFrames: 1,
+    size: 32,
+    speed: 2,
+  };
+  private destinationObject: SpaceObject | null = null;
+  private isMoving = false;
 
   private viewport = { x: 0, y: 0 };
   private readonly BOUNDS = {
@@ -67,6 +79,12 @@ export class CoursePlotterMapComponent
     this.setupResizeObserver();
   }
 
+  protected setDestinationCourse(): void {
+    if (this.selectedObject) {
+      this.destinationObject = this.selectedObject;
+      this.isMoving = true;
+    }
+  }
   // Add these methods to the component
   public startDrag(event: MouseEvent | TouchEvent): void {
     this.isDragging = true;
@@ -145,6 +163,37 @@ export class CoursePlotterMapComponent
           canvas.height
         );
       }
+
+      // Draw course line if destination is set
+      if (this.destinationObject) {
+        this.starshipIconService.drawCourseLine(
+          this.ctx,
+          this.starship,
+          this.destinationObject,
+          this.viewport.x,
+          this.viewport.y
+        );
+      }
+
+      // Move starship if needed
+      if (this.isMoving && this.destinationObject) {
+        const hasArrived = this.starshipIconService.moveTowardsDestination(
+          this.starship,
+          this.destinationObject
+        );
+        if (hasArrived) {
+          this.isMoving = false;
+          this.destinationObject = null;
+        }
+      }
+
+      // Draw starship
+      this.starshipIconService.drawStarship(
+        this.ctx,
+        this.starship,
+        this.viewport.x,
+        this.viewport.y
+      );
 
       this.starFieldService.drawStarField(
         this.ctx,
