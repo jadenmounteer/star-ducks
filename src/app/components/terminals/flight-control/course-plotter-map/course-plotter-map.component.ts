@@ -187,14 +187,6 @@ export class CoursePlotterMapComponent
         }
       }
 
-      // Draw starship
-      this.starshipIconService.drawStarship(
-        this.ctx,
-        this.starship,
-        this.viewport.x,
-        this.viewport.y
-      );
-
       this.starFieldService.drawStarField(
         this.ctx,
         canvas.width,
@@ -221,6 +213,14 @@ export class CoursePlotterMapComponent
         };
         this.spaceObjectService.drawSpaceObject(this.ctx, adjustedObject);
       });
+
+      this.starshipIconService.drawStarship(
+        this.ctx,
+        this.starship,
+        this.viewport.x,
+        this.viewport.y,
+        this.destinationObject || undefined
+      );
 
       this.animationFrameId = requestAnimationFrame(animate);
     };

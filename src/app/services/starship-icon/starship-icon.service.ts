@@ -27,7 +27,8 @@ export class StarshipIconService {
     ctx: CanvasRenderingContext2D,
     starship: StarshipIcon,
     viewportX: number,
-    viewportY: number
+    viewportY: number,
+    destination?: SpaceObject
   ): Promise<void> {
     try {
       const sprite = await this.loadSprite(starship.sprite);
@@ -36,6 +37,17 @@ export class StarshipIconService {
       const adjustedX = starship.coordinates.x - viewportX;
       const adjustedY = starship.coordinates.y - viewportY;
 
+      ctx.save();
+      ctx.translate(adjustedX, adjustedY);
+
+      if (destination) {
+        const angle = this.calculateAngle(
+          starship.coordinates,
+          destination.coordinates
+        );
+        ctx.rotate(angle + Math.PI / 2); // Add 90 degrees to point forward
+      }
+
       ctx.imageSmoothingEnabled = false;
       ctx.drawImage(
         sprite,
@@ -43,11 +55,12 @@ export class StarshipIconService {
         0,
         frameWidth,
         frameHeight,
-        adjustedX - starship.size / 2,
-        adjustedY - starship.size / 2,
+        -starship.size / 2,
+        -starship.size / 2,
         starship.size,
         starship.size
       );
+      ctx.restore();
     } catch (error) {
       console.error('Failed to load starship sprite:', error);
     }
@@ -91,5 +104,12 @@ export class StarshipIconService {
     starship.coordinates.x += Math.cos(angle) * starship.speed;
     starship.coordinates.y += Math.sin(angle) * starship.speed;
     return false;
+  }
+
+  private calculateAngle(
+    start: { x: number; y: number },
+    end: { x: number; y: number }
+  ): number {
+    return Math.atan2(end.y - start.y, end.x - start.x);
   }
 }
