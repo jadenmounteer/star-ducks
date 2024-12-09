@@ -5,7 +5,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnInit,
   AfterViewInit,
   OnDestroy,
   inject,
@@ -27,9 +26,7 @@ import { GameSessionService } from '../../../../services/game-session.service';
   templateUrl: './course-plotter-map.component.html',
   styleUrls: ['./course-plotter-map.component.scss'],
 })
-export class CoursePlotterMapComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private territoryService = inject(TerritoryService);
   private starshipIconService = inject(StarshipIconService);
   private gameSessionService = inject(GameSessionService);
@@ -40,10 +37,12 @@ export class CoursePlotterMapComponent
   @Input() spaceObjects: SpaceObject[] = [];
   @Input() set starshipState(state: StarshipState) {
     if (state) {
+      // Always set the current position directly
       this.starship.coordinates = state.currentLocation;
-      this.isMoving = state.isMoving;
 
-      if (state.destinationLocation) {
+      // Only set up movement if we have both isMoving and a destinationLocation
+      if (state.isMoving && state.destinationLocation) {
+        this.isMoving = true;
         this.destinationObject =
           this.spaceObjects.find(
             (obj) =>
@@ -51,6 +50,8 @@ export class CoursePlotterMapComponent
               obj.coordinates.y === state.destinationLocation?.y
           ) || null;
       } else {
+        // If we're not moving or don't have a destination, reset movement state
+        this.isMoving = false;
         this.destinationObject = null;
       }
     }
@@ -95,10 +96,6 @@ export class CoursePlotterMapComponent
     private canvasService: CanvasService,
     private spaceObjectService: SpaceObjectService
   ) {}
-
-  ngOnInit() {
-    this.starship.coordinates = this.starshipState.currentLocation;
-  }
 
   ngAfterViewInit(): void {
     this.initializeCanvas();
