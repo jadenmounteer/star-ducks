@@ -37,6 +37,17 @@ export class CoursePlotterMapComponent
   private animationFrameId: number | null = null;
   private destroyFn: (() => void) | null = null;
 
+  private viewport = { x: 0, y: 0 };
+  private readonly MOVEMENT_SPEED = 5;
+  private readonly BOUNDS = {
+    minX: -1000,
+    maxX: 1000,
+    minY: -1000,
+    maxY: 1000,
+  };
+  protected isDragging = false;
+  private lastMousePos = { x: 0, y: 0 };
+
   constructor(
     private starFieldService: StarFieldService,
     private canvasService: CanvasService,
@@ -49,6 +60,52 @@ export class CoursePlotterMapComponent
     this.initializeCanvas();
     this.startAnimation();
     this.setupResizeObserver();
+  }
+
+  // Add these methods to the component
+  public startDrag(event: MouseEvent | TouchEvent): void {
+    this.isDragging = true;
+    if (event instanceof MouseEvent) {
+      this.lastMousePos = { x: event.clientX, y: event.clientY };
+    } else {
+      this.lastMousePos = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
+    }
+  }
+
+  public endDrag(): void {
+    this.isDragging = false;
+  }
+
+  public handleDrag(event: MouseEvent | TouchEvent): void {
+    if (!this.isDragging) return;
+
+    let currentPos;
+    if (event instanceof MouseEvent) {
+      currentPos = { x: event.clientX, y: event.clientY };
+    } else {
+      currentPos = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
+    }
+
+    const deltaX = currentPos.x - this.lastMousePos.x;
+    const deltaY = currentPos.y - this.lastMousePos.y;
+
+    // Update viewport position with bounds checking
+    this.viewport.x = Math.max(
+      this.BOUNDS.minX,
+      Math.min(this.BOUNDS.maxX, this.viewport.x - deltaX)
+    );
+    this.viewport.y = Math.max(
+      this.BOUNDS.minY,
+      Math.min(this.BOUNDS.maxY, this.viewport.y - deltaY)
+    );
+
+    this.lastMousePos = currentPos;
   }
 
   private initializeCanvas(): void {
@@ -72,12 +129,27 @@ export class CoursePlotterMapComponent
       this.starFieldService.drawStarField(
         this.ctx,
         canvas.width,
-        canvas.height
+        canvas.height,
+        this.viewport.x,
+        this.viewport.y
       );
-      this.canvasService.drawGrid(this.ctx, canvas.width, canvas.height);
+      this.canvasService.drawGrid(
+        this.ctx,
+        canvas.width,
+        canvas.height,
+        this.viewport.x,
+        this.viewport.y
+      );
 
       this.spaceObjects.forEach((object) => {
-        this.spaceObjectService.drawSpaceObject(this.ctx, object);
+        const adjustedObject = {
+          ...object,
+          coordinates: {
+            x: object.coordinates.x - this.viewport.x,
+            y: object.coordinates.y - this.viewport.y,
+          },
+        };
+        this.spaceObjectService.drawSpaceObject(this.ctx, adjustedObject);
       });
 
       this.animationFrameId = requestAnimationFrame(animate);
@@ -97,8 +169,8 @@ export class CoursePlotterMapComponent
   public async handleClick(event: MouseEvent): Promise<void> {
     const canvas = this.canvasRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const x = event.clientX - rect.left + this.viewport.x;
+    const y = event.clientY - rect.top + this.viewport.y;
 
     const clickedObject = this.spaceObjects.find((object) =>
       this.spaceObjectService.isPointInObject(x, y, object)
@@ -107,7 +179,6 @@ export class CoursePlotterMapComponent
     if (clickedObject) {
       this.selectedObject = clickedObject;
       this.destinationSelected.emit(clickedObject);
-      // Start preview animation in next tick after view updates
       setTimeout(() => this.initializePreviewCanvas(), 0);
     }
   }

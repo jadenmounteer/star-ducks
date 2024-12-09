@@ -27,9 +27,9 @@ export class Star {
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
+  draw(ctx: CanvasRenderingContext2D, drawX: number, drawY: number) {
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.arc(drawX, drawY, this.size, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(255, 255, 255, ${this.brightness})`;
     ctx.fill();
   }

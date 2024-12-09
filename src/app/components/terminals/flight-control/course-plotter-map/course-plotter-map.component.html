@@ -2,7 +2,14 @@
   <canvas
     #canvasElement
     (click)="handleClick($event)"
-    [style.cursor]="'crosshair'"
+    (mousedown)="startDrag($event)"
+    (mousemove)="handleDrag($event)"
+    (mouseup)="endDrag()"
+    (mouseleave)="endDrag()"
+    (touchstart)="startDrag($event)"
+    (touchmove)="handleDrag($event)"
+    (touchend)="endDrag()"
+    [style.cursor]="isDragging ? 'grabbing' : 'grab'"
   >
   </canvas>
 

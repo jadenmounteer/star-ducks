@@ -42,11 +42,22 @@ export class StarFieldService {
   drawStarField(
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
-    canvasHeight: number
+    canvasHeight: number,
+    viewportX: number,
+    viewportY: number
   ): void {
     this.stars.forEach((star) => {
+      // Adjust star position based on viewport
+      const adjustedX = star.x - viewportX * 0.1; // Parallax effect
+      const adjustedY = star.y - viewportY * 0.1;
+
+      // Wrap stars around the viewport
+      const wrappedX = ((adjustedX % canvasWidth) + canvasWidth) % canvasWidth;
+      const wrappedY =
+        ((adjustedY % canvasHeight) + canvasHeight) % canvasHeight;
+
       star.update(canvasWidth, canvasHeight);
-      star.draw(ctx);
+      star.draw(ctx, wrappedX, wrappedY);
     });
   }
 }

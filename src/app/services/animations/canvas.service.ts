@@ -4,12 +4,22 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class CanvasService {
-  drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number): void {
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-    const gridSize = 20;
+  drawGrid(
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    viewportX: number,
+    viewportY: number
+  ): void {
+    const gridSize = 32;
+    const offsetX = viewportX % gridSize;
+    const offsetY = viewportY % gridSize;
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
 
     // Draw vertical lines
-    for (let x = 0; x <= width; x += gridSize) {
+    for (let x = -offsetX; x <= width; x += gridSize) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, height);
@@ -17,7 +27,7 @@ export class CanvasService {
     }
 
     // Draw horizontal lines
-    for (let y = 0; y <= height; y += gridSize) {
+    for (let y = -offsetY; y <= height; y += gridSize) {
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(width, y);
