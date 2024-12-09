@@ -26,14 +26,15 @@ export class SpaceObjectService {
   async drawSpaceObject(
     ctx: CanvasRenderingContext2D,
     object: SpaceObject,
-    displaySize: number = 32
+    displaySize: number = 32,
+    frameRate: number = 500
   ): Promise<void> {
     try {
       const sprite = await this.loadSprite(object.sprite);
       const frameWidth = sprite.width / object.animationFrames;
       const frameHeight = sprite.height;
       const currentFrame =
-        Math.floor(Date.now() / 200) % object.animationFrames;
+        Math.floor(Date.now() / frameRate) % object.animationFrames;
 
       ctx.imageSmoothingEnabled = false;
 
