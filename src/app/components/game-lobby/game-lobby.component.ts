@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { GameSessionService } from '../../services/game-session.service';
 import { PresenceService } from '../../services/player-presence/player-presence';
@@ -19,6 +19,7 @@ import { Mission } from '../../missions/mission';
 })
 export class GameLobbyComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   protected gameSessionService = inject(GameSessionService);
   private presenceService = inject(PresenceService);
   protected playerSessionService = inject(PlayerSessionService);
@@ -108,7 +109,7 @@ export class GameLobbyComponent implements OnInit, OnDestroy {
       missionState: mission.getMissionState(),
     });
 
-    // TODO: Navigate to mission screen
+    this.router.navigate(['/mission', this.gameSessionId]);
   }
 
   protected isRoleTakenByOtherPlayer(
