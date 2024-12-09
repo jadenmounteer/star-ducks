@@ -25,10 +25,13 @@ export class CoursePlotterMapComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() spaceObjects: SpaceObject[] = [];
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
   @Output() close = new EventEmitter<void>(); // Add this
 
+  private previewAnimationFrameId: number | null = null;
+  private previewCtx!: CanvasRenderingContext2D;
   private ctx!: CanvasRenderingContext2D;
   public selectedObject: SpaceObject | null = null;
   private animationFrameId: number | null = null;
@@ -91,7 +94,7 @@ export class CoursePlotterMapComponent
     resizeObserver.observe(window.document.body);
     this.destroyFn = () => resizeObserver.disconnect();
   }
-  public handleClick(event: MouseEvent): void {
+  public async handleClick(event: MouseEvent): Promise<void> {
     const canvas = this.canvasRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -104,9 +107,49 @@ export class CoursePlotterMapComponent
     if (clickedObject) {
       this.selectedObject = clickedObject;
       this.destinationSelected.emit(clickedObject);
-      // Remove this line that was closing the map
-      // this.closeMap();
+      // Start preview animation in next tick after view updates
+      setTimeout(() => this.initializePreviewCanvas(), 0);
     }
+  }
+
+  private initializePreviewCanvas(): void {
+    if (!this.selectedObject) return;
+
+    const canvas = this.previewCanvasRef.nativeElement;
+    this.previewCtx = canvas.getContext('2d')!;
+
+    // Set canvas size
+    canvas.width = 128; // Larger size for preview
+    canvas.height = 128;
+
+    this.startPreviewAnimation();
+  }
+
+  private startPreviewAnimation(): void {
+    if (this.previewAnimationFrameId) {
+      cancelAnimationFrame(this.previewAnimationFrameId);
+    }
+
+    const animate = async () => {
+      if (!this.selectedObject || !this.previewCtx) return;
+
+      // Clear the preview canvas
+      this.previewCtx.clearRect(0, 0, 128, 128);
+
+      // Draw the space object at a larger size
+      await this.spaceObjectService.drawSpaceObject(
+        this.previewCtx,
+        {
+          ...this.selectedObject,
+          coordinates: { x: 0, y: 0 }, // Center the object in the preview
+        },
+        128 // Larger size for preview
+      );
+
+      this.previewAnimationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
   }
 
   public closeMap(): void {
@@ -117,9 +160,11 @@ export class CoursePlotterMapComponent
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
+    if (this.previewAnimationFrameId) {
+      cancelAnimationFrame(this.previewAnimationFrameId);
+    }
     if (this.destroyFn) {
       this.destroyFn();
     }
-    document.body.style.overflow = ''; // Restore scrolling
   }
 }

@@ -16,8 +16,13 @@
       <button class="info-close-button" (click)="selectedObject = null">
         ×
       </button>
-      <h3>{{ selectedObject.name }}</h3>
-      <p>{{ selectedObject.description }}</p>
+      <div class="object-preview">
+        <canvas #previewCanvas class="preview-canvas"></canvas>
+      </div>
+      <div class="object-details">
+        <h3>{{ selectedObject.name }}</h3>
+        <p>{{ selectedObject.description }}</p>
+      </div>
     </div>
   </div>
   }

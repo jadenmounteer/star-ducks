@@ -55,16 +55,34 @@
     position: relative;
     pointer-events: auto;
     min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 
-    h3 {
-      margin: 0 0 10px 0;
-      color: #00ff00;
-      padding-right: 20px;
+    .object-preview {
+      width: 128px;
+      height: 128px;
+
+      .preview-canvas {
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
     }
 
-    p {
-      margin: 0;
-      font-size: 0.9em;
+    .object-details {
+      text-align: center;
+      width: 100%;
+
+      h3 {
+        margin: 0 0 10px 0;
+        color: #00ff00;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9em;
+      }
     }
 
     .info-close-button {
