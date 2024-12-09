@@ -21,6 +21,16 @@ export class FlightControlComponent {
       animationFrames: 2,
       description: 'Home planet of earth ducks.',
     },
+    {
+      id: '2',
+      name: 'Dulcan',
+      type: 'planet',
+      coordinates: { x: 200, y: 300 },
+      sprite: 'assets/sprites/space-objects/dulcan.png',
+      animationFrames: 2,
+      description:
+        'Home planet of the Dulcans. A peaceful species with no comprehension of what a dad joke is.',
+    },
     // Add more space objects...
   ];
 
