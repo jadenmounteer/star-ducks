@@ -281,7 +281,6 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
 
     if (clickedObject) {
       this.selectedObject = clickedObject;
-      this.destinationSelected.emit(clickedObject);
       setTimeout(() => this.initializePreviewCanvas(), 0);
     }
   }
