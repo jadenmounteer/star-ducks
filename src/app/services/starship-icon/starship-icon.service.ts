@@ -6,27 +6,51 @@ import { SpaceObject } from '../../models/space-object';
   providedIn: 'root',
 })
 export class StarshipIconService {
-  drawStarship(
+  private spriteCache: { [key: string]: HTMLImageElement } = {};
+  private async loadSprite(spritePath: string): Promise<HTMLImageElement> {
+    if (this.spriteCache[spritePath]) {
+      return Promise.resolve(this.spriteCache[spritePath]);
+    }
+
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        this.spriteCache[spritePath] = img;
+        resolve(img);
+      };
+      img.onerror = reject;
+      img.src = spritePath;
+    });
+  }
+
+  async drawStarship(
     ctx: CanvasRenderingContext2D,
     starship: StarshipIcon,
     viewportX: number,
     viewportY: number
-  ): void {
-    const adjustedX = starship.coordinates.x - viewportX;
-    const adjustedY = starship.coordinates.y - viewportY;
+  ): Promise<void> {
+    try {
+      const sprite = await this.loadSprite(starship.sprite);
+      const frameWidth = sprite.width / starship.animationFrames;
+      const frameHeight = sprite.height;
+      const adjustedX = starship.coordinates.x - viewportX;
+      const adjustedY = starship.coordinates.y - viewportY;
 
-    // Draw the starship sprite
-    // For now, let's draw a simple triangle
-    ctx.save();
-    ctx.translate(adjustedX, adjustedY);
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.moveTo(0, -10);
-    ctx.lineTo(-5, 10);
-    ctx.lineTo(5, 10);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(
+        sprite,
+        0,
+        0,
+        frameWidth,
+        frameHeight,
+        adjustedX - starship.size / 2,
+        adjustedY - starship.size / 2,
+        starship.size,
+        starship.size
+      );
+    } catch (error) {
+      console.error('Failed to load starship sprite:', error);
+    }
   }
 
   drawCourseLine(

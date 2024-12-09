@@ -34,7 +34,7 @@ export class CoursePlotterMapComponent
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() spaceObjects: SpaceObject[] = [];
   @Output() destinationSelected = new EventEmitter<SpaceObject>();
-  @Output() close = new EventEmitter<void>(); // Add this
+  @Output() close = new EventEmitter<void>();
 
   private previewAnimationFrameId: number | null = null;
   private previewCtx!: CanvasRenderingContext2D;
