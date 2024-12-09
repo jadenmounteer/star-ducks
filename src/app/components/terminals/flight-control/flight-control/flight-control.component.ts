@@ -21,6 +21,7 @@ export class FlightControlComponent {
       animationFrames: 2,
       size: 48,
       description: 'Home planet of Earth ducks.',
+      territory: 'federation',
     },
     {
       id: '2',
@@ -32,6 +33,7 @@ export class FlightControlComponent {
       size: 96,
       description:
         'Home planet of the Dulcans. A peaceful species with no comprehension of what a dad joke is.',
+      territory: 'federation',
     },
     {
       id: '2',
@@ -42,6 +44,7 @@ export class FlightControlComponent {
       animationFrames: 2,
       size: 192, // Bigger size for the star
       description: "Earth's star.",
+      territory: 'federation',
     },
     // Add more space objects...
   ];

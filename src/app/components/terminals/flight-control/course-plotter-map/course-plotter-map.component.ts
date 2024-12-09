@@ -8,12 +8,14 @@ import {
   OnInit,
   AfterViewInit,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import { SpaceObject } from '../../../../models/space-object';
 
 import { SpaceObjectService } from '../../../../services/space-object.service';
 import { StarFieldService } from './stars/star-field.service';
 import { CanvasService } from '../../../../services/animations/canvas.service';
+import { TerritoryService } from '../../../../services/territory/territory.service';
 
 @Component({
   standalone: true,
@@ -24,6 +26,8 @@ import { CanvasService } from '../../../../services/animations/canvas.service';
 export class CoursePlotterMapComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
+  private territoryService = inject(TerritoryService);
+
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() spaceObjects: SpaceObject[] = [];
@@ -38,7 +42,6 @@ export class CoursePlotterMapComponent
   private destroyFn: (() => void) | null = null;
 
   private viewport = { x: 0, y: 0 };
-  private readonly MOVEMENT_SPEED = 5;
   private readonly BOUNDS = {
     minX: -1000,
     maxX: 1000,
@@ -126,6 +129,16 @@ export class CoursePlotterMapComponent
       const canvas = this.canvasRef.nativeElement;
 
       this.canvasService.clearCanvas(this.ctx, canvas.width, canvas.height);
+
+      // Draw territories first (below everything else)
+      this.territoryService.drawTerritories(
+        this.ctx,
+        this.viewport.x,
+        this.viewport.y,
+        canvas.width,
+        canvas.height
+      );
+
       this.starFieldService.drawStarField(
         this.ctx,
         canvas.width,
@@ -133,6 +146,7 @@ export class CoursePlotterMapComponent
         this.viewport.x,
         this.viewport.y
       );
+
       this.canvasService.drawGrid(
         this.ctx,
         canvas.width,

@@ -1,4 +1,5 @@
-// Space objects that are rendered on the Course Plotter map
+import { TerritoryId } from './territory';
+
 export interface SpaceObject {
   id: string;
   name: string;
@@ -7,5 +8,6 @@ export interface SpaceObject {
   sprite: string;
   animationFrames: number;
   description?: string;
-  size?: number; // Default size will be 48 if not specified
+  size?: number;
+  territory: TerritoryId;
 }
