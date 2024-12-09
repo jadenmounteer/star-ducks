@@ -36,7 +36,10 @@
         <h3>{{ selectedObject.territory }} {{ selectedObject.type }}</h3>
       </div>
 
-      <button class="set-course-button" (click)="setDestinationCourse()">
+      <button
+        class="set-course-button"
+        (click)="setDestinationCourse(); selectedObject = null"
+      >
         Set Course
       </button>
     </div>
