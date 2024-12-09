@@ -112,3 +112,20 @@
     }
   }
 }
+
+.toggle-territories-button {
+  position: absolute;
+  top: 10px;
+  right: 60px; // Position it next to the close button
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #666;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+  z-index: 10000;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}

@@ -41,6 +41,8 @@ export class CoursePlotterMapComponent
   private animationFrameId: number | null = null;
   private destroyFn: (() => void) | null = null;
 
+  protected showTerritories = false;
+
   private viewport = { x: 0, y: 0 };
   private readonly BOUNDS = {
     minX: -1000,
@@ -80,6 +82,10 @@ export class CoursePlotterMapComponent
 
   public endDrag(): void {
     this.isDragging = false;
+  }
+
+  protected toggleTerritories(): void {
+    this.showTerritories = !this.showTerritories;
   }
 
   public handleDrag(event: MouseEvent | TouchEvent): void {
@@ -130,14 +136,15 @@ export class CoursePlotterMapComponent
 
       this.canvasService.clearCanvas(this.ctx, canvas.width, canvas.height);
 
-      // Draw territories first (below everything else)
-      this.territoryService.drawTerritories(
-        this.ctx,
-        this.viewport.x,
-        this.viewport.y,
-        canvas.width,
-        canvas.height
-      );
+      if (this.showTerritories) {
+        this.territoryService.drawTerritories(
+          this.ctx,
+          this.viewport.x,
+          this.viewport.y,
+          canvas.width,
+          canvas.height
+        );
+      }
 
       this.starFieldService.drawStarField(
         this.ctx,
