@@ -31,6 +31,15 @@ export class FlightControlComponent {
       description:
         'Home planet of the Dulcans. A peaceful species with no comprehension of what a dad joke is.',
     },
+    {
+      id: '2',
+      name: 'Helios',
+      type: 'star',
+      coordinates: { x: 400, y: 300 },
+      sprite: 'assets/sprites/space-objects/helios.png',
+      animationFrames: 2,
+      description: "Helios. Earth's star.",
+    },
     // Add more space objects...
   ];
 
