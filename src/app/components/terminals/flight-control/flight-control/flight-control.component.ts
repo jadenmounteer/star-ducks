@@ -19,7 +19,8 @@ export class FlightControlComponent {
       coordinates: { x: 100, y: 100 },
       sprite: 'assets/sprites/space-objects/earth.png',
       animationFrames: 2,
-      description: 'Home planet of earth ducks.',
+      size: 48,
+      description: 'Home planet of Earth ducks.',
     },
     {
       id: '2',
@@ -28,6 +29,7 @@ export class FlightControlComponent {
       coordinates: { x: 200, y: 300 },
       sprite: 'assets/sprites/space-objects/dulcan.png',
       animationFrames: 2,
+      size: 96,
       description:
         'Home planet of the Dulcans. A peaceful species with no comprehension of what a dad joke is.',
     },
@@ -38,6 +40,7 @@ export class FlightControlComponent {
       coordinates: { x: 400, y: 300 },
       sprite: 'assets/sprites/space-objects/helios.png',
       animationFrames: 2,
+      size: 192, // Bigger size for the star
       description: "Earth's star.",
     },
     // Add more space objects...

@@ -26,7 +26,7 @@ export class SpaceObjectService {
   async drawSpaceObject(
     ctx: CanvasRenderingContext2D,
     object: SpaceObject,
-    displaySize: number = 48,
+    displaySize?: number,
     frameRate: number = 500
   ): Promise<void> {
     try {
@@ -35,6 +35,7 @@ export class SpaceObjectService {
       const frameHeight = sprite.height;
       const currentFrame =
         Math.floor(Date.now() / frameRate) % object.animationFrames;
+      const size = displaySize || object.size || 48; // Use provided size, object size, or default
 
       ctx.imageSmoothingEnabled = false;
 
@@ -46,8 +47,8 @@ export class SpaceObjectService {
         frameHeight,
         object.coordinates.x,
         object.coordinates.y,
-        displaySize,
-        displaySize
+        size,
+        size
       );
     } catch (error) {
       console.error('Failed to load sprite:', error);
@@ -58,8 +59,9 @@ export class SpaceObjectService {
     x: number,
     y: number,
     object: SpaceObject,
-    size: number = 48
+    displaySize?: number
   ): boolean {
+    const size = displaySize || object.size || 48;
     return (
       x >= object.coordinates.x &&
       x <= object.coordinates.x + size &&
