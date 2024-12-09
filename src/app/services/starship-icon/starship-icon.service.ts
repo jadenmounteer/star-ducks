@@ -75,8 +75,10 @@ export class StarshipIconService {
   ): void {
     const startX = starship.coordinates.x - viewportX;
     const startY = starship.coordinates.y - viewportY;
-    const endX = destination.coordinates.x - viewportX;
-    const endY = destination.coordinates.y - viewportY;
+    const endX =
+      destination.coordinates.x - viewportX + (destination.size ?? 0) / 2;
+    const endY =
+      destination.coordinates.y - viewportY + (destination.size ?? 0) / 2;
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
