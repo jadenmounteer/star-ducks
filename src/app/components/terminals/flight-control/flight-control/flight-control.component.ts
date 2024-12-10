@@ -242,36 +242,35 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     if (!this.gameSessionId()) return;
 
     const currentState = this.starshipState();
-
-    // Ensure speed is within valid range (1-9)
     const speed = Math.max(1, Math.min(9, newSpeed));
-
-    // If we're moving, recalculate arrival time based on new speed
-    let updatedState: StarshipState = {
-      ...currentState,
-      speed,
-    };
 
     if (
       currentState.isMoving &&
       currentState.destinationLocation &&
       currentState.departureTime
     ) {
-      const newTravelTime = this.travelService.calculateTravelTime(
+      // Recalculate arrival time when moving
+      const travelTime = this.travelService.calculateTravelTime(
         currentState.currentLocation,
         currentState.destinationLocation,
         speed
       );
 
-      updatedState = {
-        ...updatedState,
-        arrivalTime: currentState.departureTime + newTravelTime * 1000,
-      };
+      await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
+        currentLocation: currentState.currentLocation,
+        destinationLocation: currentState.destinationLocation,
+        isMoving: currentState.isMoving,
+        departureTime: currentState.departureTime,
+        arrivalTime: currentState.departureTime + travelTime * 1000,
+        speed,
+      });
+    } else {
+      // Just update speed when stationary
+      await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
+        currentLocation: currentState.currentLocation,
+        isMoving: false,
+        speed,
+      });
     }
-
-    await this.gameSessionService.updateStarshipState(
-      this.gameSessionId()!,
-      updatedState
-    );
   }
 }
