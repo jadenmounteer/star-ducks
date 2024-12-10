@@ -238,11 +238,6 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   }
 
   protected getLocationName(coordinates: { x: number; y: number }): string {
-    // If we're moving between locations, show "In Transit"
-    if (this.starshipState().isMoving) {
-      return 'In Transit';
-    }
-
     // Find the closest space object to these coordinates
     const closestObject = this.spaceObjects.find(
       (obj) =>

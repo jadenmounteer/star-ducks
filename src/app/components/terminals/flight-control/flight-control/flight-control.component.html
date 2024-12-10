@@ -16,7 +16,14 @@
 
   <div class="status-display">
     <div class="location-info">
-      <p>Current Location: {{ getLocationName(currentPosition()) }}</p>
+      <p>
+        Current Location:
+        {{
+          starshipState().isMoving
+            ? "In Transit"
+            : getLocationName(currentPosition())
+        }}
+      </p>
       @if (starshipState().isMoving) {
       <p>
         Destination: {{ getLocationName(starshipState().destinationLocation!) }}
