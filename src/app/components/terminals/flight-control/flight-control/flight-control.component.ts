@@ -256,19 +256,30 @@ export class FlightControlComponent implements OnInit, OnDestroy {
       currentState.destinationLocation &&
       currentState.departureTime
     ) {
-      // Recalculate arrival time when moving
-      const travelTime = this.travelService.calculateTravelTime(
+      // Get current position
+      const currentPosition = this.travelService.calculateCurrentPosition(
         currentState.currentLocation,
+        currentState.destinationLocation,
+        currentState.departureTime,
+        currentState.speed
+      );
+
+      // Calculate new travel time from current position
+      const remainingTravelTime = this.travelService.calculateTravelTime(
+        currentPosition,
         currentState.destinationLocation,
         speed
       );
 
+      // Set new departure time to now and adjust arrival time based on remaining distance
+      const newDepartureTime = Date.now();
+
       await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
-        currentLocation: currentState.currentLocation,
+        currentLocation: currentPosition,
         destinationLocation: currentState.destinationLocation,
-        isMoving: currentState.isMoving,
-        departureTime: currentState.departureTime,
-        arrivalTime: currentState.departureTime + travelTime * 1000,
+        isMoving: true,
+        departureTime: newDepartureTime,
+        arrivalTime: newDepartureTime + remainingTravelTime * 1000,
         speed,
       });
     } else {
