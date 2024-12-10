@@ -1,10 +1,18 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { SpaceObject } from '../../../../models/space-object';
 import { CoursePlotterMapComponent } from '../course-plotter-map/course-plotter-map.component';
 import { ActivatedRoute } from '@angular/router';
 import { GameSessionService } from '../../../../services/game-session.service';
 import { Subject, takeUntil } from 'rxjs';
 import { StarshipState } from '../../../../models/starship-state';
+import { TravelService } from '../../../../services/travel.service';
 
 @Component({
   selector: 'app-flight-control',
@@ -16,11 +24,38 @@ import { StarshipState } from '../../../../models/starship-state';
 export class FlightControlComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private gameSessionService = inject(GameSessionService);
+  private travelService = inject(TravelService);
+
+  protected currentPosition = computed(() => {
+    const state = this.starshipState();
+    if (!state.isMoving || !state.departureTime || !state.destinationLocation) {
+      return state.currentLocation;
+    }
+
+    return this.travelService.calculateCurrentPosition(
+      state.currentLocation,
+      state.destinationLocation,
+      state.departureTime,
+      state.speed
+    );
+  });
+
+  protected timeToDestination = computed(() => {
+    const state = this.starshipState();
+    if (!state.isMoving || !state.departureTime || !state.arrivalTime) {
+      return 0;
+    }
+
+    const remainingTime = state.arrivalTime - Date.now();
+    return Math.max(0, Math.ceil(remainingTime / 1000)); // in seconds
+  });
+
   private destroy$ = new Subject<void>();
   protected gameSessionId = signal<string | null>(null);
   protected starshipState = signal<StarshipState>({
     currentLocation: { x: 100, y: 100 }, // Earth's coordinates
     isMoving: false,
+    speed: 1,
   });
 
   protected isMapVisible = false;
@@ -84,20 +119,53 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     this.isMapVisible = true;
     document.body.style.overflow = 'hidden'; // Prevent scrolling when map is open
   }
+
   protected async onDestinationSelected(
     destination: SpaceObject
   ): Promise<void> {
     if (!this.gameSessionId()) return;
 
+    const currentState = this.starshipState();
+    const departureTime = Date.now();
+    const travelTime = this.travelService.calculateTravelTime(
+      currentState.currentLocation,
+      destination.coordinates,
+      currentState.speed || 1
+    );
+
     await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
-      ...this.starshipState(),
+      ...currentState,
       destinationLocation: destination.coordinates,
       isMoving: true,
+      departureTime,
+      arrivalTime: departureTime + travelTime * 1000, // Convert to milliseconds
+      speed: currentState.speed || 1,
     });
   }
 
   protected hideMap(): void {
     this.isMapVisible = false;
     document.body.style.overflow = ''; // Restore scrolling
+  }
+
+  protected getLocationName(coordinates: { x: number; y: number }): string {
+    // If we're moving between locations, show "In Transit"
+    if (this.starshipState().isMoving) {
+      return 'In Transit';
+    }
+
+    // Find the closest space object to these coordinates
+    const closestObject = this.spaceObjects.find(
+      (obj) =>
+        Math.abs(obj.coordinates.x - coordinates.x) < 10 &&
+        Math.abs(obj.coordinates.y - coordinates.y) < 10
+    );
+
+    if (closestObject) {
+      return closestObject.name;
+    }
+
+    // If we're not near any known object
+    return 'Deep Space';
   }
 }

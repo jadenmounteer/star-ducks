@@ -13,4 +13,17 @@
   >
   </app-course-plotter-map>
   }
+
+  <div class="status-display">
+    <div class="location-info">
+      <p>Current Location: {{ getLocationName(currentPosition()) }}</p>
+      @if (starshipState().isMoving) {
+      <p>
+        Destination: {{ getLocationName(starshipState().destinationLocation!) }}
+      </p>
+      <p>Time to destination: {{ timeToDestination() }} seconds</p>
+      <p>Current speed: Warp {{ starshipState().speed }}</p>
+      }
+    </div>
+  </div>
 </div>

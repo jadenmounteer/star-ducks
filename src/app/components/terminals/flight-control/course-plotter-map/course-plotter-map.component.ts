@@ -108,6 +108,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
       currentLocation: this.starship.coordinates,
       destinationLocation: this.destinationObject?.coordinates,
       isMoving: this.isMoving,
+      speed: this.starship.speed,
     });
   }
 
