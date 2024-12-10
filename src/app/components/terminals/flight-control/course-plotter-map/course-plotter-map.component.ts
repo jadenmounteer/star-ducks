@@ -32,14 +32,14 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private starshipIconService = inject(StarshipIconService);
   private gameSessionService = inject(GameSessionService);
   private travelService = inject(TravelService);
-  private _currentState: StarshipState | null = null;
+  protected currentState: StarshipState | null = null;
 
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Input() spaceObjects: SpaceObject[] = [];
   @Input() set starshipState(state: StarshipState) {
-    this._currentState = state;
+    this.currentState = state;
 
     // Update starship coordinates based on current state
     if (state.isMoving && state.destinationLocation && state.departureTime) {
@@ -184,11 +184,11 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
       }
 
       // Draw course line if destination exists in state
-      if (this._currentState?.destinationLocation) {
+      if (this.currentState?.destinationLocation) {
         const destinationObject = this.spaceObjects.find(
           (obj) =>
-            obj.coordinates.x === this._currentState?.destinationLocation?.x &&
-            obj.coordinates.y === this._currentState?.destinationLocation?.y
+            obj.coordinates.x === this.currentState?.destinationLocation?.x &&
+            obj.coordinates.y === this.currentState?.destinationLocation?.y
         );
 
         if (destinationObject) {
@@ -230,17 +230,16 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
       });
 
       // Update starship position from state
-      if (this._currentState) {
-        this.starship.coordinates = this._currentState.currentLocation;
+      if (this.currentState) {
+        this.starship.coordinates = this.currentState.currentLocation;
       }
 
       // Draw starship with destination if available
-      const destinationObject = this._currentState?.destinationLocation
+      const destinationObject = this.currentState?.destinationLocation
         ? this.spaceObjects.find(
             (obj) =>
-              obj.coordinates.x ===
-                this._currentState?.destinationLocation?.x &&
-              obj.coordinates.y === this._currentState?.destinationLocation?.y
+              obj.coordinates.x === this.currentState?.destinationLocation?.x &&
+              obj.coordinates.y === this.currentState?.destinationLocation?.y
           )
         : undefined;
 
@@ -347,5 +346,15 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     if (this.destroyFn) {
       this.destroyFn();
     }
+  }
+
+  protected getEstimatedTravelTime(destination: SpaceObject): number {
+    if (!this.currentState) return 0;
+
+    return this.travelService.calculateTravelTime(
+      this.currentState.currentLocation,
+      destination.coordinates,
+      this.currentState.speed
+    );
   }
 }

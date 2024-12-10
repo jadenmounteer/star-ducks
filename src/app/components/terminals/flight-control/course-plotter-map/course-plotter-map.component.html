@@ -34,6 +34,11 @@
         <h3>{{ selectedObject.name }}</h3>
         <p class="object-description">{{ selectedObject.description }}</p>
         <h3>{{ selectedObject.territory }} {{ selectedObject.type }}</h3>
+        <p class="travel-estimate">
+          Estimated travel time:
+          {{ getEstimatedTravelTime(selectedObject) }} seconds at Warp
+          {{ currentState?.speed }}
+        </p>
       </div>
 
       <button
