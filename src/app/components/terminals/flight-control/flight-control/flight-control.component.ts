@@ -113,7 +113,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
       id: '2',
       name: 'Helios',
       type: 'star',
-      coordinates: { x: 400, y: 300 },
+      coordinates: { x: 500, y: 300 },
       sprite: 'assets/sprites/space-objects/helios.png',
       animationFrames: 2,
       size: 192, // Bigger size for the star

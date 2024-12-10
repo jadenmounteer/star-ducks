@@ -157,6 +157,30 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     const canvas = this.canvasRef.nativeElement;
     this.ctx = canvas.getContext('2d')!;
     this.resizeCanvas();
+
+    // Center viewport on current starship position
+    if (this.currentState) {
+      let currentPos;
+      if (
+        this.currentState.isMoving &&
+        this.currentState.destinationLocation &&
+        this.currentState.departureTime
+      ) {
+        currentPos = this.travelService.calculateCurrentPosition(
+          this.currentState.currentLocation,
+          this.currentState.destinationLocation,
+          this.currentState.departureTime,
+          this.currentState.speed
+        );
+      } else {
+        currentPos = this.currentState.currentLocation;
+      }
+
+      this.viewport = {
+        x: currentPos.x - canvas.width / 2,
+        y: currentPos.y - canvas.height / 2,
+      };
+    }
   }
 
   private resizeCanvas(): void {
