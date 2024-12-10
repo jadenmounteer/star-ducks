@@ -63,7 +63,7 @@ export class GameSessionService {
       starshipState: {
         currentLocation: { x: 100, y: 100 }, // Earth's coordinates
         isMoving: false,
-        speed: 1,
+        speed: 9,
       },
     };
     const collectionRef = collection(this.firestore, 'game-sessions');

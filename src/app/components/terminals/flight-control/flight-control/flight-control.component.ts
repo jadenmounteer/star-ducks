@@ -26,6 +26,8 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private gameSessionService = inject(GameSessionService);
   private travelService = inject(TravelService);
 
+  private positionUpdateInterval: number | null = null;
+
   protected currentPosition = computed(() => {
     const state = this.starshipState();
     if (!state.isMoving || !state.departureTime || !state.destinationLocation) {
@@ -55,7 +57,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   protected starshipState = signal<StarshipState>({
     currentLocation: { x: 100, y: 100 }, // Earth's coordinates
     isMoving: false,
-    speed: 1,
+    speed: 9,
   });
 
   protected isMapVisible = false;
@@ -101,23 +103,89 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     this.gameSessionId.set(this.route.snapshot.paramMap.get('gameSessionId'));
 
     if (this.gameSessionId()) {
+      // Get initial state from database
       this.gameSessionService
         .getStarshipState(this.gameSessionId()!)
         .pipe(takeUntil(this.destroy$))
         .subscribe((state) => {
-          this.starshipState.set(state);
+          if (state) {
+            // Ensure we have all required properties
+            this.starshipState.set({
+              currentLocation: state.currentLocation || { x: 100, y: 100 },
+              destinationLocation: state.destinationLocation,
+              isMoving: state.isMoving || false,
+              departureTime: state.departureTime,
+              arrivalTime: state.arrivalTime,
+              speed: state.speed || 1,
+            });
+
+            // Start position updates after we have initial state
+            this.startPositionUpdates();
+          }
         });
     }
   }
 
+  private startPositionUpdates(): void {
+    this.positionUpdateInterval = window.setInterval(async () => {
+      const state = this.starshipState();
+      if (state.isMoving && state.destinationLocation && state.departureTime) {
+        // Check if we've arrived first
+        if (state.arrivalTime && Date.now() >= state.arrivalTime) {
+          await this.handleArrival();
+          return; // Exit early after handling arrival
+        }
+
+        // Update current position if we haven't arrived yet
+        const newPosition = this.travelService.calculateCurrentPosition(
+          state.currentLocation,
+          state.destinationLocation,
+          state.departureTime,
+          state.speed
+        );
+
+        // Update state with new position
+        this.starshipState.set({
+          ...state,
+          currentLocation: newPosition,
+        });
+      }
+    }, 1000); // Update every second
+  }
+
+  private async handleArrival(): Promise<void> {
+    const state = this.starshipState();
+    if (state.destinationLocation) {
+      const newState: StarshipState = {
+        currentLocation: state.destinationLocation,
+        isMoving: false,
+        speed: state.speed,
+      };
+
+      await this.gameSessionService.updateStarshipState(
+        this.gameSessionId()!,
+        newState
+      );
+    }
+  }
+
   public ngOnDestroy(): void {
+    if (this.positionUpdateInterval) {
+      clearInterval(this.positionUpdateInterval);
+    }
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   protected showMap(): void {
     this.isMapVisible = true;
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when map is open
+    document.body.style.overflow = 'hidden';
+
+    // Clear existing interval before map opens
+    if (this.positionUpdateInterval) {
+      clearInterval(this.positionUpdateInterval);
+    }
+    this.startPositionUpdates();
   }
 
   protected async onDestinationSelected(
@@ -146,6 +214,12 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   protected hideMap(): void {
     this.isMapVisible = false;
     document.body.style.overflow = ''; // Restore scrolling
+
+    // Restart position updates when map is closed
+    // if (this.positionUpdateInterval) {
+    //   clearInterval(this.positionUpdateInterval);
+    // }
+    this.startPositionUpdates();
   }
 
   protected getLocationName(coordinates: { x: number; y: number }): string {

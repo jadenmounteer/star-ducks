@@ -19,6 +19,7 @@ import { StarshipIcon } from '../../../../models/starship-icon';
 import { StarshipIconService } from '../../../../services/starship-icon/starship-icon.service';
 import { StarshipState } from '../../../../models/starship-state';
 import { GameSessionService } from '../../../../services/game-session.service';
+import { TravelService } from '../../../../services/travel.service';
 
 @Component({
   standalone: true,
@@ -30,30 +31,28 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private territoryService = inject(TerritoryService);
   private starshipIconService = inject(StarshipIconService);
   private gameSessionService = inject(GameSessionService);
+  private travelService = inject(TravelService);
+  private _currentState: StarshipState | null = null;
 
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Input() spaceObjects: SpaceObject[] = [];
   @Input() set starshipState(state: StarshipState) {
-    if (state) {
-      // Always set the current position directly
-      this.starship.coordinates = state.currentLocation;
+    this._currentState = state;
 
-      // Only set up movement if we have both isMoving and a destinationLocation
-      if (state.isMoving && state.destinationLocation) {
-        this.isMoving = true;
-        this.destinationObject =
-          this.spaceObjects.find(
-            (obj) =>
-              obj.coordinates.x === state.destinationLocation?.x &&
-              obj.coordinates.y === state.destinationLocation?.y
-          ) || null;
-      } else {
-        // If we're not moving or don't have a destination, reset movement state
-        this.isMoving = false;
-        this.destinationObject = null;
-      }
+    // Update starship coordinates based on current state
+    if (state.isMoving && state.destinationLocation && state.departureTime) {
+      // Calculate current position during movement
+      this.starship.coordinates = this.travelService.calculateCurrentPosition(
+        state.currentLocation,
+        state.destinationLocation,
+        state.departureTime,
+        state.speed
+      );
+    } else {
+      // When not moving, use the current location
+      this.starship.coordinates = state.currentLocation;
     }
   }
 
@@ -76,10 +75,8 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     sprite: 'assets/sprites/star-ships/enterprise.png',
     animationFrames: 1,
     size: 32,
-    speed: 2,
+    speed: 1,
   };
-  private destinationObject: SpaceObject | null = null;
-  private isMoving = false;
 
   private viewport = { x: 0, y: 0 };
   private readonly BOUNDS = {
@@ -103,19 +100,9 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     this.setupResizeObserver();
   }
 
-  private async updateStarshipLocation() {
-    await this.gameSessionService.updateStarshipState(this.gameSessionId, {
-      currentLocation: this.starship.coordinates,
-      destinationLocation: this.destinationObject?.coordinates,
-      isMoving: this.isMoving,
-      speed: this.starship.speed,
-    });
-  }
-
   protected setDestinationCourse(): void {
     if (this.selectedObject) {
-      this.destinationObject = this.selectedObject;
-      this.isMoving = true;
+      this.destinationSelected.emit(this.selectedObject);
     }
   }
   // Add these methods to the component
@@ -184,7 +171,6 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private startAnimation(): void {
     const animate = () => {
       const canvas = this.canvasRef.nativeElement;
-
       this.canvasService.clearCanvas(this.ctx, canvas.width, canvas.height);
 
       if (this.showTerritories) {
@@ -197,27 +183,22 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         );
       }
 
-      // Draw course line if destination is set
-      if (this.destinationObject) {
-        this.starshipIconService.drawCourseLine(
-          this.ctx,
-          this.starship,
-          this.destinationObject,
-          this.viewport.x,
-          this.viewport.y
+      // Draw course line if destination exists in state
+      if (this._currentState?.destinationLocation) {
+        const destinationObject = this.spaceObjects.find(
+          (obj) =>
+            obj.coordinates.x === this._currentState?.destinationLocation?.x &&
+            obj.coordinates.y === this._currentState?.destinationLocation?.y
         );
-      }
 
-      // Move starship if needed
-      if (this.isMoving && this.destinationObject) {
-        const hasArrived = this.starshipIconService.moveTowardsDestination(
-          this.starship,
-          this.destinationObject
-        );
-        if (hasArrived) {
-          this.isMoving = false;
-          this.destinationObject = null;
-          this.updateStarshipLocation();
+        if (destinationObject) {
+          this.starshipIconService.drawCourseLine(
+            this.ctx,
+            this.starship,
+            destinationObject,
+            this.viewport.x,
+            this.viewport.y
+          );
         }
       }
 
@@ -248,12 +229,27 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         this.spaceObjectService.drawSpaceObject(this.ctx, adjustedObject);
       });
 
+      // Update starship position from state
+      if (this._currentState) {
+        this.starship.coordinates = this._currentState.currentLocation;
+      }
+
+      // Draw starship with destination if available
+      const destinationObject = this._currentState?.destinationLocation
+        ? this.spaceObjects.find(
+            (obj) =>
+              obj.coordinates.x ===
+                this._currentState?.destinationLocation?.x &&
+              obj.coordinates.y === this._currentState?.destinationLocation?.y
+          )
+        : undefined;
+
       this.starshipIconService.drawStarship(
         this.ctx,
         this.starship,
         this.viewport.x,
         this.viewport.y,
-        this.destinationObject || undefined
+        destinationObject
       );
 
       this.animationFrameId = requestAnimationFrame(animate);
