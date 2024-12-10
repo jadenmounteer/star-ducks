@@ -26,4 +26,18 @@
       }
     </div>
   </div>
+
+  <div class="speed-controls">
+    <p>Warp Speed Control:</p>
+    <div class="speed-buttons">
+      @for (speed of [1,2,3,4,5,6,7,8,9]; track speed) {
+      <button
+        [class.active]="starshipState().speed === speed"
+        (click)="updateSpeed(speed)"
+      >
+        {{ speed }}
+      </button>
+      }
+    </div>
+  </div>
 </div>
