@@ -11,4 +11,4 @@ export interface Territory {
   };
 }
 
-export type TerritoryId = 'federation' | 'neutral';
+export type TerritoryId = 'federation';

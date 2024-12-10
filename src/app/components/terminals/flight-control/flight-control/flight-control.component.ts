@@ -101,7 +101,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
       id: '2',
       name: 'Dulcan',
       type: 'planet',
-      coordinates: { x: 200, y: 300 },
+      coordinates: { x: 350, y: 600 },
       sprite: 'assets/sprites/space-objects/dulcan.png',
       animationFrames: 2,
       size: 96,
@@ -110,10 +110,10 @@ export class FlightControlComponent implements OnInit, OnDestroy {
       territory: 'federation',
     },
     {
-      id: '2',
+      id: '3',
       name: 'Helios',
       type: 'star',
-      coordinates: { x: 500, y: 300 },
+      coordinates: { x: 800, y: 450 },
       sprite: 'assets/sprites/space-objects/helios.png',
       animationFrames: 2,
       size: 192, // Bigger size for the star

@@ -13,23 +13,10 @@ export class TerritoryService {
       color: 'rgba(0, 0, 255, 0.1)',
       borderColor: 'rgba(0, 0, 255, 0.5)',
       bounds: {
-        minX: -500,
-        maxX: 1000,
-        minY: -500,
-        maxY: 1000,
-      },
-    },
-
-    neutral: {
-      id: 'neutral',
-      name: 'Neutral Space',
-      color: 'rgba(200, 200, 200, 0.1)',
-      borderColor: 'rgba(200, 200, 200, 0.5)',
-      bounds: {
-        minX: BOUNDS.minX,
-        maxX: BOUNDS.maxX,
-        minY: BOUNDS.minY,
-        maxY: BOUNDS.maxY,
+        minX: -1800,
+        maxX: 2000,
+        minY: -2000,
+        maxY: 4500,
       },
     },
   };
