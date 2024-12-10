@@ -308,7 +308,8 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         this.starship.coordinates,
         this.viewport,
         '#dddddd',
-        this.starship.size
+        this.starship.size,
+        true
       );
 
       // If there's a destination, draw an arrow to it too

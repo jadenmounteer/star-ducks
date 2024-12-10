@@ -11,13 +11,17 @@ export class DirectionalArrowService {
     targetPosition: { x: number; y: number },
     viewportPosition: { x: number; y: number },
     color: string = '#dddddd',
-    objectSize: number = 48
+    objectSize: number = 48,
+    isStarship: boolean = false
   ): void {
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
     // Adjust target position to center of object
-    const targetX = targetPosition.x - viewportPosition.x + objectSize / 2;
-    const targetY = targetPosition.y - viewportPosition.y + objectSize / 2;
+    // Only add size offset for space objects, not for starship
+    const targetX =
+      targetPosition.x - viewportPosition.x + (isStarship ? 0 : objectSize / 2);
+    const targetY =
+      targetPosition.y - viewportPosition.y + (isStarship ? 0 : objectSize / 2);
 
     // Calculate angle to target
     const angle = Math.atan2(targetY - centerY, targetX - centerX);
