@@ -21,6 +21,13 @@ import { StarshipState } from '../../../../models/starship-state';
 import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
 
+export const BOUNDS = {
+  minX: -5000,
+  maxX: 5000,
+  minY: -5000,
+  maxY: 5000,
+};
+
 @Component({
   standalone: true,
   selector: 'app-course-plotter-map',
@@ -71,12 +78,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   };
 
   private viewport = { x: 0, y: 0 };
-  private readonly BOUNDS = {
-    minX: -1000,
-    maxX: 1000,
-    minY: -1000,
-    maxY: 1000,
-  };
+
   protected isDragging = false;
   private lastMousePos = { x: 0, y: 0 };
 
@@ -142,12 +144,12 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
 
     // Update viewport position with bounds checking
     this.viewport.x = Math.max(
-      this.BOUNDS.minX,
-      Math.min(this.BOUNDS.maxX, this.viewport.x - deltaX)
+      BOUNDS.minX,
+      Math.min(BOUNDS.maxX, this.viewport.x - deltaX)
     );
     this.viewport.y = Math.max(
-      this.BOUNDS.minY,
-      Math.min(this.BOUNDS.maxY, this.viewport.y - deltaY)
+      BOUNDS.minY,
+      Math.min(BOUNDS.maxY, this.viewport.y - deltaY)
     );
 
     this.lastMousePos = currentPos;
