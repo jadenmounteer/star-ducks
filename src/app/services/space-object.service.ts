@@ -62,11 +62,17 @@ export class SpaceObjectService {
     displaySize?: number
   ): boolean {
     const size = displaySize || object.size || 48;
-    return (
-      x >= object.coordinates.x &&
-      x <= object.coordinates.x + size &&
-      y >= object.coordinates.y &&
-      y <= object.coordinates.y + size
-    );
+    const padding = 20; // Extra padding for touch devices
+    const radius = size / 2 + padding;
+
+    // Calculate distance from click/touch point to object center
+    const centerX = object.coordinates.x + size / 2;
+    const centerY = object.coordinates.y + size / 2;
+
+    const dx = x - centerX;
+    const dy = y - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    return distance <= radius;
   }
 }
