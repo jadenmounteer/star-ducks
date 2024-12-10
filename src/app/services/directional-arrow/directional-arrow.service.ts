@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class DirectionalArrowService {
-  drawDirectionalArrow(
+  public drawDirectionalArrow(
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
     canvasHeight: number,
@@ -15,8 +15,9 @@ export class DirectionalArrowService {
   ): void {
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
-    const targetX = targetPosition.x - viewportPosition.x;
-    const targetY = targetPosition.y - viewportPosition.y;
+    // Adjust target position to center of object
+    const targetX = targetPosition.x - viewportPosition.x + objectSize / 2;
+    const targetY = targetPosition.y - viewportPosition.y + objectSize / 2;
 
     // Calculate angle to target
     const angle = Math.atan2(targetY - centerY, targetX - centerX);
@@ -35,7 +36,7 @@ export class DirectionalArrowService {
 
       this.drawArrow(ctx, arrowX, arrowY, angle, color);
     } else {
-      // Draw above the object
+      // Draw above the object's center
       const arrowY = targetY - objectSize / 2 - 20; // 20px above object
       this.drawArrow(ctx, targetX, arrowY, Math.PI / 2, color); // Point downward
     }
