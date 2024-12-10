@@ -41,17 +41,8 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   @Input() set starshipState(state: StarshipState) {
     this.currentState = state;
 
-    // Update starship coordinates based on current state
-    if (state.isMoving && state.destinationLocation && state.departureTime) {
-      // Calculate current position during movement
-      this.starship.coordinates = this.travelService.calculateCurrentPosition(
-        state.currentLocation,
-        state.destinationLocation,
-        state.departureTime,
-        state.speed
-      );
-    } else {
-      // When not moving, use the current location
+    // Only set coordinates directly when not moving
+    if (!state.isMoving) {
       this.starship.coordinates = state.currentLocation;
     }
   }
@@ -173,6 +164,22 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
       const canvas = this.canvasRef.nativeElement;
       this.canvasService.clearCanvas(this.ctx, canvas.width, canvas.height);
 
+      // Update starship position if moving
+      if (
+        this.currentState?.isMoving &&
+        this.currentState.destinationLocation &&
+        this.currentState.departureTime &&
+        (!this.currentState.arrivalTime ||
+          Date.now() < this.currentState.arrivalTime)
+      ) {
+        this.starship.coordinates = this.travelService.calculateCurrentPosition(
+          this.currentState.currentLocation,
+          this.currentState.destinationLocation,
+          this.currentState.departureTime,
+          this.currentState.speed
+        );
+      }
+
       if (this.showTerritories) {
         this.territoryService.drawTerritories(
           this.ctx,
@@ -229,12 +236,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         this.spaceObjectService.drawSpaceObject(this.ctx, adjustedObject);
       });
 
-      // Update starship position from state
-      if (this.currentState) {
-        this.starship.coordinates = this.currentState.currentLocation;
-      }
-
-      // Draw starship with destination if available
+      // Draw course line and starship
       const destinationObject = this.currentState?.destinationLocation
         ? this.spaceObjects.find(
             (obj) =>
@@ -243,6 +245,17 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
           )
         : undefined;
 
+      if (destinationObject) {
+        this.starshipIconService.drawCourseLine(
+          this.ctx,
+          this.starship,
+          destinationObject,
+          this.viewport.x,
+          this.viewport.y
+        );
+      }
+
+      // Draw starship at calculated position
       this.starshipIconService.drawStarship(
         this.ctx,
         this.starship,

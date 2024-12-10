@@ -38,12 +38,32 @@ export class TravelService {
   ): { x: number; y: number } {
     const now = Date.now();
     const elapsedTime = (now - departureTime) / 1000; // Convert to seconds
-    const totalTime = this.calculateTravelTime(start, end, speed);
-    const progress = Math.min(elapsedTime / totalTime, 1);
 
+    // Get speed in pixels per second
+    const speedInPixels =
+      this.WARP_SPEEDS[speed as keyof typeof this.WARP_SPEEDS];
+
+    // Calculate direction vector
+    const dx = end.x - start.x;
+    const dy = end.y - start.y;
+    const totalDistance = Math.sqrt(dx * dx + dy * dy);
+
+    // Calculate unit vector
+    const unitX = dx / totalDistance;
+    const unitY = dy / totalDistance;
+
+    // Calculate distance traveled
+    const distanceTraveled = speedInPixels * elapsedTime;
+
+    // If we've reached the destination, return end coordinates
+    if (distanceTraveled >= totalDistance) {
+      return { ...end };
+    }
+
+    // Return interpolated position
     return {
-      x: start.x + (end.x - start.x) * progress,
-      y: start.y + (end.y - start.y) * progress,
+      x: start.x + unitX * distanceTraveled,
+      y: start.y + unitY * distanceTraveled,
     };
   }
 }

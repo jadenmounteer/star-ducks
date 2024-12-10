@@ -137,27 +137,12 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     this.positionUpdateInterval = window.setInterval(async () => {
       const state = this.starshipState();
       if (state.isMoving && state.destinationLocation && state.departureTime) {
-        // Check if we've arrived first
+        // Only check for arrival, don't update position
         if (state.arrivalTime && Date.now() >= state.arrivalTime) {
           await this.handleArrival();
-          return; // Exit early after handling arrival
         }
-
-        // Update current position if we haven't arrived yet
-        const newPosition = this.travelService.calculateCurrentPosition(
-          state.currentLocation,
-          state.destinationLocation,
-          state.departureTime,
-          state.speed
-        );
-
-        // Update state with new position
-        this.starshipState.set({
-          ...state,
-          currentLocation: newPosition,
-        });
       }
-    }, 1000); // Update every second
+    }, 1000);
   }
 
   private async handleArrival(): Promise<void> {
