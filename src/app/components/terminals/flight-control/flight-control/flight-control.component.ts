@@ -57,7 +57,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   protected starshipState = signal<StarshipState>({
     currentLocation: { x: 100, y: 100 }, // Earth's coordinates
     isMoving: false,
-    speed: 9,
+    speed: 1,
   });
 
   protected isMapVisible = false;
