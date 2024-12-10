@@ -18,8 +18,8 @@ import { TerritoryService } from '../../../../services/territory/territory.servi
 import { StarshipIcon } from '../../../../models/starship-icon';
 import { StarshipIconService } from '../../../../services/starship-icon/starship-icon.service';
 import { StarshipState } from '../../../../models/starship-state';
-import { GameSessionService } from '../../../../services/game-session.service';
 import { TravelService } from '../../../../services/travel.service';
+import { TimeFormatService } from '../../../../services/time-format.service';
 
 @Component({
   standalone: true,
@@ -30,7 +30,7 @@ import { TravelService } from '../../../../services/travel.service';
 export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private territoryService = inject(TerritoryService);
   private starshipIconService = inject(StarshipIconService);
-  private gameSessionService = inject(GameSessionService);
+  private timeFormatService = inject(TimeFormatService);
   private travelService = inject(TravelService);
   protected currentState: StarshipState | null = null;
 
@@ -367,9 +367,6 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
       this.currentState.speed
     );
 
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${minutes}m ${seconds}s`;
+    return this.timeFormatService.formatTime(totalSeconds);
   }
 }

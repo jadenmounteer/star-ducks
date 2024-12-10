@@ -13,6 +13,7 @@ import { GameSessionService } from '../../../../services/game-session.service';
 import { Subject, takeUntil } from 'rxjs';
 import { StarshipState } from '../../../../models/starship-state';
 import { TravelService } from '../../../../services/travel.service';
+import { TimeFormatService } from '../../../../services/time-format.service';
 
 @Component({
   selector: 'app-flight-control',
@@ -25,6 +26,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private gameSessionService = inject(GameSessionService);
   private travelService = inject(TravelService);
+  private timeFormatService = inject(TimeFormatService);
 
   private positionUpdateInterval: number | null = null;
 
@@ -42,7 +44,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     );
   });
 
-  protected timeToDestination = computed(() => {
+  private secondsToDestination = computed(() => {
     const state = this.starshipState();
     if (!state.isMoving || !state.departureTime || !state.arrivalTime) {
       return 0;
@@ -50,6 +52,11 @@ export class FlightControlComponent implements OnInit, OnDestroy {
 
     const remainingTime = state.arrivalTime - Date.now();
     return Math.max(0, Math.ceil(remainingTime / 1000)); // in seconds
+  });
+
+  protected formattedTimeToDestination = computed(() => {
+    const seconds = this.secondsToDestination();
+    return this.timeFormatService.formatTime(seconds);
   });
 
   private destroy$ = new Subject<void>();
