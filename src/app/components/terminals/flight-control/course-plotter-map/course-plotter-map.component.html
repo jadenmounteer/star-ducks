@@ -36,7 +36,7 @@
         <h3>{{ selectedObject.territory }} {{ selectedObject.type }}</h3>
         <p class="travel-estimate">
           Estimated travel time:
-          {{ getEstimatedTravelTime(selectedObject) }} seconds at Warp
+          {{ getFormattedTravelTime(selectedObject) }} seconds at Warp
           {{ currentState?.speed }}
         </p>
       </div>

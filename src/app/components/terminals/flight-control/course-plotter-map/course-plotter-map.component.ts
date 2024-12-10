@@ -357,4 +357,19 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
       this.currentState.speed
     );
   }
+
+  protected getFormattedTravelTime(destination: SpaceObject): string {
+    if (!this.currentState) return '0m 0s';
+
+    const totalSeconds = this.travelService.calculateTravelTime(
+      this.currentState.currentLocation,
+      destination.coordinates,
+      this.currentState.speed
+    );
+
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}m ${seconds}s`;
+  }
 }
