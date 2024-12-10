@@ -29,6 +29,8 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private timeFormatService = inject(TimeFormatService);
 
   private positionUpdateInterval: number | null = null;
+  private timeUpdateInterval: number | null = null;
+  private timeSignal = signal<number>(Date.now());
 
   protected currentPosition = computed(() => {
     const state = this.starshipState();
@@ -45,13 +47,28 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   });
 
   private secondsToDestination = computed(() => {
+    // Force recomputation by reading the timeSignal
+    this.timeSignal();
+
     const state = this.starshipState();
-    if (!state.isMoving || !state.departureTime || !state.arrivalTime) {
+    if (!state.isMoving || !state.departureTime || !state.destinationLocation) {
       return 0;
     }
 
-    const remainingTime = state.arrivalTime - Date.now();
-    return Math.max(0, Math.ceil(remainingTime / 1000)); // in seconds
+    // Calculate remaining distance
+    const currentPos = this.travelService.calculateCurrentPosition(
+      state.currentLocation,
+      state.destinationLocation,
+      state.departureTime,
+      state.speed
+    );
+
+    // Calculate time for remaining distance
+    return this.travelService.calculateTravelTime(
+      currentPos,
+      state.destinationLocation,
+      state.speed
+    );
   });
 
   protected formattedTimeToDestination = computed(() => {
@@ -131,6 +148,8 @@ export class FlightControlComponent implements OnInit, OnDestroy {
           }
         });
     }
+
+    this.startTimeUpdates();
   }
 
   private startPositionUpdates(): void {
@@ -161,9 +180,18 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     }
   }
 
+  private startTimeUpdates(): void {
+    this.timeUpdateInterval = window.setInterval(() => {
+      this.timeSignal.set(Date.now());
+    }, 1000);
+  }
+
   public ngOnDestroy(): void {
     if (this.positionUpdateInterval) {
       clearInterval(this.positionUpdateInterval);
+    }
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
     }
     this.destroy$.next();
     this.destroy$.complete();
