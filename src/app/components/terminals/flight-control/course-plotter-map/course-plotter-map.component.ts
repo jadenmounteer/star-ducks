@@ -20,6 +20,7 @@ import { StarshipIconService } from '../../../../services/starship-icon/starship
 import { StarshipState } from '../../../../models/starship-state';
 import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
+import { DirectionalArrowService } from '../../../../services/directional-arrow/directional-arrow.service';
 
 export const BOUNDS = {
   minX: -5000,
@@ -39,6 +40,8 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private starshipIconService = inject(StarshipIconService);
   private timeFormatService = inject(TimeFormatService);
   private travelService = inject(TravelService);
+  private directionalArrowService = inject(DirectionalArrowService);
+
   protected currentState: StarshipState | null = null;
 
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -296,6 +299,27 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         this.viewport.y,
         destinationObject
       );
+
+      // After drawing everything else, draw the directional arrow
+      this.directionalArrowService.drawDirectionalArrow(
+        this.ctx,
+        canvas.width,
+        canvas.height,
+        this.starship.coordinates,
+        this.viewport
+      );
+
+      // If there's a destination, draw an arrow to it too
+      if (destinationObject) {
+        this.directionalArrowService.drawDirectionalArrow(
+          this.ctx,
+          canvas.width,
+          canvas.height,
+          destinationObject.coordinates,
+          this.viewport,
+          '#ff0000' // Different color for destination
+        );
+      }
 
       this.animationFrameId = requestAnimationFrame(animate);
     };
