@@ -58,6 +58,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   public selectedObject: SpaceObject | null = null;
   private animationFrameId: number | null = null;
   private destroyFn: (() => void) | null = null;
+  private hasDragged = false; // We don't want to open a modal if the user has dragged the map
 
   protected showTerritories = false;
 
@@ -99,6 +100,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   // Add these methods to the component
   public startDrag(event: MouseEvent | TouchEvent): void {
     this.isDragging = true;
+    this.hasDragged = false;
     if (event instanceof MouseEvent) {
       this.lastMousePos = { x: event.clientX, y: event.clientY };
     } else {
@@ -132,6 +134,11 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
 
     const deltaX = currentPos.x - this.lastMousePos.x;
     const deltaY = currentPos.y - this.lastMousePos.y;
+
+    // If the mouse has moved more than a few pixels, consider it a drag
+    if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+      this.hasDragged = true;
+    }
 
     // Update viewport position with bounds checking
     this.viewport.x = Math.max(
@@ -279,6 +286,12 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     this.destroyFn = () => resizeObserver.disconnect();
   }
   public async handleClick(event: MouseEvent): Promise<void> {
+    if (this.hasDragged) {
+      // Reset the flag and ignore the click if we dragged
+      this.hasDragged = false;
+      return;
+    }
+
     const canvas = this.canvasRef.nativeElement;
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left + this.viewport.x;
