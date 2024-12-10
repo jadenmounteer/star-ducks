@@ -4,50 +4,63 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class DirectionalArrowService {
-  public drawDirectionalArrow(
+  drawDirectionalArrow(
     ctx: CanvasRenderingContext2D,
     canvasWidth: number,
     canvasHeight: number,
     targetPosition: { x: number; y: number },
     viewportPosition: { x: number; y: number },
-    color: string = '#dddddd'
+    color: string = '#dddddd',
+    objectSize: number = 48
   ): void {
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
     const targetX = targetPosition.x - viewportPosition.x;
     const targetY = targetPosition.y - viewportPosition.y;
 
-    // If target is off screen, draw arrow at screen edge
+    // Calculate angle to target
+    const angle = Math.atan2(targetY - centerY, targetX - centerX);
+
+    // Check if target is off screen
     if (
       targetX < 0 ||
       targetX > canvasWidth ||
       targetY < 0 ||
       targetY > canvasHeight
     ) {
-      // Calculate angle to target
-      const angle = Math.atan2(targetY - centerY, targetX - centerX);
-
-      // Calculate arrow position at screen edge
+      // Draw at screen edge
       const radius = Math.min(canvasWidth, canvasHeight) * 0.45;
       const arrowX = centerX + Math.cos(angle) * radius;
       const arrowY = centerY + Math.sin(angle) * radius;
 
-      // Draw arrow
-      ctx.save();
-      ctx.translate(arrowX, arrowY);
-      ctx.rotate(angle);
-
-      // Arrow shape
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(-15, -10);
-      ctx.lineTo(-15, 10);
-      ctx.closePath();
-
-      ctx.fillStyle = color;
-      ctx.fill();
-
-      ctx.restore();
+      this.drawArrow(ctx, arrowX, arrowY, angle, color);
+    } else {
+      // Draw above the object
+      const arrowY = targetY - objectSize / 2 - 20; // 20px above object
+      this.drawArrow(ctx, targetX, arrowY, Math.PI / 2, color); // Point downward
     }
+  }
+
+  private drawArrow(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    angle: number,
+    color: string
+  ): void {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(-15, -10);
+    ctx.lineTo(-15, 10);
+    ctx.closePath();
+
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    ctx.restore();
   }
 }

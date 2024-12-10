@@ -306,7 +306,9 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         canvas.width,
         canvas.height,
         this.starship.coordinates,
-        this.viewport
+        this.viewport,
+        '#dddddd',
+        this.starship.size
       );
 
       // If there's a destination, draw an arrow to it too
@@ -317,7 +319,8 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
           canvas.height,
           destinationObject.coordinates,
           this.viewport,
-          '#ff0000' // Different color for destination
+          '#ff0000',
+          destinationObject.size
         );
       }
 
