@@ -10,7 +10,7 @@ export class DirectionalArrowService {
     canvasHeight: number,
     targetPosition: { x: number; y: number },
     viewportPosition: { x: number; y: number },
-    color: string = '#00ff00'
+    color: string = '#dddddd'
   ): void {
     const centerX = canvasWidth / 2;
     const centerY = canvasHeight / 2;
