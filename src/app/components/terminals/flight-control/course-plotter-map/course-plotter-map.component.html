@@ -21,6 +21,10 @@
     <i [class]="showTerritories ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
   </button>
 
+  <button class="space-object-search-button">
+    <i class="fa fa-search"></i>
+  </button>
+
   @if(selectedObject) {
   <div class="object-info-container" (click)="handleContainerClick($event)">
     <div class="object-info">
