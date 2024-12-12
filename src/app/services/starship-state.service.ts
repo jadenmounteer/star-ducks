@@ -97,21 +97,22 @@ export class StarshipStateService {
 
   async initializeState(gameSessionId: string): Promise<void> {
     this.currentGameSessionId = gameSessionId;
-    const state = await this.gameSessionService
-      .getStarshipState(gameSessionId)
-      .toPromise();
-    if (state) {
-      this.starshipState.set({
-        currentLocation: state.currentLocation || { x: 100, y: 100 },
-        destinationLocation: state.destinationLocation,
-        isMoving: state.isMoving || false,
-        departureTime: state.departureTime,
-        arrivalTime: state.arrivalTime,
-        speed: state.speed || 1,
-      });
 
-      this.startTimeUpdates();
-    }
+    // Subscribe to real-time updates
+    this.gameSessionService
+      .getStarshipState(gameSessionId)
+      .subscribe((state) => {
+        if (state) {
+          this.starshipState.set({
+            currentLocation: state.currentLocation || { x: 100, y: 100 },
+            destinationLocation: state.destinationLocation,
+            isMoving: state.isMoving || false,
+            departureTime: state.departureTime,
+            arrivalTime: state.arrivalTime,
+            speed: state.speed || 1,
+          });
+        }
+      });
   }
 
   public async setDestination(

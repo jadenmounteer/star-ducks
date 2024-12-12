@@ -15,6 +15,7 @@ import { addDoc, collection } from '@angular/fire/firestore';
 import { GameSession } from '../models/game-session';
 import { Observable } from 'rxjs';
 import { StarshipState } from '../models/starship-state';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -25,22 +26,8 @@ export class GameSessionService {
   constructor() {}
 
   public getStarshipState(gameSessionId: string): Observable<StarshipState> {
-    const gameSessionRef = doc(
-      this.firestore,
-      `game-sessions/${gameSessionId}`
-    );
-
-    return new Observable<StarshipState>((observer) => {
-      const unsubscribe = onSnapshot(gameSessionRef, (doc) => {
-        const gameSession = doc.data() as GameSession;
-        if (gameSession?.starshipState) {
-          observer.next(gameSession.starshipState);
-        }
-      });
-
-      // Cleanup subscription when observer unsubscribes
-      return () => unsubscribe();
-    });
+    const docRef = doc(this.firestore, `game-sessions/${gameSessionId}`);
+    return docData(docRef).pipe(map((session: any) => session?.starshipState));
   }
 
   public async updateStarshipState(
