@@ -10,10 +10,10 @@ import { SpaceObject } from '../../../../models/space-object';
 import { CoursePlotterMapComponent } from '../course-plotter-map/course-plotter-map.component';
 import { ActivatedRoute } from '@angular/router';
 import { GameSessionService } from '../../../../services/game-session.service';
-import { Subject, takeUntil } from 'rxjs';
-import { StarshipState } from '../../../../models/starship-state';
+import { Subject } from 'rxjs';
 import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
+import { StarshipStateService } from '../../../../services/starship-state.service';
 
 @Component({
   selector: 'app-flight-control',
@@ -27,47 +27,68 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private gameSessionService = inject(GameSessionService);
   private travelService = inject(TravelService);
   private timeFormatService = inject(TimeFormatService);
+  protected starshipStateService = inject(StarshipStateService);
 
   private positionUpdateInterval: number | null = null;
   private timeUpdateInterval: number | null = null;
   private timeSignal = signal<number>(Date.now());
 
   protected currentPosition = computed(() => {
-    const state = this.starshipState();
-    if (!state.isMoving || !state.departureTime || !state.destinationLocation) {
-      return state.currentLocation;
+    const state = this.starshipStateService.getStarshipState();
+    if (
+      !state().isMoving ||
+      !state().departureTime ||
+      !state().destinationLocation
+    ) {
+      return state().currentLocation;
     }
 
     return this.travelService.calculateCurrentPosition(
-      state.currentLocation,
-      state.destinationLocation,
-      state.departureTime,
-      state.speed
+      state().currentLocation ?? { x: 100, y: 100 }, // Add null coalescing operator
+      state().destinationLocation ?? { x: 100, y: 100 }, // Add null coalescing operator
+      state().departureTime ?? 0,
+      state().speed ?? 1
     );
   });
+
+  protected currentSpeed = computed(
+    () => this.starshipStateService.getStarshipState()().speed ?? 1
+  );
+
+  protected destinationLocation = computed(
+    () => this.starshipStateService.getStarshipState()().destinationLocation
+  );
+
+  protected isMoving = computed(
+    () => this.starshipStateService.getStarshipState()().isMoving
+  );
 
   private secondsToDestination = computed(() => {
     // Force recomputation by reading the timeSignal
     this.timeSignal();
 
-    const state = this.starshipState();
-    if (!state.isMoving || !state.departureTime || !state.destinationLocation) {
+    const state = this.starshipStateService.getStarshipState();
+    if (
+      !state().isMoving ||
+      !state().departureTime ||
+      !state().destinationLocation
+    ) {
       return 0;
     }
 
     // Calculate remaining distance
     const currentPos = this.travelService.calculateCurrentPosition(
-      state.currentLocation,
-      state.destinationLocation,
-      state.departureTime,
-      state.speed
+      state().currentLocation ?? { x: 100, y: 100 }, // Add null coalescing operator
+      state().destinationLocation ?? { x: 100, y: 100 }, // Add null coalescing operator
+      state().departureTime ?? 0,
+      state().speed ?? 1
     );
 
     // Calculate time for remaining distance
     return this.travelService.calculateTravelTime(
       currentPos,
-      state.destinationLocation,
-      state.speed
+      state().destinationLocation ?? { x: 100, y: 100 }, // Add null coalescing operator
+      state().speed ?? 1
     );
   });
 
@@ -78,11 +99,6 @@ export class FlightControlComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   protected gameSessionId = signal<string | null>(null);
-  protected starshipState = signal<StarshipState>({
-    currentLocation: { x: 100, y: 100 }, // Earth's coordinates
-    isMoving: false,
-    speed: 1,
-  });
 
   protected isMapVisible = false;
   protected spaceObjects: SpaceObject[] = [
@@ -124,77 +140,11 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   ];
 
   public ngOnInit(): void {
-    this.gameSessionId.set(this.route.snapshot.paramMap.get('gameSessionId'));
-
-    if (this.gameSessionId()) {
-      // Get initial state from database
-      this.gameSessionService
-        .getStarshipState(this.gameSessionId()!)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((state) => {
-          if (state) {
-            // Ensure we have all required properties
-            this.starshipState.set({
-              currentLocation: state.currentLocation || { x: 100, y: 100 },
-              destinationLocation: state.destinationLocation,
-              isMoving: state.isMoving || false,
-              departureTime: state.departureTime,
-              arrivalTime: state.arrivalTime,
-              speed: state.speed || 1,
-            });
-
-            // Start position updates after we have initial state
-            this.startPositionUpdates();
-          }
-        });
+    const gameSessionId = this.route.snapshot.paramMap.get('gameSessionId');
+    if (gameSessionId) {
+      this.gameSessionId.set(gameSessionId);
+      this.starshipStateService.initializeState(gameSessionId);
     }
-
-    this.startTimeUpdates();
-  }
-
-  private startPositionUpdates(): void {
-    this.positionUpdateInterval = window.setInterval(async () => {
-      const state = this.starshipState();
-      if (state.isMoving && state.destinationLocation && state.departureTime) {
-        // Only check for arrival, don't update position
-        if (state.arrivalTime && Date.now() >= state.arrivalTime) {
-          await this.handleArrival();
-        }
-      }
-    }, 1000);
-  }
-
-  private async handleArrival(): Promise<void> {
-    const state = this.starshipState();
-    if (state.destinationLocation) {
-      const newState: StarshipState = {
-        currentLocation: state.destinationLocation,
-        isMoving: false,
-        speed: state.speed,
-      };
-
-      await this.gameSessionService.updateStarshipState(
-        this.gameSessionId()!,
-        newState
-      );
-    }
-  }
-
-  private startTimeUpdates(): void {
-    this.timeUpdateInterval = window.setInterval(() => {
-      this.timeSignal.set(Date.now());
-    }, 1000);
-  }
-
-  public ngOnDestroy(): void {
-    if (this.positionUpdateInterval) {
-      clearInterval(this.positionUpdateInterval);
-    }
-    if (this.timeUpdateInterval) {
-      clearInterval(this.timeUpdateInterval);
-    }
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   protected showMap(): void {
@@ -205,36 +155,26 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     if (this.positionUpdateInterval) {
       clearInterval(this.positionUpdateInterval);
     }
-    this.startPositionUpdates();
+    this.starshipStateService.startPositionUpdates(this.gameSessionId()!);
   }
 
   protected async onDestinationSelected(
     destination: SpaceObject
   ): Promise<void> {
-    if (!this.gameSessionId()) return;
-
-    const currentState = this.starshipState();
-    const departureTime = Date.now();
-    const travelTime = this.travelService.calculateTravelTime(
-      currentState.currentLocation,
-      destination.coordinates,
-      currentState.speed || 1
+    if (!this.gameSessionId()) {
+      console.error('Game session ID is not set');
+      return;
+    }
+    await this.starshipStateService.setDestination(
+      this.gameSessionId()!,
+      destination.coordinates
     );
-
-    await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
-      ...currentState,
-      destinationLocation: destination.coordinates,
-      isMoving: true,
-      departureTime,
-      arrivalTime: departureTime + travelTime * 1000, // Convert to milliseconds
-      speed: currentState.speed || 1,
-    });
   }
 
   protected hideMap(): void {
     this.isMapVisible = false;
     document.body.style.overflow = ''; // Restore scrolling
-    this.startPositionUpdates();
+    this.starshipStateService.startPositionUpdates(this.gameSessionId()!);
   }
 
   protected getLocationName(coordinates: { x: number; y: number }): string {
@@ -255,48 +195,20 @@ export class FlightControlComponent implements OnInit, OnDestroy {
 
   protected async updateSpeed(newSpeed: number): Promise<void> {
     if (!this.gameSessionId()) return;
+    await this.starshipStateService.updateSpeed(
+      this.gameSessionId()!,
+      newSpeed
+    );
+  }
 
-    const currentState = this.starshipState();
-    const speed = Math.max(1, Math.min(9, newSpeed));
-
-    if (
-      currentState.isMoving &&
-      currentState.destinationLocation &&
-      currentState.departureTime
-    ) {
-      // Get current position
-      const currentPosition = this.travelService.calculateCurrentPosition(
-        currentState.currentLocation,
-        currentState.destinationLocation,
-        currentState.departureTime,
-        currentState.speed
-      );
-
-      // Calculate new travel time from current position
-      const remainingTravelTime = this.travelService.calculateTravelTime(
-        currentPosition,
-        currentState.destinationLocation,
-        speed
-      );
-
-      // Set new departure time to now and adjust arrival time based on remaining distance
-      const newDepartureTime = Date.now();
-
-      await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
-        currentLocation: currentPosition,
-        destinationLocation: currentState.destinationLocation,
-        isMoving: true,
-        departureTime: newDepartureTime,
-        arrivalTime: newDepartureTime + remainingTravelTime * 1000,
-        speed,
-      });
-    } else {
-      // Just update speed when stationary
-      await this.gameSessionService.updateStarshipState(this.gameSessionId()!, {
-        currentLocation: currentState.currentLocation,
-        isMoving: false,
-        speed,
-      });
+  public ngOnDestroy(): void {
+    if (this.positionUpdateInterval) {
+      clearInterval(this.positionUpdateInterval);
     }
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

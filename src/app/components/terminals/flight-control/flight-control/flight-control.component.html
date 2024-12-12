@@ -6,7 +6,7 @@
   @if(isMapVisible) {
   <app-course-plotter-map
     [spaceObjects]="spaceObjects"
-    [starshipState]="starshipState()"
+    [starshipState]="starshipStateService.getStarshipState()()"
     [gameSessionId]="gameSessionId()!"
     (destinationSelected)="onDestinationSelected($event)"
     (close)="hideMap()"
@@ -18,18 +18,12 @@
     <div class="location-info">
       <p>
         Current Location:
-        {{
-          starshipState().isMoving
-            ? "In Transit"
-            : getLocationName(currentPosition())
-        }}
+        {{ isMoving() ? "In Transit" : getLocationName(currentPosition()) }}
       </p>
-      @if (starshipState().isMoving) {
-      <p>
-        Destination: {{ getLocationName(starshipState().destinationLocation!) }}
-      </p>
+      @if (isMoving()) {
+      <p>Destination: {{ destinationLocation() }}</p>
       <p>Time to destination: {{ formattedTimeToDestination() }} seconds</p>
-      <p>Current speed: Warp {{ starshipState().speed }}</p>
+      <p>Current speed: Warp {{ currentSpeed() }}</p>
       }
     </div>
   </div>
@@ -39,7 +33,7 @@
     <div class="speed-buttons">
       @for (speed of [1,2,3,4,5,6,7,8,9]; track speed) {
       <button
-        [class.active]="starshipState().speed === speed"
+        [class.active]="currentSpeed() === speed"
         (click)="updateSpeed(speed)"
       >
         {{ speed }}
