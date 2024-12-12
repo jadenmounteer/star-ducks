@@ -21,6 +21,7 @@ import { StarshipState } from '../../../../models/starship-state';
 import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
 import { DirectionalArrowService } from '../../../../services/directional-arrow/directional-arrow.service';
+import { spaceObjects } from '../../../../models/space-objects';
 
 export const BOUNDS = {
   minX: -5000,
@@ -47,7 +48,6 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('previewCanvas') previewCanvasRef!: ElementRef<HTMLCanvasElement>;
 
-  @Input() spaceObjects: SpaceObject[] = [];
   @Input() set starshipState(state: StarshipState) {
     this.currentState = state;
 
@@ -231,7 +231,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
 
       // Draw course line if destination exists in state
       if (this.currentState?.destinationLocation) {
-        const destinationObject = this.spaceObjects.find(
+        const destinationObject = spaceObjects.find(
           (obj) =>
             obj.coordinates.x === this.currentState?.destinationLocation?.x &&
             obj.coordinates.y === this.currentState?.destinationLocation?.y
@@ -264,7 +264,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         this.viewport.y
       );
 
-      this.spaceObjects.forEach((object) => {
+      spaceObjects.forEach((object) => {
         const adjustedObject = {
           ...object,
           coordinates: {
@@ -277,7 +277,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
 
       // Draw course line and starship
       const destinationObject = this.currentState?.destinationLocation
-        ? this.spaceObjects.find(
+        ? spaceObjects.find(
             (obj) =>
               obj.coordinates.x === this.currentState?.destinationLocation?.x &&
               obj.coordinates.y === this.currentState?.destinationLocation?.y
@@ -354,7 +354,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     const x = event.clientX - rect.left + this.viewport.x;
     const y = event.clientY - rect.top + this.viewport.y;
 
-    const clickedObject = this.spaceObjects.find((object) =>
+    const clickedObject = spaceObjects.find((object) =>
       this.spaceObjectService.isPointInObject(x, y, object)
     );
 

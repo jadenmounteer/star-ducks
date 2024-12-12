@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
 import { StarshipStateService } from '../../../../services/starship-state.service';
+import { spaceObjects } from '../../../../models/space-objects';
 
 @Component({
   selector: 'app-flight-control',
@@ -103,50 +104,13 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   protected gameSessionId = signal<string | null>(null);
 
   protected isMapVisible = false;
-  protected spaceObjects: SpaceObject[] = [
-    {
-      id: '1',
-      name: 'Earth',
-      type: 'planet',
-      coordinates: { x: 100, y: 100 },
-      sprite: 'assets/sprites/space-objects/earth.png',
-      animationFrames: 2,
-      size: 48,
-      description: 'Home planet of Earth ducks.',
-      territory: 'federation',
-    },
-    {
-      id: '2',
-      name: 'Dulcan',
-      type: 'planet',
-      coordinates: { x: 350, y: 600 },
-      sprite: 'assets/sprites/space-objects/dulcan.png',
-      animationFrames: 2,
-      size: 96,
-      description:
-        'Home planet of the Dulcans. A peaceful species with no comprehension of what a dad joke is.',
-      territory: 'federation',
-    },
-    {
-      id: '3',
-      name: 'Helios',
-      type: 'star',
-      coordinates: { x: 800, y: 450 },
-      sprite: 'assets/sprites/space-objects/helios.png',
-      animationFrames: 2,
-      size: 192, // Bigger size for the star
-      description: "Earth's star.",
-      territory: 'federation',
-    },
-    // Add more space objects...
-  ];
 
   protected destinationName = computed(() => {
     const state = this.starshipStateService.getStarshipState()();
     if (!state.destinationLocation) return '';
 
     // Find the space object that matches these coordinates
-    const destination = this.spaceObjects.find(
+    const destination = spaceObjects.find(
       (obj) =>
         obj.coordinates.x === state.destinationLocation?.x &&
         obj.coordinates.y === state.destinationLocation?.y
@@ -195,7 +159,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
 
   protected getLocationName(coordinates: { x: number; y: number }): string {
     // Find the closest space object to these coordinates
-    const closestObject = this.spaceObjects.find(
+    const closestObject = spaceObjects.find(
       (obj) =>
         Math.abs(obj.coordinates.x - coordinates.x) < 10 &&
         Math.abs(obj.coordinates.y - coordinates.y) < 10
