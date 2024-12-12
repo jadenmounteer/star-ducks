@@ -5,11 +5,6 @@
     <div class="location-display">
       @if (currentLocationObject()) {
       <div class="current-location">
-        <img
-          [src]="currentLocationObject()?.sprite"
-          [alt]="currentLocationObject()?.name"
-          [width]="currentLocationObject()?.size"
-        />
         <div class="location-info">
           <h3>{{ currentLocationObject()?.name }}</h3>
           <p>{{ currentLocationObject()?.type | titlecase }}</p>
@@ -21,6 +16,4 @@
   </div>
 </div>
 
-{{ currentLocationObject() | json }}
-<!-- Just here for testing purposes -->
 <app-flight-control></app-flight-control>

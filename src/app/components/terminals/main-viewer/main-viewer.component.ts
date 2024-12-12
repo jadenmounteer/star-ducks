@@ -14,6 +14,7 @@ import { FlightControlComponent } from '../flight-control/flight-control/flight-
 import { StarshipStateService } from '../../../services/starship-state.service';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { spaceObjects } from '../../../models/space-objects';
+import { SpaceObjectService } from '../../../services/space-object.service';
 
 @Component({
   selector: 'app-main-viewer',
@@ -47,7 +48,8 @@ export class MainViewerComponent implements OnInit, OnChanges {
   constructor(
     private starFieldService: StarFieldService,
     private warpStarFieldService: WarpStarFieldService,
-    private starshipStateService: StarshipStateService
+    private starshipStateService: StarshipStateService,
+    private spaceObjectService: SpaceObjectService
   ) {}
 
   ngOnInit() {
@@ -98,6 +100,22 @@ export class MainViewerComponent implements OnInit, OnChanges {
           0,
           0
         );
+
+        // Draw the current location object if we're not moving
+        const locationObject = this.currentLocationObject();
+        if (locationObject) {
+          // Position the object in the center-left of the screen
+          const adjustedObject = {
+            ...locationObject,
+            coordinates: {
+              x: canvas.width * 0.25, // 25% from the left
+              y: canvas.height * 0.3, // 0.5 is vertically centered
+            },
+            size: locationObject.size ? locationObject.size * 4 : 192, // Make it 4x larger
+          };
+
+          this.spaceObjectService.drawSpaceObject(this.ctx, adjustedObject);
+        }
       }
 
       this.animationFrameId = requestAnimationFrame(animate);
