@@ -8,5 +8,5 @@ import { Component, input, InputSignal } from '@angular/core';
   styleUrl: './alert-modal.component.scss',
 })
 export class AlertModalComponent {
-  public message: InputSignal<string> = input.required();
+  public message = input.required<string>();
 }
