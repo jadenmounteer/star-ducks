@@ -28,7 +28,7 @@ export class WarpStarFieldService {
       x: Math.random() * width,
       y: Math.random() * height,
       z: Math.random() * width,
-      brightness: Math.random() * 0.2 + 0.8,
+      brightness: Math.random() * 0.3 + 0.7,
       speed: Math.random() * 2 + 1,
       length: 0,
     };
@@ -40,18 +40,15 @@ export class WarpStarFieldService {
     height: number,
     warpFactor: number
   ): void {
-    // Even more transparent fade effect for brighter trails
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.fillRect(0, 0, width, height);
 
     const centerX = width / 2;
     const centerY = height / 2;
 
     this.stars.forEach((star) => {
-      // Calculate star movement
       star.z -= star.speed * warpFactor * 10;
 
-      // Reset star if it goes off screen
       if (star.z < 1) {
         Object.assign(star, this.createStar(width, height));
         star.x = Math.random() * width;
@@ -59,19 +56,17 @@ export class WarpStarFieldService {
         star.z = width;
       }
 
-      // Project star position
       const projectedX = (star.x - centerX) * (width / star.z) + centerX;
       const projectedY = (star.y - centerY) * (width / star.z) + centerY;
 
-      // Calculate length based on speed and z-position
-      star.length = Math.min(20, (warpFactor * 50) / (star.z * 0.1));
+      star.length = Math.min(200, (warpFactor * 200) / (star.z * 0.1));
 
-      // Much brighter star streaks
       ctx.beginPath();
-      ctx.strokeStyle = `rgba(180, 230, 255, ${star.brightness})`;
-      ctx.lineWidth = Math.min(5, (width / star.z) * 0.8);
+      ctx.strokeStyle = `rgba(121, 240, 254, ${star.brightness})`;
+      ctx.shadowColor = 'rgba(121, 240, 254, 0.8)';
+      ctx.shadowBlur = 15;
+      ctx.lineWidth = Math.min(12, (width / star.z) * 1.5);
 
-      // Draw line from current position to a point behind
       ctx.moveTo(projectedX, projectedY);
       ctx.lineTo(
         projectedX + (star.length * (projectedX - centerX)) / width,
@@ -79,6 +74,8 @@ export class WarpStarFieldService {
       );
 
       ctx.stroke();
+      ctx.stroke();
+      ctx.shadowBlur = 0;
     });
   }
 }
