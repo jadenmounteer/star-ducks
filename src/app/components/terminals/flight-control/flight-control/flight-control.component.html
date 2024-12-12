@@ -21,7 +21,7 @@
         {{ isMoving() ? "In Transit" : getLocationName(currentPosition()) }}
       </p>
       @if (isMoving()) {
-      <p>Destination: {{ destinationLocation() }}</p>
+      <p>Destination: {{ destinationName() }}</p>
       <p>
         Time to destination: {{ starshipStateService.formattedRemainingTime() }}
       </p>

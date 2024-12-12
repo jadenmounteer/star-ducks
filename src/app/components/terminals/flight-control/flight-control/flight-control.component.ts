@@ -141,6 +141,20 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     // Add more space objects...
   ];
 
+  protected destinationName = computed(() => {
+    const state = this.starshipStateService.getStarshipState()();
+    if (!state.destinationLocation) return '';
+
+    // Find the space object that matches these coordinates
+    const destination = this.spaceObjects.find(
+      (obj) =>
+        obj.coordinates.x === state.destinationLocation?.x &&
+        obj.coordinates.y === state.destinationLocation?.y
+    );
+
+    return destination?.name || 'Unknown Location';
+  });
+
   public ngOnInit(): void {
     const gameSessionId = this.route.snapshot.paramMap.get('gameSessionId');
     if (gameSessionId) {
