@@ -33,6 +33,8 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private timeUpdateInterval: number | null = null;
   private timeSignal = signal<number>(Date.now());
 
+  protected remainingTime = this.starshipStateService.remainingTime;
+
   protected currentPosition = computed(() => {
     const state = this.starshipStateService.getStarshipState();
     if (

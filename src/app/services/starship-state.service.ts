@@ -8,19 +8,74 @@ import { TravelService } from './travel.service';
 })
 export class StarshipStateService {
   private starshipState = signal<StarshipState>({
-    currentLocation: { x: 100, y: 100 }, // Earth's coordinates
+    currentLocation: { x: 100, y: 100 },
     isMoving: false,
     speed: 1,
   });
 
-  private positionUpdateInterval: number | null = null;
   private timeUpdateInterval: number | null = null;
-  private timeSignal = signal<number>(Date.now());
+  private readonly TIME_UPDATE_INTERVAL = 1000; // Update every second
+
+  private currentGameSessionId: string | null = null;
+
+  // Add computed signal for remaining time
+  readonly remainingTime = computed(() => {
+    const state = this.starshipState();
+    if (!state.isMoving || !state.arrivalTime) {
+      return null;
+    }
+    const remaining = state.arrivalTime - Date.now();
+    return remaining > 0 ? remaining : 0;
+  });
+
+  readonly formattedRemainingTime = computed(() => {
+    const remaining = this.remainingTime();
+    if (remaining === null) return null;
+
+    // Convert milliseconds to minutes and seconds
+    const totalSeconds = Math.ceil(remaining / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    // Format with leading zeros if needed
+    return `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+  });
 
   constructor(
     private gameSessionService: GameSessionService,
     private travelService: TravelService
-  ) {}
+  ) {
+    // Start time updates when service is created
+    this.startTimeUpdates();
+  }
+
+  private startTimeUpdates(): void {
+    // Clear any existing interval
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
+    }
+
+    // Update time every second to trigger remainingTime recomputation
+    this.timeUpdateInterval = window.setInterval(() => {
+      const state = this.starshipState();
+      if (
+        state.isMoving &&
+        state.arrivalTime &&
+        Date.now() >= state.arrivalTime &&
+        this.currentGameSessionId
+      ) {
+        this.handleArrival(this.currentGameSessionId);
+      }
+      // Force signal update to trigger recomputation
+      this.starshipState.set({ ...state });
+    }, this.TIME_UPDATE_INTERVAL);
+  }
+
+  ngOnDestroy(): void {
+    if (this.timeUpdateInterval) {
+      clearInterval(this.timeUpdateInterval);
+    }
+  }
 
   currentPosition = computed(() => {
     const state = this.starshipState();
@@ -41,7 +96,7 @@ export class StarshipStateService {
   }
 
   async initializeState(gameSessionId: string): Promise<void> {
-    // Get initial state from database
+    this.currentGameSessionId = gameSessionId;
     const state = await this.gameSessionService
       .getStarshipState(gameSessionId)
       .toPromise();
@@ -55,7 +110,7 @@ export class StarshipStateService {
         speed: state.speed || 1,
       });
 
-      this.startPositionUpdates(gameSessionId);
+      this.startTimeUpdates();
     }
   }
 
@@ -84,7 +139,7 @@ export class StarshipStateService {
     this.starshipState.set(newState);
   }
   public startPositionUpdates(gameSessionId: string): void {
-    this.positionUpdateInterval = window.setInterval(async () => {
+    this.timeUpdateInterval = window.setInterval(async () => {
       const state = this.starshipState();
       if (state.isMoving && state.destinationLocation && state.departureTime) {
         if (state.arrivalTime && Date.now() >= state.arrivalTime) {
@@ -159,15 +214,6 @@ export class StarshipStateService {
         newState
       );
       this.starshipState.set(newState);
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.positionUpdateInterval) {
-      clearInterval(this.positionUpdateInterval);
-    }
-    if (this.timeUpdateInterval) {
-      clearInterval(this.timeUpdateInterval);
     }
   }
 }

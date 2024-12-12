@@ -22,7 +22,9 @@
       </p>
       @if (isMoving()) {
       <p>Destination: {{ destinationLocation() }}</p>
-      <p>Time to destination: {{ formattedTimeToDestination() }} seconds</p>
+      <p>
+        Time to destination: {{ starshipStateService.formattedRemainingTime() }}
+      </p>
       <p>Current speed: Warp {{ currentSpeed() }}</p>
       }
     </div>
