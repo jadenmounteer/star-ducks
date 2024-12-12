@@ -12,7 +12,7 @@ import {
 import { SpaceObject } from '../../../../models/space-object';
 
 import { SpaceObjectService } from '../../../../services/space-object.service';
-import { StarFieldService } from './stars/star-field.service';
+import { CoursePlotterStarFieldService } from './stars/course-plotter-star-field.service';
 import { CanvasService } from '../../../../services/animations/canvas.service';
 import { TerritoryService } from '../../../../services/territory/territory.service';
 import { StarshipIcon } from '../../../../models/starship-icon';
@@ -86,7 +86,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private lastMousePos = { x: 0, y: 0 };
 
   constructor(
-    private starFieldService: StarFieldService,
+    private coursePlotterStarFieldService: CoursePlotterStarFieldService,
     private canvasService: CanvasService,
     private spaceObjectService: SpaceObjectService
   ) {}
@@ -192,7 +192,10 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     const canvas = this.canvasRef.nativeElement;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    this.starFieldService.initStarField(canvas.width, canvas.height);
+    this.coursePlotterStarFieldService.initStarField(
+      canvas.width,
+      canvas.height
+    );
   }
 
   private startAnimation(): void {
@@ -245,7 +248,7 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
         }
       }
 
-      this.starFieldService.drawStarField(
+      this.coursePlotterStarFieldService.drawStarField(
         this.ctx,
         canvas.width,
         canvas.height,

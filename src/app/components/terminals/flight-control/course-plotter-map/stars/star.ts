@@ -9,18 +9,7 @@ export class Star {
   ) {}
 
   update(width: number, height: number) {
-    // Update star position
-    // This gives a cool effect, but not what we're going for. Maybe something like this
-    // for warp speed main view effect?
-    // this.y += this.speed;
-
-    // Reset position if star goes off screen
-    if (this.y > height) {
-      this.y = 0;
-      this.x = Math.random() * width;
-    }
-
-    // Update twinkling effect
+    // Only update the twinkling effect
     this.brightness += this.twinkleSpeed;
     if (this.brightness > 1 || this.brightness < 0.2) {
       this.twinkleSpeed = -this.twinkleSpeed;
