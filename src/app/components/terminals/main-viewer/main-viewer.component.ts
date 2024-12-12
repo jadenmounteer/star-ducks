@@ -8,18 +8,19 @@ import {
   OnInit,
   computed,
 } from '@angular/core';
-import { StarshipState } from '../../../models/starship-state';
 import { StarFieldService } from '../flight-control/course-plotter-map/stars/star-field.service';
 import { WarpStarFieldService } from './warp-star-field-service/warp-star-field-service.service';
 import { FlightControlComponent } from '../flight-control/flight-control/flight-control.component';
 import { StarshipStateService } from '../../../services/starship-state.service';
+import { CommonModule, JsonPipe } from '@angular/common';
+import { spaceObjects } from '../../../models/space-objects';
 
 @Component({
   selector: 'app-main-viewer',
   standalone: true,
   templateUrl: './main-viewer.component.html',
   styleUrl: './main-viewer.component.scss',
-  imports: [FlightControlComponent],
+  imports: [FlightControlComponent, CommonModule, JsonPipe],
 })
 export class MainViewerComponent implements OnInit, OnChanges {
   @ViewChild('viewerCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
@@ -27,6 +28,17 @@ export class MainViewerComponent implements OnInit, OnChanges {
   protected starshipState = computed(() =>
     this.starshipStateService.getStarshipState()()
   );
+
+  protected currentLocationObject = computed(() => {
+    const state = this.starshipState();
+    if (!state) return null;
+
+    return spaceObjects.find(
+      (obj) =>
+        Math.abs(obj.coordinates.x - state.currentLocation.x) < 10 &&
+        Math.abs(obj.coordinates.y - state.currentLocation.y) < 10
+    );
+  });
 
   private ctx!: CanvasRenderingContext2D;
   private animationFrameId: number | null = null;
@@ -71,7 +83,6 @@ export class MainViewerComponent implements OnInit, OnChanges {
       const state = this.starshipState();
 
       if (state?.isMoving) {
-        // Use warp effect when moving
         this.warpStarFieldService.drawStarField(
           this.ctx,
           canvas.width,
@@ -79,9 +90,7 @@ export class MainViewerComponent implements OnInit, OnChanges {
           state.speed || 1
         );
       } else {
-        // Clear the canvas completely for normal stars
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // Draw normal starfield when stationary
         this.starFieldService.drawStarField(
           this.ctx,
           canvas.width,
