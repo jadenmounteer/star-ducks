@@ -101,17 +101,23 @@ export class MainViewerComponent implements OnInit, OnChanges {
           0
         );
 
-        // Draw the current location object if we're not moving
         const locationObject = this.currentLocationObject();
         if (locationObject) {
-          // Position the object in the center-left of the screen
+          // Calculate responsive size based on canvas dimensions
+          const minDimension = Math.min(canvas.width, canvas.height);
+          const baseSize = minDimension * 0.2; // 30% of the smaller canvas dimension
+          const scaleFactor = locationObject.size
+            ? locationObject.size / 48
+            : 1; // Assuming 48 is the base size
+          const responsiveSize = baseSize * scaleFactor;
+
           const adjustedObject = {
             ...locationObject,
             coordinates: {
-              x: canvas.width * 0.25, // 25% from the left
-              y: canvas.height * 0.3, // 0.5 is vertically centered
+              x: canvas.width * 0.25,
+              y: canvas.height * 0.3,
             },
-            size: locationObject.size ? locationObject.size * 4 : 192, // Make it 4x larger
+            size: responsiveSize,
           };
 
           this.spaceObjectService.drawSpaceObject(this.ctx, adjustedObject);
