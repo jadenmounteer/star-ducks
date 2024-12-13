@@ -1,27 +1,13 @@
 # StarDucks
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+The mobile starship party game you have been waiting for! 🎉🖖
 
-## Development server
+In an alternate universe where ducks have reached the final frontier, take on the role of a starship crewman and complete missions together.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+<img width="337" alt="image" src="https://github.com/user-attachments/assets/8509a4c9-5068-4a44-96ac-f005381df06e" />
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+<img width="764" alt="image" src="https://github.com/user-attachments/assets/a7599c50-3d37-484f-8fd9-645299117d05" />
 
-## Build
+<img width="757" alt="image" src="https://github.com/user-attachments/assets/2d3c18f1-3430-431a-aaaa-b416e5d6bb80" />
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
