@@ -1,0 +1,13 @@
+.dark-ui-button {
+  background: $dark-ui-background;
+  border: 1px solid $dark-ui-color;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: #0f0;
+  cursor: pointer;
+  margin-top: 10px;
+
+  &:hover {
+    background: rgba(0, 255, 0, 0.4);
+  }
+}
