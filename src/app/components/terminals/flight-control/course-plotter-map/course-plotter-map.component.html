@@ -29,9 +29,12 @@
   </button>
 
   @if(selectedObject) {
-  <div class="object-info-container" (click)="handleContainerClick($event)">
-    <div class="object-info">
-      <button class="info-close-button" (click)="selectedObject = null">
+  <div class="popup-container" (click)="handleContainerClick($event)">
+    <div class="object-info dark-ui-popup">
+      <button
+        class="dark-ui-popup-close-button"
+        (click)="selectedObject = null"
+      >
         ×
       </button>
       <div class="object-preview">
