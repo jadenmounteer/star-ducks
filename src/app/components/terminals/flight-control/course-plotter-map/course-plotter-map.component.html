@@ -13,15 +13,18 @@
   >
   </canvas>
 
-  <button class="close-button" (click)="closeMap()">
+  <button class="close-button dark-icon-button" (click)="closeMap()">
     <i class="fa fa-window-close"></i>
   </button>
 
-  <button class="toggle-territories-button" (click)="toggleTerritories()">
+  <button
+    class="toggle-territories-button dark-icon-button"
+    (click)="toggleTerritories()"
+  >
     <i [class]="showTerritories ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
   </button>
 
-  <button class="space-object-search-button">
+  <button class="space-object-search-button dark-icon-button">
     <i class="fa fa-search"></i>
   </button>
 

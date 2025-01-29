@@ -11,3 +11,16 @@
     background: rgba(0, 255, 0, 0.4);
   }
 }
+
+.dark-icon-button {
+  cursor: pointer;
+  background: $alternative-dark-ui-background;
+  color: $alternative-dark-ui-color;
+  border: 1px solid $alternative-dark-ui-outline;
+  border-radius: 4px;
+  padding: 5px;
+
+  &:hover {
+    background: $alternative-dark-ui-background-hover;
+  }
+}
