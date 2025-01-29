@@ -1,10 +1,12 @@
+@import "../../../../style-library/main.scss";
+
 .course-plotter {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #000;
+  background: $space-color;
   z-index: 9999;
   overflow: hidden;
 
@@ -42,7 +44,7 @@
     border: 1px solid #666;
     padding: 20px;
     border-radius: 4px;
-    color: #fff;
+    color: $alternative-dark-ui-color;
     position: relative;
     pointer-events: auto;
     min-width: 300px;
@@ -71,7 +73,7 @@
 
       h3 {
         margin: 0 0 10px 0;
-        color: #00ff00;
+        color: $dark-ui-color;
       }
 
       p {
@@ -118,7 +120,7 @@
 }
 
 .travel-estimate {
-  color: #0f0;
+  color: $dark-ui-color;
   font-family: "LCARS", sans-serif;
   margin-top: 10px;
   padding: 5px;
