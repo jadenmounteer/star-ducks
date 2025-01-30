@@ -1,7 +1,8 @@
+@import "../../../style-library/main.scss";
 .main-viewer {
   width: 100%;
   height: 100%;
-  background-color: #000;
+  background-color: $space-color;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
