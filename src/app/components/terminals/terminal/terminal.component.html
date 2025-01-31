@@ -1,1 +1,15 @@
-<app-screen-swiper></app-screen-swiper>
+<div class="terminal-container">
+  <app-screen-swiper
+    [terminals]="terminals"
+    [currentIndex]="currentTerminalIndex"
+    (terminalChange)="onTerminalChange($event)"
+  />
+
+  <div class="terminal-content">
+    @switch (currentTerminalIndex) { @case (0) {
+    <app-main-viewer />
+    } @case (1) {
+    <app-flight-control />
+    } }
+  </div>
+</div>

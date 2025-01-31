@@ -1,0 +1,32 @@
+.screen-swiper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid #333;
+}
+
+.nav-arrow {
+  background: none;
+  border: none;
+  color: #00ff00;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px 15px;
+
+  &:disabled {
+    color: #333;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    color: #33ff33;
+  }
+}
+
+.terminal-name {
+  color: #00ff00;
+  font-family: monospace;
+  text-transform: uppercase;
+}

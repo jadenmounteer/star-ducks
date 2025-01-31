@@ -1,1 +1,19 @@
-<p>screen-swiper works!</p>
+<div class="screen-swiper">
+  <button
+    class="nav-arrow left"
+    (click)="onPrevious()"
+    [disabled]="currentIndex === 0"
+  >
+    ◀
+  </button>
+
+  <div class="terminal-name">{{ terminals[currentIndex]?.name }}</div>
+
+  <button
+    class="nav-arrow right"
+    (click)="onNext()"
+    [disabled]="currentIndex === terminals.length - 1"
+  >
+    ▶
+  </button>
+</div>

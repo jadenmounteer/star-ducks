@@ -1,0 +1,11 @@
+.terminal-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.terminal-content {
+  flex: 1;
+  overflow: hidden;
+}
