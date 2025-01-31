@@ -17,14 +17,23 @@
     <div class="location-info">
       <p>
         Current Location:
-        {{ isMoving() ? "In Transit" : getLocationName(currentPosition()) }}
+        <span class="data">
+          {{ isMoving() ? "In Transit" : getLocationName(currentPosition()) }}
+        </span>
       </p>
       @if (isMoving()) {
-      <p>Destination: {{ destinationName() }}</p>
       <p>
-        Time to destination: {{ starshipStateService.formattedRemainingTime() }}
+        Destination: <span class="data">{{ destinationName() }}</span>
       </p>
-      <p>Current speed: Warp {{ currentSpeed() }}</p>
+      <p>
+        Time to destination:
+        <span class="data">{{
+          starshipStateService.formattedRemainingTime()
+        }}</span>
+      </p>
+      <p>
+        Current speed: <span class="data">Warp {{ currentSpeed() }}</span>
+      </p>
       }
     </div>
   </div>

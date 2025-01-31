@@ -8,10 +8,9 @@
   overflow: hidden;
 
   .open-map-button {
-    @include copy-medium;
+    @include terminal-text;
     padding: 10px 20px;
     background: $dark-ui-background;
-    color: $dark-ui-color;
     border: 1px solid $dark-ui-color;
     border-radius: 4px;
     cursor: pointer;
@@ -28,6 +27,12 @@
     p {
       @include terminal-text;
       margin: 5px 0;
+
+      // Make dynamic data orange
+      span.data {
+        @include copy-mono;
+        margin-left: 5px;
+      }
     }
   }
 }
