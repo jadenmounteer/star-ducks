@@ -1,6 +1,7 @@
 // Space-themed font families
 $font-family-title: "Orbitron", "Rajdhani", sans-serif;
 $font-family-mono: "JetBrains Mono", "Space Mono", monospace;
+$font-family-copy: "Rajdhani", "JetBrains Mono", sans-serif;
 
 // Title text mixin
 @mixin title-text {
@@ -37,4 +38,42 @@ $font-family-mono: "JetBrains Mono", "Space Mono", monospace;
 @mixin title-glow($color: #00f3ff) {
   text-shadow: 0 0 5px rgba($color, 0.6), 0 0 15px rgba($color, 0.4),
     0 0 25px rgba($color, 0.2);
+}
+
+// Copy text mixins
+@mixin copy-text {
+  font-family: $font-family-copy;
+  color: $dark-ui-copy;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
+@mixin copy-large {
+  @include copy-text;
+  font-size: 1.125rem; // 18px
+}
+
+@mixin copy-medium {
+  @include copy-text;
+  font-size: 1rem; // 16px
+}
+
+@mixin copy-small {
+  @include copy-text;
+  font-size: 0.875rem; // 14px
+}
+
+@mixin copy-mono {
+  font-family: $font-family-mono;
+  color: $dark-ui-copy;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+// Terminal text specific mixin
+@mixin terminal-text {
+  font-family: $font-family-mono;
+  color: $dark-ui-color; // Keep the space green for terminal text
+  letter-spacing: 0.05em;
+  line-height: 1.2;
 }
