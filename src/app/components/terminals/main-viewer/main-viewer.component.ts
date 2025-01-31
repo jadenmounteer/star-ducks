@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  Input,
   ViewChild,
   OnChanges,
   SimpleChanges,
@@ -10,7 +9,6 @@ import {
 } from '@angular/core';
 import { StarFieldService } from '../flight-control/course-plotter-map/stars/star-field.service';
 import { WarpStarFieldService } from './warp-star-field-service/warp-star-field-service.service';
-import { FlightControlComponent } from '../flight-control/flight-control/flight-control.component';
 import { StarshipStateService } from '../../../services/starship-state.service';
 import { CommonModule } from '@angular/common';
 import { spaceObjects } from '../../../models/space-objects';
@@ -21,7 +19,7 @@ import { SpaceObjectService } from '../../../services/space-object.service';
   standalone: true,
   templateUrl: './main-viewer.component.html',
   styleUrl: './main-viewer.component.scss',
-  imports: [FlightControlComponent, CommonModule],
+  imports: [[], CommonModule],
 })
 export class MainViewerComponent implements OnInit, OnChanges {
   @ViewChild('viewerCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
