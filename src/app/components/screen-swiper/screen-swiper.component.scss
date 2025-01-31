@@ -1,32 +1,34 @@
+@import "../../../styles.scss";
+
 .screen-swiper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.8);
+  background: $alternative-dark-ui-background;
   border-bottom: 1px solid #333;
 }
 
 .nav-arrow {
   background: none;
   border: none;
-  color: #00ff00;
+  color: $dark-ui-color;
   font-size: 24px;
   cursor: pointer;
   padding: 5px 15px;
 
   &:disabled {
-    color: #333;
+    color: $alternative-dark-ui-outline;
     cursor: not-allowed;
   }
 
   &:hover:not(:disabled) {
-    color: #33ff33;
+    color: $dark-ui-color;
   }
 }
 
 .terminal-name {
-  color: #00ff00;
+  color: $dark-ui-color;
   font-family: monospace;
   text-transform: uppercase;
 }
