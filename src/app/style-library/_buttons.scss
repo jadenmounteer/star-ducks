@@ -26,3 +26,25 @@
     background: $alternative-dark-ui-background-hover;
   }
 }
+
+.alternative-dark-ui-button {
+  background: rgba(255, 107, 26, 0.2);
+  border: 1px solid $dark-ui-copy;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: $dark-ui-copy;
+  cursor: pointer;
+  margin-top: 10px;
+
+  @include copy-mono;
+  font-weight: 600;
+
+  &:hover {
+    background: rgba(255, 107, 26, 0.4);
+    @include title-glow($dark-ui-copy);
+  }
+
+  &:active {
+    background: rgba(255, 107, 26, 0.5);
+  }
+}
