@@ -28,7 +28,6 @@
 }
 
 .terminal-name {
-  color: $dark-ui-color;
-  font-family: monospace;
-  text-transform: uppercase;
+  @include title-medium;
+  @include title-glow;
 }
