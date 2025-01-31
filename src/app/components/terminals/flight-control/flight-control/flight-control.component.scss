@@ -1,4 +1,4 @@
-@import "../../../../../styles.scss";
+@import "../../../../style-library/main.scss";
 
 .flight-control-container {
   width: 50%;
@@ -8,16 +8,26 @@
   overflow: hidden;
 
   .open-map-button {
+    @include copy-medium;
     padding: 10px 20px;
-    background: #007bff;
-    color: white;
-    border: none;
+    background: $dark-ui-background;
+    color: $dark-ui-color;
+    border: 1px solid $dark-ui-color;
     border-radius: 4px;
     cursor: pointer;
     margin: 10px;
 
     &:hover {
-      background: #0056b3;
+      background: $dark-ui-background-hover;
+    }
+  }
+}
+
+.status-display {
+  .location-info {
+    p {
+      @include terminal-text;
+      margin: 5px 0;
     }
   }
 }
@@ -25,12 +35,12 @@
 .speed-controls {
   margin-top: 20px;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.3);
+  background: $alternative-dark-ui-background;
   border-radius: 4px;
 
   p {
+    @include terminal-text;
     margin: 0 0 10px 0;
-    color: #0f0;
   }
 
   .speed-buttons {
@@ -38,21 +48,21 @@
     gap: 5px;
 
     button {
+      @include terminal-text;
       width: 40px;
       height: 40px;
-      background: rgba(0, 255, 0, 0.1);
-      border: 1px solid #0f0;
-      color: #0f0;
+      background: $dark-ui-background;
+      border: 1px solid $dark-ui-color;
       border-radius: 4px;
       cursor: pointer;
 
       &:hover {
-        background: rgba(0, 255, 0, 0.2);
+        background: $dark-ui-background-hover;
       }
 
       &.active {
-        background: rgba(0, 255, 0, 0.3);
-        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        background: $dark-ui-background-hover;
+        box-shadow: 0 0 10px rgba($dark-ui-color, 0.5);
       }
     }
   }
