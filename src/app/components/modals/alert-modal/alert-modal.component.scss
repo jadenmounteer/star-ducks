@@ -1,0 +1,10 @@
+@import "../../../style-library/main.scss";
+
+.modal-body {
+  @extend .dark-ui-popup;
+
+  p {
+    @include copy-text;
+    text-align: center;
+  }
+}

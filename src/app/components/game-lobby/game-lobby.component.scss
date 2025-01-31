@@ -1,21 +1,22 @@
+@import "../../style-library/main.scss";
+
 .player-list {
+  @extend .dark-ui-popup;
   margin: 20px 0;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 
   h2 {
-    margin-top: 0;
+    @include title-small;
     margin-bottom: 15px;
   }
 }
 
 .player-item {
+  @include copy-text;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $alternative-dark-ui-outline;
 
   &:last-child {
     border-bottom: none;
@@ -23,14 +24,15 @@
 }
 
 .player-status {
+  @include copy-text;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 0.9em;
-  background-color: #ff4444;
-  color: white;
+  background-color: $dark-ui-background;
 
   &.online {
-    background-color: #00c851;
+    background-color: rgba($dark-ui-color, 0.3);
+    color: $dark-ui-color;
   }
 }
 
@@ -41,56 +43,39 @@
 // ... existing styles ...
 
 .missions-section {
-  margin: 20px 0;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  @extend .dark-ui-popup;
 
   .mission-info {
     margin-top: 15px;
     padding: 15px;
-    background-color: #f5f5f5;
+    background: $alternative-dark-ui-background;
     border-radius: 4px;
 
     .mission-description {
+      @include copy-text;
       margin-bottom: 10px;
     }
 
     .mission-requirements {
+      @include copy-text;
       display: flex;
       gap: 20px;
       font-size: 0.9em;
-      color: #666;
     }
   }
 }
 
 .launch-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  @extend .dark-ui-button;
 
   &:disabled {
-    background-color: #ccc;
+    opacity: 0.5;
     cursor: not-allowed;
-  }
-
-  &:not(:disabled):hover {
-    background-color: #0056b3;
   }
 }
 
 .role-button {
-  padding: 6px 12px;
-  margin: 0 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  cursor: pointer;
+  @extend .alternative-dark-ui-button;
 
   &:disabled {
     opacity: 0.5;
@@ -98,9 +83,9 @@
   }
 
   &.selected {
-    background-color: #00c851;
-    color: white;
-    border-color: #00a541;
+    background: rgba($dark-ui-color, 0.3);
+    color: $dark-ui-color;
+    border-color: $dark-ui-color;
   }
 }
 
@@ -108,24 +93,24 @@
   margin-top: 15px;
 
   h3 {
+    @include title-small;
     margin-bottom: 10px;
-    font-size: 1em;
   }
 
   .role-status {
+    @include copy-text;
     display: inline-flex;
     align-items: center;
     margin-right: 15px;
     padding: 5px 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background: $alternative-dark-ui-background;
+    border: 1px solid $alternative-dark-ui-outline;
     border-radius: 4px;
-    font-size: 0.9em;
 
     &.filled {
-      background-color: #d4edda;
-      border-color: #c3e6cb;
-      color: #155724;
+      background: rgba($dark-ui-color, 0.2);
+      border-color: $dark-ui-color;
+      color: $dark-ui-color;
     }
 
     .status-indicator {
@@ -134,7 +119,7 @@
     }
 
     &:not(.filled) .status-indicator {
-      color: #dc3545;
+      color: $dark-ui-copy;
     }
   }
 }

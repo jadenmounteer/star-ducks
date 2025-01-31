@@ -1,0 +1,16 @@
+@import "../../style-library/main.scss";
+
+.user-menu {
+  .menu-button {
+    @extend .dark-ui-button;
+  }
+
+  .menu-content {
+    @extend .dark-ui-popup;
+
+    button {
+      @extend .alternative-dark-ui-button;
+      width: 100%;
+    }
+  }
+}
