@@ -1,7 +1,6 @@
 @import "../../style-library/main.scss";
 
 .player-list {
-  @extend .dark-ui-popup;
   margin: 20px 0;
 
   h2 {
@@ -43,8 +42,6 @@
 // ... existing styles ...
 
 .missions-section {
-  @extend .dark-ui-popup;
-
   .mission-info {
     margin-top: 15px;
     padding: 15px;
