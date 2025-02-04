@@ -2,54 +2,30 @@
 
 .modal-body {
   @extend .dark-ui-popup;
+}
 
-  h2 {
-    @include terminal-text;
-    margin-bottom: 1rem;
-    text-align: center;
+button {
+  @extend .dark-ui-button;
+  width: 100%;
+}
+
+input {
+  @include terminal-text;
+  width: 100%;
+  padding: 0.5rem;
+  background: $dark-ui-background;
+  border: 1px solid $dark-ui-color;
+  border-radius: 4px;
+  color: $dark-ui-color;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: $dark-ui-color;
+    @include title-glow($dark-ui-color);
   }
 
-  .input-group {
-    margin: 1rem 0;
-    width: 100%;
-
-    label {
-      @include copy-text;
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    input {
-      @include terminal-text;
-      width: 100%;
-      padding: 0.5rem;
-      background: $dark-ui-background;
-      border: 1px solid $dark-ui-color;
-      border-radius: 4px;
-      color: $dark-ui-color;
-
-      &:focus {
-        outline: none;
-        border-color: $dark-ui-color;
-        @include title-glow($dark-ui-color);
-      }
-
-      &::placeholder {
-        color: rgba($dark-ui-color, 0.5);
-      }
-    }
-  }
-
-  .button-group {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    width: 100%;
-
-    button {
-      @extend .dark-ui-button;
-      width: 100%;
-    }
+  &::placeholder {
+    color: rgba($dark-ui-color, 0.5);
   }
 }
