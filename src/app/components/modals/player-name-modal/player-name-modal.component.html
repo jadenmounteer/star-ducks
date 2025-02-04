@@ -1,5 +1,15 @@
 <div class="modal-body">
   <h2>Enter Your Name</h2>
-  <input [(ngModel)]="playerName" placeholder="Enter your name..." />
-  <button (click)="submit()" [disabled]="!playerName.trim()">Submit</button>
+  <input
+    class="large-text-input"
+    [(ngModel)]="playerName"
+    placeholder="Enter your name..."
+  />
+  <button
+    class="dark-ui-button submit-modal-button"
+    (click)="submit()"
+    [disabled]="!playerName.trim()"
+  >
+    Submit
+  </button>
 </div>

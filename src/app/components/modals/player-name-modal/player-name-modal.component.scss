@@ -3,29 +3,3 @@
 .modal-body {
   @extend .dark-ui-popup;
 }
-
-button {
-  @extend .dark-ui-button;
-  width: 100%;
-}
-
-input {
-  @include terminal-text;
-  width: 100%;
-  padding: 0.5rem;
-  background: $dark-ui-background;
-  border: 1px solid $dark-ui-color;
-  border-radius: 4px;
-  color: $dark-ui-color;
-  font-size: 16px;
-
-  &:focus {
-    outline: none;
-    border-color: $dark-ui-color;
-    @include title-glow($dark-ui-color);
-  }
-
-  &::placeholder {
-    color: rgba($dark-ui-color, 0.5);
-  }
-}

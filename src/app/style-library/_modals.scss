@@ -7,12 +7,12 @@
     padding: 5px;
     width: 200px;
   }
-  button {
-    margin-top: 10px;
-    padding: 5px 15px;
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+}
+
+.submit-modal-button {
+  width: 100%;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
