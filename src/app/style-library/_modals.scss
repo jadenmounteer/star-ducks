@@ -15,13 +15,22 @@
 
 // Base modal content
 .modal-content {
-  @extend .dark-ui-popup;
   position: relative;
   min-width: 300px;
   max-width: 90%;
   max-height: 90vh;
   overflow-y: auto;
   z-index: 1002;
+  background: $alternative-dark-ui-background;
+  border: 1px solid $alternative-dark-ui-outline;
+  padding: 20px;
+  border-radius: 4px;
+  color: $alternative-dark-ui-color;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 // Modal close button
