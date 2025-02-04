@@ -24,7 +24,9 @@
     right: 10px;
     z-index: 10000;
   }
+}
 
+.object-info {
   .object-preview {
     width: 128px;
     height: 128px;
@@ -35,45 +37,41 @@
     }
   }
 
-  .object-description {
-    text-wrap: wrap;
-  }
-
   .object-details {
     text-align: center;
     width: 100%;
 
     h3 {
+      @include terminal-text;
       margin: 0 0 10px 0;
-      color: $dark-ui-color;
     }
 
     p {
+      @include copy-text;
       margin: 0;
       font-size: 0.9em;
+
+      &.travel-estimate {
+        margin-top: 10px;
+      }
     }
+  }
+
+  .object-description {
+    text-wrap: wrap;
   }
 }
 
 .toggle-territories-button {
   position: absolute;
   top: 10px;
-  right: 60px; // Position it next to the close button
+  right: 60px;
   z-index: 10000;
 }
 
 .space-object-search-button {
   position: absolute;
   top: 10px;
-  right: 111px; // Position it next to the close button
+  right: 111px;
   z-index: 10000;
-}
-
-.travel-estimate {
-  color: $dark-ui-color;
-  font-family: "LCARS", sans-serif;
-  margin-top: 10px;
-  padding: 5px;
-  background: $dark-ui-background;
-  border-radius: 4px;
 }

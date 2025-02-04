@@ -29,14 +29,8 @@
   </button>
 
   @if(selectedObject) {
-  <div class="popup-container" (click)="handleContainerClick($event)">
-    <div class="object-info dark-ui-popup">
-      <button
-        class="dark-ui-popup-close-button"
-        (click)="selectedObject = null"
-      >
-        ×
-      </button>
+  <app-modal (modalClosed)="selectedObject = null">
+    <div class="object-info">
       <div class="object-preview">
         <canvas #previewCanvas class="preview-canvas"></canvas>
       </div>
@@ -58,6 +52,6 @@
         Set Course
       </button>
     </div>
-  </div>
+  </app-modal>
   }
 </div>

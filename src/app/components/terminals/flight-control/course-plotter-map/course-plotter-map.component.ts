@@ -22,6 +22,7 @@ import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
 import { DirectionalArrowService } from '../../../../services/directional-arrow/directional-arrow.service';
 import { spaceObjects } from '../../../../models/space-objects';
+import { ModalComponent } from '../../../ui-components/modal/modal.component';
 
 export const BOUNDS = {
   minX: -5000,
@@ -35,6 +36,7 @@ export const BOUNDS = {
   selector: 'app-course-plotter-map',
   templateUrl: './course-plotter-map.component.html',
   styleUrls: ['./course-plotter-map.component.scss'],
+  imports: [ModalComponent],
 })
 export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private territoryService = inject(TerritoryService);
