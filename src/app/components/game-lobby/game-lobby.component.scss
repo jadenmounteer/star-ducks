@@ -1,5 +1,30 @@
 @import "../../style-library/main.scss";
 
+.game-lobby {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h1 {
+    @include title-large;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+.entrance-code-container {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 10px;
+  background: $alternative-dark-ui-background;
+  border: 1px solid $alternative-dark-ui-outline;
+  border-radius: 4px;
+
+  span {
+    @include terminal-text;
+  }
+}
+
 .player-list {
   margin: 20px 0;
 
@@ -39,9 +64,18 @@
   background-color: #00c851;
 }
 
-// ... existing styles ...
-
 .missions-section {
+  background: $dark-ui-background;
+  border: 1px solid $dark-ui-outline;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 2rem;
+
+  h2 {
+    @include title-small;
+    margin-bottom: 1rem;
+  }
+
   .mission-info {
     margin-top: 15px;
     padding: 15px;
