@@ -1,3 +1,5 @@
+@import "../../../style-library/main.scss";
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -6,11 +8,38 @@
 .dropdown-menu {
   display: none;
   position: absolute;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 999;
+  min-width: 200px;
+  z-index: 10001;
+  margin-top: 5px;
+  right: 0;
+
+  &.show {
+    display: block;
+  }
 }
 
-.dropdown-menu.show {
+[dropdown-item] {
+  @include terminal-text;
+  padding: 10px 15px;
   display: block;
+  cursor: pointer;
+  color: $dark-ui-color;
+  border-bottom: 1px solid $alternative-dark-ui-outline;
+  text-align: left;
+  width: 100%;
+  white-space: nowrap;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: $dark-ui-background-hover;
+  }
+}
+
+[dropdown-button] {
+  @extend .dark-icon-button;
+  min-width: 44px;
+  min-height: 44px;
 }

@@ -1,19 +1,31 @@
 [dropdown-item] {
-  color: black;
+  @include terminal-text;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
   cursor: pointer;
-}
+  color: $dark-ui-color;
+  border-bottom: 1px solid $alternative-dark-ui-outline;
 
-[dropdown-item]:hover {
-  background-color: $menu-background-color-darker;
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: $dark-ui-background-hover;
+  }
 }
 
 [dropdown-button] {
-  cursor: pointer;
+  @extend .dark-icon-button;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .dropdown-menu {
-  background-color: $menu-background-color;
+  background: $alternative-dark-ui-background;
+  border: 1px solid $alternative-dark-ui-outline;
+  border-radius: 4px;
+  padding: 5px 0;
+  backdrop-filter: blur(5px);
 }
