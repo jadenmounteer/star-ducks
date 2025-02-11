@@ -20,10 +20,24 @@
   color: $alternative-dark-ui-color;
   border: 1px solid $alternative-dark-ui-outline;
   border-radius: 4px;
-  padding: 5px;
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 24px;
+  }
 
   &:hover {
     background: $alternative-dark-ui-background-hover;
+  }
+
+  &:active {
+    background: $alternative-dark-ui-background-hover;
+    transform: scale(0.95);
   }
 }
 
