@@ -14,9 +14,20 @@
   </canvas>
 
   <div class="course-plotter-map-controls">
-    <button class="space-object-search-button dark-icon-button">
-      <i class="fa fa-search"></i>
-    </button>
+    <app-dropdown #searchDropdown>
+      <button
+        dropdown-button
+        class="space-object-search-button dark-icon-button"
+        (click)="searchDropdown.toggleDropdown()"
+      >
+        <i class="fa fa-search"></i>
+      </button>
+      @for (object of spaceObjects; track object.name) {
+      <span dropdown-item (click)="selectAndCenterObject(object)">
+        {{ object.name }} ({{ object.territory }})
+      </span>
+      }
+    </app-dropdown>
 
     <button
       class="toggle-territories-button dark-icon-button"

@@ -10,6 +10,7 @@ import {
   inject,
 } from '@angular/core';
 import { SpaceObject } from '../../../../models/space-object';
+import { spaceObjects } from '../../../../models/space-objects';
 
 import { SpaceObjectService } from '../../../../services/space-object.service';
 import { CoursePlotterStarFieldService } from './stars/course-plotter-star-field.service';
@@ -21,8 +22,8 @@ import { StarshipState } from '../../../../models/starship-state';
 import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
 import { DirectionalArrowService } from '../../../../services/directional-arrow/directional-arrow.service';
-import { spaceObjects } from '../../../../models/space-objects';
 import { ModalComponent } from '../../../ui-components/modal/modal.component';
+import { DropdownComponent } from '../../../ui-components/dropdown/dropdown.component';
 
 export const BOUNDS = {
   minX: -5000,
@@ -36,7 +37,7 @@ export const BOUNDS = {
   selector: 'app-course-plotter-map',
   templateUrl: './course-plotter-map.component.html',
   styleUrls: ['./course-plotter-map.component.scss'],
-  imports: [ModalComponent],
+  imports: [ModalComponent, DropdownComponent],
 })
 export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
   private territoryService = inject(TerritoryService);
@@ -86,6 +87,9 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
 
   protected isDragging = false;
   private lastMousePos = { x: 0, y: 0 };
+
+  // Make spaceObjects available to the template
+  protected spaceObjects = spaceObjects;
 
   constructor(
     private coursePlotterStarFieldService: CoursePlotterStarFieldService,
@@ -453,5 +457,17 @@ export class CoursePlotterMapComponent implements AfterViewInit, OnDestroy {
     );
 
     return this.timeFormatService.formatTime(totalSeconds);
+  }
+
+  protected selectAndCenterObject(object: SpaceObject): void {
+    // Center the viewport on the selected object
+    this.viewport.x =
+      object.coordinates.x - this.canvasRef.nativeElement.width / 2;
+    this.viewport.y =
+      object.coordinates.y - this.canvasRef.nativeElement.height / 2;
+
+    // Select the object to show its details
+    this.selectedObject = object;
+    setTimeout(() => this.initializePreviewCanvas(), 0);
   }
 }
