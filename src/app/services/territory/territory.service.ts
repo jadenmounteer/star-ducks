@@ -7,8 +7,8 @@ import { BOUNDS } from '../../components/terminals/flight-control/course-plotter
 })
 export class TerritoryService {
   private territories: Record<TerritoryId, Territory> = {
-    federation: {
-      id: 'federation',
+    Federation: {
+      id: 'Federation',
       name: 'United Federation of Ducks',
       color: 'rgba(0, 0, 255, 0.1)',
       borderColor: 'rgba(0, 0, 255, 0.5)',
@@ -19,8 +19,8 @@ export class TerritoryService {
         maxY: 4500,
       },
     },
-    duckulon: {
-      id: 'duckulon',
+    Duckulon: {
+      id: 'Duckulon',
       name: 'Duckulon Empire',
       color: 'rgba(0, 255, 42, 0.21)',
       borderColor: 'rgba(0, 255, 42, 0.5)',
@@ -31,8 +31,8 @@ export class TerritoryService {
         maxY: 500,
       },
     },
-    dingon: {
-      id: 'dingon',
+    Dingon: {
+      id: 'Dingon',
       name: 'Dingon Confederacy',
       color: 'rgba(255, 47, 0, 0.26)',
       borderColor: 'rgba(255, 47, 0, 0.5)',
