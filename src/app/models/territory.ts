@@ -11,4 +11,4 @@ export interface Territory {
   };
 }
 
-export type TerritoryId = 'federation';
+export type TerritoryId = 'federation' | 'duckulon' | 'dingon';

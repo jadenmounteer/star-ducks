@@ -19,6 +19,30 @@ export class TerritoryService {
         maxY: 4500,
       },
     },
+    duckulon: {
+      id: 'duckulon',
+      name: 'Duckulon Empire',
+      color: 'rgba(0, 255, 42, 0.21)',
+      borderColor: 'rgba(0, 255, 42, 0.5)',
+      bounds: {
+        minX: 4500,
+        maxX: 7000,
+        minY: -3500,
+        maxY: 500,
+      },
+    },
+    dingon: {
+      id: 'dingon',
+      name: 'Dingon Confederacy',
+      color: 'rgba(255, 47, 0, 0.26)',
+      borderColor: 'rgba(255, 47, 0, 0.5)',
+      bounds: {
+        minX: 4200,
+        maxX: 7000,
+        minY: 600,
+        maxY: 4000,
+      },
+    },
   };
 
   drawTerritories(
