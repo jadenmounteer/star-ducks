@@ -14,7 +14,7 @@ export class TerritoryService {
       borderColor: 'rgba(0, 0, 255, 0.5)',
       bounds: {
         minX: -1800,
-        maxX: 2000,
+        maxX: 4000,
         minY: -2000,
         maxY: 4500,
       },

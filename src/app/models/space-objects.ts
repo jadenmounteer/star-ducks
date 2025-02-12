@@ -16,7 +16,7 @@ export const spaceObjects: SpaceObject[] = [
     id: '2',
     name: 'Dulcan',
     type: 'planet',
-    coordinates: { x: 350, y: 600 },
+    coordinates: { x: 1750, y: 1350 },
     sprite: 'assets/sprites/space-objects/dulcan.png',
     animationFrames: 2,
     size: 96,
@@ -28,7 +28,7 @@ export const spaceObjects: SpaceObject[] = [
     id: '3',
     name: 'Helios',
     type: 'star',
-    coordinates: { x: 800, y: 450 },
+    coordinates: { x: 1600, y: 450 },
     sprite: 'assets/sprites/space-objects/helios.png',
     animationFrames: 2,
     size: 192, // Bigger size for the star
