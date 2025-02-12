@@ -9,9 +9,9 @@ export class CoursePlotterStarFieldService {
   private readonly NUM_STARS = 100000; // Increased back to 100,000 stars
   private readonly BOUNDS = {
     minX: -5000,
-    maxX: 5000,
+    maxX: 10000,
     minY: -5000,
-    maxY: 5000,
+    maxY: 10000,
   };
 
   initStarField(width: number, height: number): void {
@@ -45,10 +45,10 @@ export class CoursePlotterStarFieldService {
 
       // Only draw stars that are within the viewport
       if (
-        drawX >= -10 &&
-        drawX <= width + 10 &&
-        drawY >= -10 &&
-        drawY <= height + 10
+        drawX >= -20 &&
+        drawX <= width + 20 &&
+        drawY >= -20 &&
+        drawY <= height + 20
       ) {
         // Update star's twinkle effect
         star.update(width, height);
