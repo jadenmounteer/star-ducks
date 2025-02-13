@@ -31,7 +31,7 @@ export const spaceObjects: SpaceObject[] = [
     coordinates: { x: 1600, y: 450 },
     sprite: 'assets/sprites/space-objects/helios.png',
     animationFrames: 2,
-    size: 192, // Bigger size for the star
+    size: 300, // Bigger size for the star
     description: "Earth's star.",
     territory: 'Federation',
   },
@@ -55,6 +55,18 @@ export const spaceObjects: SpaceObject[] = [
     animationFrames: 2,
     size: 30,
     description: 'Large asteroid housing a Federation research station.',
+    territory: 'Federation',
+  },
+  {
+    id: '6',
+    name: 'Duckson',
+    type: 'star',
+    coordinates: { x: 4100, y: -1950 },
+    sprite: 'assets/sprites/space-objects/helios.png',
+    animationFrames: 2,
+    size: 120,
+    description:
+      'Small star in the neutral zone between the Federation and the Duckulan Empire.',
     territory: 'Federation',
   },
   // Add more space objects...
