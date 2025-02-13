@@ -91,4 +91,18 @@ export class TerritoryService {
     );
     return (territory?.id as TerritoryId) || ('neutral' as TerritoryId);
   }
+
+  getTerritoryAtLocation(x: number, y: number): Territory | null {
+    for (const territory of Object.values(this.territories)) {
+      if (
+        x >= territory.bounds.minX &&
+        x <= territory.bounds.maxX &&
+        y >= territory.bounds.minY &&
+        y <= territory.bounds.maxY
+      ) {
+        return territory;
+      }
+    }
+    return null;
+  }
 }

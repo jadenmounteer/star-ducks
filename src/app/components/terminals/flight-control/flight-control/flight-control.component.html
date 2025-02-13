@@ -21,6 +21,12 @@
           {{ isMoving() ? "In Transit" : getLocationName(currentPosition()) }}
         </span>
       </p>
+      <p>
+        Territory:
+        <span class="data">{{
+          getCurrentTerritory()?.name || "Neutral Space"
+        }}</span>
+      </p>
       @if (isMoving()) {
       <p>
         Destination: <span class="data">{{ destinationName() }}</span>

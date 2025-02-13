@@ -15,6 +15,8 @@ import { TravelService } from '../../../../services/travel.service';
 import { TimeFormatService } from '../../../../services/time-format.service';
 import { StarshipStateService } from '../../../../services/starship-state.service';
 import { spaceObjects } from '../../../../models/space-objects';
+import { TerritoryService } from '../../../../services/territory/territory.service';
+import { Territory } from '../../../../models/territory';
 
 @Component({
   selector: 'app-flight-control',
@@ -29,6 +31,7 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private travelService = inject(TravelService);
   private timeFormatService = inject(TimeFormatService);
   protected starshipStateService = inject(StarshipStateService);
+  private territoryService = inject(TerritoryService);
 
   private positionUpdateInterval: number | null = null;
   private timeUpdateInterval: number | null = null;
@@ -118,6 +121,11 @@ export class FlightControlComponent implements OnInit, OnDestroy {
 
     return destination?.name || 'Unknown Location';
   });
+
+  protected getCurrentTerritory(): Territory | null {
+    const position = this.currentPosition();
+    return this.territoryService.getTerritoryAtLocation(position.x, position.y);
+  }
 
   public ngOnInit(): void {
     const gameSessionId = this.route.snapshot.paramMap.get('gameSessionId');
