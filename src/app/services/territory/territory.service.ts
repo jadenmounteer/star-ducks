@@ -42,6 +42,18 @@ export class TerritoryService {
         maxY: 4000,
       },
     },
+    Neutral: {
+      id: 'Neutral',
+      name: 'Neutral Zone',
+      color: 'rgba(128, 128, 128, 0.1)',
+      borderColor: 'rgba(128, 128, 128, 0.5)',
+      bounds: {
+        minX: 0,
+        maxX: 0,
+        minY: 0,
+        maxY: 0,
+      },
+    },
   };
 
   drawTerritories(

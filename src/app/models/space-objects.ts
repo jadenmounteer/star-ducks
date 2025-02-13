@@ -53,7 +53,7 @@ export const spaceObjects: SpaceObject[] = [
     coordinates: { x: 3900, y: -1800 },
     sprite: 'assets/sprites/space-objects/hathor.png',
     animationFrames: 2,
-    size: 30,
+    size: 40,
     description: 'Large asteroid housing a Federation research station.',
     territory: 'Federation',
   },
@@ -67,7 +67,7 @@ export const spaceObjects: SpaceObject[] = [
     size: 120,
     description:
       'Small star in the neutral zone between the Federation and the Duckulan Empire.',
-    territory: 'Federation',
+    territory: 'Neutral',
   },
   // Add more space objects...
 ];
