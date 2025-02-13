@@ -46,5 +46,16 @@ export const spaceObjects: SpaceObject[] = [
     description: 'Home planet of the Duckulans',
     territory: 'Duckulan',
   },
+  {
+    id: '5',
+    name: 'Hathor',
+    type: 'asteroid',
+    coordinates: { x: 3900, y: -1800 },
+    sprite: 'assets/sprites/space-objects/hathor.png',
+    animationFrames: 2,
+    size: 30,
+    description: 'Large asteroid housing a Federation research station.',
+    territory: 'Federation',
+  },
   // Add more space objects...
 ];
