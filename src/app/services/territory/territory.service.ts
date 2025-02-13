@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { TerritoryId, Territory } from '../../models/territory';
-import { BOUNDS } from '../../components/terminals/flight-control/course-plotter-map/course-plotter-map.component';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +18,9 @@ export class TerritoryService {
         maxY: 4500,
       },
     },
-    Duckulon: {
-      id: 'Duckulon',
-      name: 'Duckulon Empire',
+    Duckulan: {
+      id: 'Duckulan',
+      name: 'Duckulan Star Empire',
       color: 'rgba(0, 255, 42, 0.21)',
       borderColor: 'rgba(0, 255, 42, 0.5)',
       bounds: {

@@ -35,5 +35,16 @@ export const spaceObjects: SpaceObject[] = [
     description: "Earth's star.",
     territory: 'Federation',
   },
+  {
+    id: '4',
+    name: 'Duckulus',
+    type: 'planet',
+    coordinates: { x: 5000, y: -3350 },
+    sprite: 'assets/sprites/space-objects/duckulus.png',
+    animationFrames: 2,
+    size: 70,
+    description: 'Home planet of the Duckulans',
+    territory: 'Duckulan',
+  },
   // Add more space objects...
 ];
