@@ -122,9 +122,29 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     return destination?.name || 'Unknown Location';
   });
 
-  protected getCurrentTerritory(): Territory | null {
+  protected getCurrentTerritory(): Territory {
     const position = this.currentPosition();
-    return this.territoryService.getTerritoryAtLocation(position.x, position.y);
+    const territory = this.territoryService.getTerritoryAtLocation(
+      position.x,
+      position.y
+    );
+
+    if (!territory) {
+      return {
+        id: 'neutral',
+        name: 'Neutral Zone',
+        color: 'rgba(128, 128, 128, 0.1)',
+        borderColor: 'rgba(128, 128, 128, 0.5)',
+        bounds: {
+          minX: 0,
+          maxX: 0,
+          minY: 0,
+          maxY: 0,
+        },
+      };
+    }
+
+    return territory;
   }
 
   public ngOnInit(): void {
