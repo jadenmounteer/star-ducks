@@ -1,1 +1,32 @@
-<p>operations works!</p>
+<div class="operations-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Energy Level</th>
+        <th>Terminal</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        @for(system of systems; track system.name) {
+        <td>{{ system.name }}</td>
+        <td>{{ system.status }}</td>
+        <td>{{ system.powerUsage }}%</td>
+        <td>{{ system.terminal }}</td>
+        <td>
+          <button (click)="allocatePower(system.name, system.powerUsage + 10)">
+            Edit
+          </button>
+        </td>
+
+        }
+      </tr>
+    </tbody>
+  </table>
+  <div class="power-display">
+    <p>Ship's Power: {{ availablePower }}% unused</p>
+  </div>
+</div>
