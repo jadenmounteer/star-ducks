@@ -1,12 +1,12 @@
 <div class="modal-body">
-  <h2 class="modal-title">Enter Your Name</h2>
+  <h2 class="modal-title title-text">Enter Your Name</h2>
   <input
-    class="large-text-input large-modal-input"
+    class="large-text-input terminal-text large-modal-input"
     [(ngModel)]="playerName"
     placeholder="Enter your name..."
   />
   <button
-    class="dark-ui-button submit-modal-button"
+    class="dark-ui-button terminal-text submit-modal-button"
     (click)="submit()"
     [disabled]="!playerName.trim()"
   >

@@ -1,12 +1,12 @@
 <div class="game-lobby">
-  <h1>Mission Launch</h1>
+  <h1 class="title-large lobby-title">Mission Launch</h1>
 
   <div class="entrance-code-container">
-    <span>Entrance Code: {{ entranceCode() }}</span>
+    <span class="terminal-text">Entrance Code: {{ entranceCode() }}</span>
   </div>
 
   <div class="missions-section">
-    <h2>Select a mission</h2>
+    <h2 class="title-small">Select a mission</h2>
     <app-dropdown #dropdown>
       <button dropdown-button (click)="dropdown.toggleDropdown()">
         {{ selectedMission().name }}
@@ -19,8 +19,10 @@
     </app-dropdown>
 
     <div class="mission-info">
-      <p class="mission-description">{{ selectedMission().description }}</p>
-      <div class="mission-requirements">
+      <p class="mission-description copy-medium">
+        {{ selectedMission().description }}
+      </p>
+      <div class="mission-requirements copy-medium">
         <span
           >Players: {{ selectedMission().minimumPlayers }} -
           {{ selectedMission().maximumPlayers }}</span
@@ -29,9 +31,12 @@
       </div>
       <!-- Add required roles section -->
       <div class="required-roles">
-        <h3>Required Roles:</h3>
+        <h3 class="title-small">Required Roles:</h3>
         @for (role of selectedMission().availableRoles; track role) {
-        <span class="role-status" [class.filled]="isRoleFilled(role)">
+        <span
+          class="role-status copy-medium"
+          [class.filled]="isRoleFilled(role)"
+        >
           {{ role }}
           <span class="status-indicator">{{
             isRoleFilled(role) ? "✓" : "×"
@@ -45,10 +50,13 @@
   <div class="player-list">
     <h2>Crew Members</h2>
     @for (player of players(); track player.playerId) {
-    <div class="player-item">
+    <div class="player-item copy-medium">
       <div class="player-info">
         <span class="player-name">{{ player.playerName }}</span>
-        <span class="player-status" [class.online]="player.isOnline">
+        <span
+          class="player-status copy-medium"
+          [class.online]="player.isOnline"
+        >
           {{ player.isOnline ? "Online" : "Offline" }}
         </span>
       </div>

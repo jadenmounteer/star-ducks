@@ -1,5 +1,5 @@
 <div class="flight-control-container">
-  <button (click)="showMap()" class="alternative-dark-ui-button">
+  <button (click)="showMap()" class="alternative-dark-ui-button copy-mono">
     Open Course Plotter
   </button>
 
@@ -15,29 +15,29 @@
 
   <div class="status-display">
     <div class="location-info">
-      <p>
+      <p class="terminal-text">
         Current Location:
-        <span class="data">
+        <span class="data copy-mono">
           {{ isMoving() ? "In Transit" : getLocationName(currentPosition()) }}
         </span>
       </p>
-      <p>
+      <p class="terminal-text">
         Territory:
         <span class="data">{{
           getCurrentTerritory()?.name || "Neutral Space"
         }}</span>
       </p>
       @if (isMoving()) {
-      <p>
+      <p class="terminal-text">
         Destination: <span class="data">{{ destinationName() }}</span>
       </p>
-      <p>
+      <p class="terminal-text">
         Time to destination:
         <span class="data">{{
           starshipStateService.formattedRemainingTime()
         }}</span>
       </p>
-      <p>
+      <p class="terminal-text">
         Current speed: <span class="data">Warp {{ currentSpeed() }}</span>
       </p>
       }
@@ -45,12 +45,13 @@
   </div>
 
   <div class="speed-controls">
-    <p>Warp Speed Control:</p>
+    <p class="terminal-text">Warp Speed Control:</p>
     <div class="speed-buttons">
       @for (speed of [1,2,3,4,5,6,7,8,9]; track speed) {
       <button
         [class.active]="currentSpeed() === speed"
         (click)="updateSpeed(speed)"
+        class="terminal-text"
       >
         {{ speed }}
       </button>

@@ -60,12 +60,7 @@
   text-align: center;
 
   h2 {
-    @include title-small;
     margin-bottom: 1.5rem;
-  }
-
-  p {
-    @include copy-text;
   }
 }
 

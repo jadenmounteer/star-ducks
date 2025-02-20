@@ -22,6 +22,7 @@
       >
         <i class="fa fa-search"></i>
       </button>
+
       @for (object of spaceObjects; track object.name) {
       <span dropdown-item (click)="selectAndCenterObject(object)">
         {{ object.name }} ({{ object.territory }})
@@ -48,10 +49,14 @@
         <canvas #previewCanvas class="preview-canvas"></canvas>
       </div>
       <div class="object-details">
-        <h3>{{ selectedObject.name }}</h3>
-        <p class="object-description">{{ selectedObject.description }}</p>
-        <h3>{{ selectedObject.territory }} {{ selectedObject.type }}</h3>
-        <p class="travel-estimate">
+        <h3 class="terminal-text">{{ selectedObject.name }}</h3>
+        <p class="object-description copy-large">
+          {{ selectedObject.description }}
+        </p>
+        <h3 class="terminal-text">
+          {{ selectedObject.territory }} {{ selectedObject.type }}
+        </h3>
+        <p class="travel-estimate copy-large">
           Estimated travel time:
           {{ getFormattedTravelTime(selectedObject) }} seconds at Warp
           {{ currentState?.speed }}
@@ -59,7 +64,7 @@
       </div>
 
       <button
-        class="dark-ui-button submit-modal-button"
+        class="dark-ui-button terminal-text submit-modal-button"
         (click)="setDestinationCourse(); selectedObject = null"
       >
         Set Course

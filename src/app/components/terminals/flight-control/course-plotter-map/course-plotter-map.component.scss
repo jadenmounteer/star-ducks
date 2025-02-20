@@ -37,12 +37,10 @@
     width: 100%;
 
     h3 {
-      @include terminal-text;
       margin: 0 0 10px 0;
     }
 
     p {
-      @include copy-text;
       margin: 0;
       font-size: 0.9em;
 

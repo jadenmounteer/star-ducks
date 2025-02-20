@@ -11,12 +11,10 @@
 .status-display {
   .location-info {
     p {
-      @include terminal-text;
       margin: 5px 0;
 
       // Make dynamic data orange
       span.data {
-        @include copy-mono;
         margin-left: 5px;
       }
     }
@@ -30,7 +28,6 @@
   border-radius: 4px;
 
   p {
-    @include terminal-text;
     margin: 0 0 10px 0;
   }
 
@@ -39,7 +36,6 @@
     gap: 5px;
 
     button {
-      @include terminal-text;
       width: 40px;
       height: 40px;
       background: $dark-ui-background;

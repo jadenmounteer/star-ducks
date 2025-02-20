@@ -4,12 +4,11 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+}
 
-  h1 {
-    @include title-large;
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+.lobby-title {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .entrance-code-container {
@@ -19,23 +18,17 @@
   background: $alternative-dark-ui-background;
   border: 1px solid $alternative-dark-ui-outline;
   border-radius: 4px;
-
-  span {
-    @include terminal-text;
-  }
 }
 
 .player-list {
   margin: 20px 0;
 
   h2 {
-    @include title-small;
     margin-bottom: 15px;
   }
 }
 
 .player-item {
-  @include copy-text;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -48,7 +41,6 @@
 }
 
 .player-status {
-  @include copy-text;
   padding: 4px 8px;
   border-radius: 12px;
   font-size: 0.9em;
@@ -72,7 +64,6 @@
   margin-bottom: 2rem;
 
   h2 {
-    @include title-small;
     margin-bottom: 1rem;
   }
 
@@ -83,12 +74,10 @@
     border-radius: 4px;
 
     .mission-description {
-      @include copy-text;
       margin-bottom: 10px;
     }
 
     .mission-requirements {
-      @include copy-text;
       display: flex;
       gap: 20px;
       font-size: 0.9em;
@@ -124,12 +113,10 @@
   margin-top: 15px;
 
   h3 {
-    @include title-small;
     margin-bottom: 10px;
   }
 
   .role-status {
-    @include copy-text;
     display: inline-flex;
     align-items: center;
     margin-right: 15px;

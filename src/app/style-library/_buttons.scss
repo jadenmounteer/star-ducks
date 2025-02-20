@@ -7,8 +7,6 @@
   cursor: pointer;
   margin-top: 10px;
 
-  @include terminal-text;
-
   &:hover {
     background: rgba(0, 255, 0, 0.4);
   }
@@ -50,7 +48,6 @@
   cursor: pointer;
   margin-top: 10px;
 
-  @include copy-mono;
   font-weight: 600;
 
   &:hover {

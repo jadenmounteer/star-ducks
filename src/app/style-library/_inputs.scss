@@ -1,5 +1,4 @@
 .large-text-input {
-  @include terminal-text;
   width: 100%;
   padding: 0.5rem;
   background: $dark-ui-background;
@@ -11,7 +10,6 @@
   &:focus {
     outline: none;
     border-color: $dark-ui-color;
-    @include title-glow($dark-ui-color);
   }
 
   &::placeholder {

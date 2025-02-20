@@ -1,14 +1,12 @@
 @import "../../style-library/main.scss";
 
 h1 {
-  @include title-large;
   @include title-glow;
   text-align: center;
   margin-bottom: 2rem;
 }
 
 span {
-  @include copy-text;
   display: block;
   text-align: center;
   margin-bottom: 2rem;
