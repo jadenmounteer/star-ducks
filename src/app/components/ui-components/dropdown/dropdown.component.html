@@ -1,6 +1,11 @@
 <div class="dropdown" [class.show]="isOpen">
   <ng-content select="[dropdown-button]"></ng-content>
   <div class="dropdown-menu" [class.show]="isOpen">
-    <ng-content select="[dropdown-item] "></ng-content>
+    <div
+      (click)="selectItem($any($event.target).textContent.trim())"
+      #dropdownContent
+    >
+      <ng-content select="[dropdown-item]"></ng-content>
+    </div>
   </div>
 </div>
