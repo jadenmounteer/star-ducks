@@ -12,6 +12,20 @@ $font-family-copy: "Rajdhani", "JetBrains Mono", sans-serif;
   color: $dark-ui-color;
 }
 
+@mixin terminal-font {
+  font-family: $font-family-mono;
+  color: $dark-ui-color; // Keep the space green for terminal text
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+}
+
+@mixin copy-text {
+  font-family: $font-family-copy;
+  color: $dark-ui-copy;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+
 // Title size variations
 .title-large {
   @include title-text;
@@ -40,14 +54,6 @@ $font-family-copy: "Rajdhani", "JetBrains Mono", sans-serif;
     0 0 25px rgba($color, 0.2);
 }
 
-// Copy text mixins
-@mixin copy-text {
-  font-family: $font-family-copy;
-  color: $dark-ui-copy;
-  letter-spacing: 0.02em;
-  line-height: 1.5;
-}
-
 .copy-large {
   @include copy-text;
   font-size: 1.125rem; // 18px
@@ -72,8 +78,8 @@ $font-family-copy: "Rajdhani", "JetBrains Mono", sans-serif;
 
 // Terminal text specific mixin
 .terminal-text {
-  font-family: $font-family-mono;
-  color: $dark-ui-color; // Keep the space green for terminal text
-  letter-spacing: 0.05em;
-  line-height: 1.2;
+  @include terminal-font;
 }
+
+$terminal-font: "JetBrains Mono", "Space Mono", monospace;
+$copy-font: "Rajdhani", "JetBrains Mono", sans-serif;

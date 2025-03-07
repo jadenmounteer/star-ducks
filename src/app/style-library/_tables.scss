@@ -1,0 +1,50 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $alternative-dark-ui-background;
+  border: 1px solid $dark-ui-outline;
+  backdrop-filter: blur(5px);
+}
+
+thead {
+  background: rgba($dark-ui-color, 0.1);
+  border-bottom: 2px solid $dark-ui-outline;
+
+  th {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 1.1em;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    @include terminal-font;
+  }
+}
+
+tbody {
+  tr {
+    border-bottom: 1px solid $alternative-dark-ui-outline;
+
+    &:hover {
+      background: $dark-ui-background;
+    }
+  }
+
+  td {
+    padding: 10px 15px;
+    @include copy-text;
+
+    button {
+      @extend .dark-icon-button;
+      min-width: 80px;
+      padding: 8px 12px;
+    }
+  }
+}
+
+.table-container {
+  margin: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba($dark-ui-color, 0.1);
+}
