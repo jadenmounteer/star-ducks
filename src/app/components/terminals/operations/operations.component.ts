@@ -5,11 +5,11 @@ import {
   DataTableComponent,
   TableColumn,
 } from '../../ui-components/data-table/data-table.component';
-
+import { PowerIndicatorComponent } from '../../ui-components/power-indicator/power-indicator.component';
 @Component({
   selector: 'app-operations',
   standalone: true,
-  imports: [DataTableComponent],
+  imports: [DataTableComponent, PowerIndicatorComponent],
   templateUrl: './operations.component.html',
   styleUrl: './operations.component.scss',
 })

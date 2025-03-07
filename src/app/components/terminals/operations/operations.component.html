@@ -18,7 +18,7 @@
     <button class="edit-button">Edit</button>
   </ng-template>
 
-  <div table-footer class="power-display">
-    <span>Ship's Power: {{ availablePower }}% unused</span>
+  <div power-indicator class="power-indicator-container">
+    <app-power-indicator [powerLevel]="availablePower"></app-power-indicator>
   </div>
 </app-data-table>

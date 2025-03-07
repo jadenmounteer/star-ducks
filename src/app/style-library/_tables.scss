@@ -4,12 +4,17 @@
   background: $alternative-dark-ui-background;
   border: 1px solid $dark-ui-outline;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 40px); // Account for margins
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "header header"
+    "table indicator"
+    "footer indicator";
+  max-height: calc(100vh - 40px);
 }
 
 .table-header {
+  grid-area: header;
   padding: 15px;
   border-bottom: 1px solid $dark-ui-outline;
   flex-shrink: 0; // Prevent header from shrinking
@@ -39,6 +44,7 @@
 }
 
 table {
+  grid-area: table;
   width: 100%;
   border-collapse: collapse;
   flex: 1;
@@ -135,7 +141,18 @@ td {
 }
 
 .table-footer {
+  grid-area: footer;
   padding: 15px;
   border-top: 1px solid $dark-ui-outline;
   flex-shrink: 0;
+}
+
+.power-indicator-container {
+  grid-area: indicator;
+  border-left: 1px solid $dark-ui-outline;
+  background: rgba($dark-ui-color, 0.05);
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

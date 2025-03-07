@@ -60,6 +60,8 @@ export interface TableColumn {
         </tbody>
       </table>
 
+      <ng-content select="[power-indicator]"></ng-content>
+
       @if(showFooter) {
       <div class="table-footer">
         <ng-content select="[table-footer]"></ng-content>
