@@ -1,50 +1,113 @@
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: $alternative-dark-ui-background;
-  border: 1px solid $dark-ui-outline;
-  backdrop-filter: blur(5px);
-}
-
-thead {
-  background: rgba($dark-ui-color, 0.1);
-  border-bottom: 2px solid $dark-ui-outline;
-
-  th {
-    padding: 12px 15px;
-    text-align: left;
-    font-size: 1.1em;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    @include terminal-font;
-  }
-}
-
-tbody {
-  tr {
-    border-bottom: 1px solid $alternative-dark-ui-outline;
-
-    &:hover {
-      background: $dark-ui-background;
-    }
-  }
-
-  td {
-    padding: 10px 15px;
-    @include copy-text;
-
-    button {
-      @extend .dark-icon-button;
-      min-width: 80px;
-      padding: 8px 12px;
-    }
-  }
-}
-
 .table-container {
   margin: 20px;
   border-radius: 4px;
+  background: $alternative-dark-ui-background;
+  border: 1px solid $dark-ui-outline;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba($dark-ui-color, 0.1);
+}
+
+.operations-header {
+  padding: 15px;
+  border-bottom: 1px solid $dark-ui-outline;
+
+  .operations-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .tab-button {
+      @extend .dark-ui-button !optional;
+      white-space: nowrap;
+
+      &.active {
+        background: $dark-ui-color;
+        color: $dark-ui-background;
+      }
+    }
+  }
+
+  .search-input {
+    @extend .dark-text-input !optional;
+    width: 100%;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+tbody tr {
+  border-bottom: 1px solid $alternative-dark-ui-outline;
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+    gap: 8px;
+
+    td {
+      display: flex;
+      align-items: center;
+
+      &::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+        @include terminal-font;
+        color: $dark-ui-color;
+        opacity: 0.7;
+      }
+
+      &[data-label="Name"] {
+        grid-column: 1;
+      }
+
+      &[data-label="Status"] {
+        grid-column: 2;
+        &.online {
+          color: #00ff00;
+        }
+      }
+
+      &[data-label="Energy Level"] {
+        grid-column: 1;
+      }
+
+      &[data-label="Terminal"] {
+        grid-column: 2;
+      }
+
+      &[data-label="Action"] {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+td {
+  padding: 10px 15px;
+  @include copy-text;
+}
+
+.edit-button {
+  @extend .dark-icon-button;
+  min-width: 80px;
+  padding: 8px 12px;
+}
+
+.power-display {
+  padding: 15px;
+  border-top: 1px solid $dark-ui-outline;
+  @include terminal-font;
+  text-align: right;
 }

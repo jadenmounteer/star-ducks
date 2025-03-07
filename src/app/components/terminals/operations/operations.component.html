@@ -1,4 +1,14 @@
-<div class="operations-container">
+<div class="table-container">
+  <div class="operations-header">
+    <div class="operations-tabs">
+      <button class="tab-button active">Ship Systems</button>
+      <button class="tab-button">Crew Members</button>
+      <button class="tab-button">Access Levels</button>
+      <button class="tab-button">Software Systems</button>
+    </div>
+    <input type="text" class="search-input" placeholder="Search" />
+  </div>
+
   <table>
     <thead>
       <tr>
@@ -10,23 +20,23 @@
       </tr>
     </thead>
     <tbody>
+      @for(system of systems; track system.name) {
       <tr>
-        @for(system of systems; track system.name) {
-        <td>{{ system.name }}</td>
-        <td>{{ system.status }}</td>
-        <td>{{ system.powerUsage }}%</td>
-        <td>{{ system.terminal }}</td>
-        <td>
-          <button (click)="allocatePower(system.name, system.powerUsage + 10)">
-            Edit
-          </button>
+        <td data-label="Name">{{ system.name }}</td>
+        <td data-label="Status" [class.online]="system.status === 'Online'">
+          {{ system.status }}
         </td>
-
-        }
+        <td data-label="Energy Level">{{ system.powerUsage }}%</td>
+        <td data-label="Terminal">{{ system.terminal }}</td>
+        <td data-label="Action">
+          <button class="edit-button">Edit</button>
+        </td>
       </tr>
+      }
     </tbody>
   </table>
+
   <div class="power-display">
-    <p>Ship's Power: {{ availablePower }}% unused</p>
+    <span>Ship's Power: {{ availablePower }}% unused</span>
   </div>
 </div>
