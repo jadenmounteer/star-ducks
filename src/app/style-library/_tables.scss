@@ -9,7 +9,7 @@
   max-height: calc(100vh - 40px); // Account for margins
 }
 
-.operations-header {
+.table-header {
   padding: 15px;
   border-bottom: 1px solid $dark-ui-outline;
   flex-shrink: 0; // Prevent header from shrinking
@@ -47,16 +47,15 @@ table {
 thead {
   background: rgba($dark-ui-color, 0.1);
   border-bottom: 2px solid $dark-ui-outline;
+  flex-shrink: 0;
 
   th {
+    @include terminal-font;
     padding: 12px 15px;
     text-align: left;
     font-size: 1.1em;
-    font-weight: normal;
     text-transform: uppercase;
     letter-spacing: 1px;
-    @include terminal-font;
-
     background: rgba(74, 158, 255, 0.1);
   }
 
@@ -138,10 +137,8 @@ td {
   padding: 8px 12px;
 }
 
-.power-display {
+.table-footer {
   padding: 15px;
   border-top: 1px solid $dark-ui-outline;
-  @include terminal-font;
-  text-align: right;
-  flex-shrink: 0; // Prevent footer from shrinking
+  flex-shrink: 0;
 }
