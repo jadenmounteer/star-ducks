@@ -15,18 +15,28 @@ import {
 })
 export class OperationsComponent implements OnInit {
   columns: TableColumn[] = [
-    { key: 'name', label: 'Name' },
+    {
+      key: 'name',
+      label: 'Name',
+      responsive: { gridColumn: '1' },
+    },
     {
       key: 'status',
       label: 'Status',
       class: (value) => (value === 'Online' ? 'online' : ''),
+      responsive: { gridColumn: '2' },
     },
     {
       key: 'powerUsage',
       label: 'Energy Level',
       format: (value) => `${value}%`,
+      responsive: { gridColumn: '1' },
     },
-    { key: 'terminal', label: 'Terminal' },
+    {
+      key: 'terminal',
+      label: 'Terminal',
+      responsive: { gridColumn: '2' },
+    },
   ];
 
   systems: ShipSystem[] = [];

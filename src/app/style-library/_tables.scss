@@ -99,28 +99,25 @@ tbody tr {
         opacity: 0.7;
       }
 
-      &[data-label="Name"] {
+      // Apply responsive styles from column config
+      &[data-responsive-column="1"] {
         grid-column: 1;
       }
 
-      &[data-label="Status"] {
-        grid-column: 2;
-        &.online {
-          color: #00ff00;
-        }
-      }
-
-      &[data-label="Energy Level"] {
-        grid-column: 1;
-      }
-
-      &[data-label="Terminal"] {
+      &[data-responsive-column="2"] {
         grid-column: 2;
       }
 
-      &[data-label="Action"] {
+      &[data-responsive-column="1 / -1"] {
         grid-column: 1 / -1;
+      }
+
+      &[data-justify="flex-end"] {
         justify-content: flex-end;
+      }
+
+      &[data-justify="center"] {
+        justify-content: center;
       }
     }
   }

@@ -5,6 +5,10 @@ export interface TableColumn {
   label: string;
   format?: (value: any) => string;
   class?: (value: any) => string;
+  responsive?: {
+    gridColumn?: '1' | '2' | '1 / -1';
+    justify?: 'flex-start' | 'flex-end' | 'center';
+  };
 }
 
 @Component({
@@ -34,6 +38,8 @@ export interface TableColumn {
             @for(column of columns; track column.key) {
             <td
               [attr.data-label]="column.label"
+              [attr.data-responsive-column]="column.responsive?.gridColumn"
+              [attr.data-justify]="column.responsive?.justify"
               [class]="column.class ? column.class(row[column.key]) : ''"
             >
               {{
