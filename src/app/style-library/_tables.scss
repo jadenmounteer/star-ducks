@@ -40,6 +40,21 @@ table {
 }
 
 thead {
+  background: rgba($dark-ui-color, 0.1);
+  border-bottom: 2px solid $dark-ui-outline;
+
+  th {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 1.1em;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    @include terminal-font;
+
+    background: rgba(74, 158, 255, 0.1);
+  }
+
   @media (max-width: 768px) {
     display: none;
   }
