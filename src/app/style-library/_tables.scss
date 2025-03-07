@@ -4,11 +4,15 @@
   background: $alternative-dark-ui-background;
   border: 1px solid $dark-ui-outline;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 40px); // Account for margins
 }
 
 .operations-header {
   padding: 15px;
   border-bottom: 1px solid $dark-ui-outline;
+  flex-shrink: 0; // Prevent header from shrinking
 
   .operations-tabs {
     display: flex;
@@ -37,6 +41,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
+  flex: 1;
 }
 
 thead {
@@ -58,6 +63,19 @@ thead {
   @media (max-width: 768px) {
     display: none;
   }
+}
+
+tbody {
+  display: block;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px); // Adjust based on header and footer height
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
 tbody tr {
@@ -125,4 +143,5 @@ td {
   border-top: 1px solid $dark-ui-outline;
   @include terminal-font;
   text-align: right;
+  flex-shrink: 0; // Prevent footer from shrinking
 }
