@@ -23,7 +23,7 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
       <div class="power-readout">
-        <span class="power-label">SHIP POWER</span>
+        <span class="power-label"> Remaining Power</span>
         <span class="power-value">{{ powerLevel }}%</span>
         <span class="power-status">{{
           powerLevel < 20 ? 'CRITICAL' : 'NOMINAL'
