@@ -1,24 +1,26 @@
-<app-data-table
-  [columns]="columns"
-  [data]="systems"
-  [showHeader]="true"
-  [showFooter]="true"
-  [showActions]="true"
->
-  <div table-header>
-    <div class="operations-tabs">
-      <button class="tab-button active">Ship Systems</button>
-      <button class="tab-button">Crew Members</button>
-      <button class="tab-button">Access Levels</button>
-      <button class="tab-button">Software Systems</button>
+<div class="operations-container">
+  <app-data-table
+    [columns]="columns"
+    [data]="systems"
+    [showHeader]="true"
+    [showFooter]="true"
+    [showActions]="true"
+  >
+    <div table-header>
+      <div class="operations-tabs">
+        <button class="tab-button active">Ship Systems</button>
+        <button class="tab-button">Crew Members</button>
+        <button class="tab-button">Access Levels</button>
+        <button class="tab-button">Software Systems</button>
+      </div>
     </div>
-  </div>
 
-  <ng-template table-actions let-system>
-    <button class="edit-button">Edit</button>
-  </ng-template>
+    <ng-template table-actions let-system>
+      <button class="edit-button">Edit</button>
+    </ng-template>
+  </app-data-table>
 
-  <div power-indicator class="power-indicator-container">
+  <div class="power-indicator-container">
     <app-power-indicator [powerLevel]="availablePower"></app-power-indicator>
   </div>
-</app-data-table>
+</div>

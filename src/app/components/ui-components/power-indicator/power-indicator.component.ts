@@ -36,9 +36,9 @@ import { CommonModule } from '@angular/common';
       .power-indicator {
         display: flex;
         gap: 20px;
-        padding: 20px;
-        height: 100%;
+        padding: 10px;
         align-items: center;
+        justify-content: center;
       }
 
       .power-tube {

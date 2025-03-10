@@ -5,11 +5,10 @@
   border: 1px solid $dark-ui-outline;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr auto;
   grid-template-areas:
-    "header header"
-    "table indicator"
-    "footer indicator";
+    "header"
+    "table"
+    "indicator";
   max-height: calc(100vh - 40px);
 }
 
@@ -145,14 +144,4 @@ td {
   padding: 15px;
   border-top: 1px solid $dark-ui-outline;
   flex-shrink: 0;
-}
-
-.power-indicator-container {
-  grid-area: indicator;
-  border-left: 1px solid $dark-ui-outline;
-  background: rgba($dark-ui-color, 0.05);
-  min-width: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
