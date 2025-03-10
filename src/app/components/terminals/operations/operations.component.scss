@@ -16,3 +16,20 @@
   justify-content: center;
   padding: 20px;
 }
+
+.operations-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  .tab-button {
+    @extend .dark-ui-button !optional;
+    white-space: nowrap;
+
+    &.active {
+      background: $alternative-dark-ui-background-hover;
+    }
+  }
+}

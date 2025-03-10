@@ -17,23 +17,6 @@
   padding: 15px;
   border-bottom: 1px solid $dark-ui-outline;
   flex-shrink: 0; // Prevent header from shrinking
-
-  .operations-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-
-    .tab-button {
-      @extend .dark-ui-button !optional;
-      white-space: nowrap;
-
-      &.active {
-        background: $alternative-dark-ui-background-hover;
-      }
-    }
-  }
 }
 
 table {
