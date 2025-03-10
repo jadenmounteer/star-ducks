@@ -8,12 +8,10 @@
   <app-data-table
     [columns]="columns"
     [data]="systems"
-    [showHeader]="true"
-    [showFooter]="true"
+    [showHeader]="false"
+    [showFooter]="false"
     [showActions]="true"
   >
-    <div table-header></div>
-
     <ng-template table-actions let-system>
       <button class="edit-button">Edit</button>
     </ng-template>
