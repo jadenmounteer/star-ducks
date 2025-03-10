@@ -34,11 +34,6 @@
       }
     }
   }
-
-  .search-input {
-    @extend .dark-text-input !optional;
-    width: 100%;
-  }
 }
 
 table {
