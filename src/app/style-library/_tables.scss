@@ -30,8 +30,7 @@
       white-space: nowrap;
 
       &.active {
-        background: $dark-ui-color;
-        color: $dark-ui-background;
+        background: $alternative-dark-ui-background-hover;
       }
     }
   }
