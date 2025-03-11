@@ -47,13 +47,13 @@
   <div class="speed-controls">
     <p class="terminal-text">Warp Speed Control:</p>
     <div class="speed-buttons">
-      @for (speed of warpSettings; track speed.speed) {
+      @for (setting of warpSettings; track setting.speed) {
       <button
-        [class.active]="currentSpeed() === speed.speed"
-        (click)="updateSpeed(speed.speed)"
+        [class.active]="currentSpeed() === setting.speed"
+        (click)="updateSpeed(setting.speed)"
         class="terminal-text"
       >
-        {{ speed }}
+        {{ setting.speed }}
       </button>
       }
     </div>
