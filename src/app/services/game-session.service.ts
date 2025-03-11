@@ -16,12 +16,14 @@ import { GameSession } from '../models/game-session';
 import { Observable } from 'rxjs';
 import { StarshipState } from '../models/starship-state';
 import { map } from 'rxjs/operators';
+import { ShipSystemsService } from './ship-systems/ship-systems.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameSessionService {
   private firestore: Firestore = inject(Firestore);
+  private shipSystemsService = inject(ShipSystemsService);
 
   constructor() {}
 
@@ -51,6 +53,7 @@ export class GameSessionService {
         currentLocation: { x: 100, y: 100 }, // Earth's coordinates
         isMoving: false,
         speed: 1,
+        systems: this.shipSystemsService.initializeSystems(),
       },
     };
     const collectionRef = collection(this.firestore, 'game-sessions');

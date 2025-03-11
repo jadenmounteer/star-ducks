@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PowerManagementService } from '../../../services/power-management.service';
-import { ShipSystem } from '../../../models/ship-system';
+import { ShipSystem, ShipSystemName } from '../../../models/ship-system';
 import {
   DataTableComponent,
   TableColumn,
@@ -53,7 +53,7 @@ export class OperationsComponent implements OnInit {
     this.availablePower = this.powerManagementService.getAvailablePower();
   }
 
-  allocatePower(systemName: string, power: number): void {
+  public allocatePower(systemName: ShipSystemName, power: number): void {
     this.powerManagementService.allocatePower(systemName, power);
     this.updateData();
   }

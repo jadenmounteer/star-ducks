@@ -2,6 +2,7 @@ import { Injectable, computed, signal } from '@angular/core';
 import { StarshipState } from '../models/starship-state';
 import { GameSessionService } from './game-session.service';
 import { TravelService } from './travel.service';
+import { ShipSystemsService } from './ship-systems/ship-systems.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class StarshipStateService {
     currentLocation: { x: 100, y: 100 },
     isMoving: false,
     speed: 1,
+    systems: this.shipSystemsService.initializeSystems(),
   });
 
   private timeUpdateInterval: number | null = null;
@@ -43,7 +45,8 @@ export class StarshipStateService {
 
   constructor(
     private gameSessionService: GameSessionService,
-    private travelService: TravelService
+    private travelService: TravelService,
+    private shipSystemsService: ShipSystemsService
   ) {
     // Start time updates when service is created
     this.startTimeUpdates();
@@ -98,11 +101,21 @@ export class StarshipStateService {
   async initializeState(gameSessionId: string): Promise<void> {
     this.currentGameSessionId = gameSessionId;
 
+    // Initialize systems first
+    const initialSystems = this.shipSystemsService.initializeSystems();
+
     // Subscribe to real-time updates
     this.gameSessionService
       .getStarshipState(gameSessionId)
       .subscribe((state) => {
         if (state) {
+          // Update ship systems if they exist in the state
+          if (state.systems) {
+            state.systems.forEach((system) => {
+              this.shipSystemsService.updateSystem(system.name, system);
+            });
+          }
+
           this.starshipState.set({
             currentLocation: state.currentLocation || { x: 100, y: 100 },
             destinationLocation: state.destinationLocation,
@@ -110,6 +123,7 @@ export class StarshipStateService {
             departureTime: state.departureTime,
             arrivalTime: state.arrivalTime,
             speed: state.speed || 1,
+            systems: this.shipSystemsService.currentSystems, // Use the systems from the service
           });
         }
       });
@@ -157,6 +171,7 @@ export class StarshipStateService {
         currentLocation: state.destinationLocation,
         isMoving: false,
         speed: state.speed,
+        systems: this.shipSystemsService.currentSystems,
       };
 
       await this.gameSessionService.updateStarshipState(
@@ -197,11 +212,12 @@ export class StarshipStateService {
         departureTime: newDepartureTime,
         arrivalTime: newDepartureTime + remainingTravelTime * 1000,
         speed,
+        systems: this.shipSystemsService.currentSystems,
       };
 
       await this.gameSessionService.updateStarshipState(
         gameSessionId,
-        newState
+        newState as StarshipState
       );
       this.starshipState.set(newState);
     } else {
@@ -209,10 +225,11 @@ export class StarshipStateService {
         currentLocation: currentState.currentLocation,
         isMoving: false,
         speed,
+        systems: this.shipSystemsService.currentSystems,
       };
       await this.gameSessionService.updateStarshipState(
         gameSessionId,
-        newState
+        newState as StarshipState
       );
       this.starshipState.set(newState);
     }
