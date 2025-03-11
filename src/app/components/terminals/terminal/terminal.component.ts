@@ -11,6 +11,10 @@ export enum TerminalName {
   MainViewer = 'Main Viewer',
   FlightControl = 'Flight Control',
   Operations = 'Operations',
+  Tactical = 'Tactical',
+  Engineering = 'Engineering',
+  Communications = 'Communications',
+  Captain = 'Captain',
 }
 
 @Component({
