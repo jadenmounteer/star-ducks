@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { ShipSystem } from '../models/ship-system';
+import { ShipSystem, ShipSystemName } from '../models/ship-system';
+import { TerminalName } from '../components/terminals/terminal/terminal.component';
 
 @Injectable({
   providedIn: 'root',
@@ -8,22 +9,16 @@ export class PowerManagementService {
   private totalPower = signal<number>(100); // Total available power
   private systems = signal<ShipSystem[]>([
     {
-      name: 'Forward Shields',
-      status: 'Online',
-      powerUsage: 0,
-      terminal: 'Tactical',
-    },
-    {
-      name: 'Engines',
+      name: ShipSystemName.Engines,
       status: 'Online',
       powerUsage: 10,
-      terminal: 'Flight Control',
+      terminal: TerminalName.FlightControl,
     },
     {
-      name: 'Life Support',
+      name: ShipSystemName.LifeSupport,
       status: 'Online',
       powerUsage: 20,
-      terminal: 'Operations',
+      terminal: TerminalName.Operations,
     },
   ]);
 

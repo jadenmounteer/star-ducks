@@ -7,6 +7,12 @@ import { MainViewerComponent } from '../main-viewer/main-viewer.component';
 import { FlightControlComponent } from '../flight-control/flight-control/flight-control.component';
 import { OperationsComponent } from '../operations/operations.component';
 
+export enum TerminalName {
+  MainViewer = 'Main Viewer',
+  FlightControl = 'Flight Control',
+  Operations = 'Operations',
+}
+
 @Component({
   selector: 'app-terminal',
   standalone: true,
@@ -21,9 +27,9 @@ import { OperationsComponent } from '../operations/operations.component';
 })
 export class TerminalComponent {
   terminals: Terminal[] = [
-    { name: 'Main Viewer', component: MainViewerComponent },
-    { name: 'Flight Control', component: FlightControlComponent },
-    { name: 'Operations', component: OperationsComponent },
+    { name: TerminalName.MainViewer, component: MainViewerComponent },
+    { name: TerminalName.FlightControl, component: FlightControlComponent },
+    { name: TerminalName.Operations, component: OperationsComponent },
   ];
 
   currentTerminalIndex = 0;
