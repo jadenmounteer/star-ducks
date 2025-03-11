@@ -3,6 +3,8 @@ import { StarshipState } from '../models/starship-state';
 import { GameSessionService } from './game-session.service';
 import { TravelService } from './travel.service';
 import { ShipSystemsService } from './ship-systems/ship-systems.service';
+import { PowerManagementService } from './power-management.service';
+import { ShipSystemName } from '../models/ship-system';
 
 @Injectable({
   providedIn: 'root',
@@ -46,7 +48,8 @@ export class StarshipStateService {
   constructor(
     private gameSessionService: GameSessionService,
     private travelService: TravelService,
-    private shipSystemsService: ShipSystemsService
+    private shipSystemsService: ShipSystemsService,
+    private powerManagementService: PowerManagementService
   ) {
     // Start time updates when service is created
     this.startTimeUpdates();
@@ -131,27 +134,46 @@ export class StarshipStateService {
 
   public async setDestination(
     gameSessionId: string,
-    destination: { x: number; y: number }
+    destination: { x: number; y: number },
+    requiredPower: number
   ): Promise<void> {
     const currentState = this.starshipState();
-    const departureTime = Date.now();
-    const travelTime = this.travelService.calculateTravelTime(
-      currentState.currentLocation,
-      destination,
-      currentState.speed || 1
+
+    this.powerManagementService.allocatePower(
+      ShipSystemName.Engines,
+      requiredPower
     );
 
-    const newState: StarshipState = {
-      ...currentState,
-      destinationLocation: destination,
-      isMoving: true,
-      departureTime,
-      arrivalTime: departureTime + travelTime * 1000, // Convert to milliseconds
-      speed: currentState.speed || 1,
-    };
+    // Only proceed if we have enough power
+    if (
+      this.shipSystemsService.getSystemByName(ShipSystemName.Engines)
+        ?.powerUsage === requiredPower
+    ) {
+      const departureTime = Date.now();
+      const travelTime = this.travelService.calculateTravelTime(
+        currentState.currentLocation,
+        destination,
+        currentState.speed
+      );
 
-    await this.gameSessionService.updateStarshipState(gameSessionId, newState);
-    this.starshipState.set(newState);
+      const newState: StarshipState = {
+        ...currentState,
+        destinationLocation: destination,
+        isMoving: true,
+        departureTime,
+        arrivalTime: departureTime + travelTime * 1000,
+        speed: currentState.speed,
+        systems: this.shipSystemsService.currentSystems,
+      };
+
+      await this.gameSessionService.updateStarshipState(
+        gameSessionId,
+        newState
+      );
+      this.starshipState.set(newState);
+    } else {
+      console.error('Not enough power available for engines');
+    }
   }
   public startPositionUpdates(gameSessionId: string): void {
     this.timeUpdateInterval = window.setInterval(async () => {
@@ -167,6 +189,8 @@ export class StarshipStateService {
   private async handleArrival(gameSessionId: string): Promise<void> {
     const state = this.starshipState();
     if (state.destinationLocation) {
+      this.powerManagementService.allocatePower(ShipSystemName.Engines, 0);
+
       const newState: StarshipState = {
         currentLocation: state.destinationLocation,
         isMoving: false,
@@ -182,45 +206,63 @@ export class StarshipStateService {
     }
   }
 
-  async updateSpeed(gameSessionId: string, newSpeed: number): Promise<void> {
+  async updateSpeed(
+    gameSessionId: string,
+    newSpeed: number,
+    requiredPower: number
+  ): Promise<void> {
     const currentState = this.starshipState();
     const speed = Math.max(1, Math.min(9, newSpeed));
 
-    if (
-      currentState.isMoving &&
-      currentState.destinationLocation &&
-      currentState.departureTime
-    ) {
-      const currentPosition = this.travelService.calculateCurrentPosition(
-        currentState.currentLocation,
-        currentState.destinationLocation,
-        currentState.departureTime,
-        currentState.speed
+    if (currentState.isMoving) {
+      // Only adjust power if ship is already moving
+      this.powerManagementService.allocatePower(
+        ShipSystemName.Engines,
+        requiredPower
       );
 
-      const remainingTravelTime = this.travelService.calculateTravelTime(
-        currentPosition,
-        currentState.destinationLocation,
-        speed
-      );
+      // Only proceed with speed change if we have enough power
+      if (
+        this.shipSystemsService.getSystemByName(ShipSystemName.Engines)
+          ?.powerUsage === requiredPower
+      ) {
+        if (currentState.destinationLocation && currentState.departureTime) {
+          const currentPosition = this.travelService.calculateCurrentPosition(
+            currentState.currentLocation,
+            currentState.destinationLocation,
+            currentState.departureTime,
+            currentState.speed
+          );
 
-      const newDepartureTime = Date.now();
-      const newState = {
-        currentLocation: currentPosition,
-        destinationLocation: currentState.destinationLocation,
-        isMoving: true,
-        departureTime: newDepartureTime,
-        arrivalTime: newDepartureTime + remainingTravelTime * 1000,
-        speed,
-        systems: this.shipSystemsService.currentSystems,
-      };
+          const remainingTravelTime = this.travelService.calculateTravelTime(
+            currentPosition,
+            currentState.destinationLocation,
+            speed
+          );
 
-      await this.gameSessionService.updateStarshipState(
-        gameSessionId,
-        newState as StarshipState
-      );
-      this.starshipState.set(newState);
+          const newDepartureTime = Date.now();
+          const newState = {
+            currentLocation: currentPosition,
+            destinationLocation: currentState.destinationLocation,
+            isMoving: true,
+            departureTime: newDepartureTime,
+            arrivalTime: newDepartureTime + remainingTravelTime * 1000,
+            speed,
+            systems: this.shipSystemsService.currentSystems,
+          };
+
+          await this.gameSessionService.updateStarshipState(
+            gameSessionId,
+            newState as StarshipState
+          );
+          this.starshipState.set(newState);
+        }
+      } else {
+        console.error('Not enough power available for requested speed');
+        return;
+      }
     } else {
+      // If not moving, just update the speed without changing power
       const newState = {
         currentLocation: currentState.currentLocation,
         isMoving: false,

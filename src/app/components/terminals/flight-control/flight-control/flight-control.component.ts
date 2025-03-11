@@ -192,7 +192,10 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     }
     await this.starshipStateService.setDestination(
       this.gameSessionId()!,
-      destination.coordinates
+      destination.coordinates,
+      this.warpSettings.find(
+        (setting) => setting.speed === this.currentSpeed()
+      )!.powerUsage
     );
   }
 
@@ -218,11 +221,15 @@ export class FlightControlComponent implements OnInit, OnDestroy {
     return 'Deep Space';
   }
 
-  protected async updateSpeed(newSpeed: number): Promise<void> {
+  protected async updateSpeed(
+    newSpeed: number,
+    requiredPower: number
+  ): Promise<void> {
     if (!this.gameSessionId()) return;
     await this.starshipStateService.updateSpeed(
       this.gameSessionId()!,
-      newSpeed
+      newSpeed,
+      requiredPower
     );
   }
 

@@ -50,7 +50,7 @@
       @for (setting of warpSettings; track setting.speed) {
       <button
         [class.active]="currentSpeed() === setting.speed"
-        (click)="updateSpeed(setting.speed)"
+        (click)="updateSpeed(setting.speed, setting.powerUsage)"
         class="terminal-text"
       >
         {{ setting.speed }}
