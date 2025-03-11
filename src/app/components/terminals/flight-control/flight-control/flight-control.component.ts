@@ -18,6 +18,11 @@ import { spaceObjects } from '../../../../models/space-objects';
 import { TerritoryService } from '../../../../services/territory/territory.service';
 import { Territory } from '../../../../models/territory';
 
+export interface WarpSetting {
+  speed: number;
+  powerUsage: number;
+}
+
 @Component({
   selector: 'app-flight-control',
   standalone: true,
@@ -38,6 +43,18 @@ export class FlightControlComponent implements OnInit, OnDestroy {
   private timeSignal = signal<number>(Date.now());
 
   protected remainingTime = this.starshipStateService.remainingTime;
+
+  protected warpSettings: WarpSetting[] = [
+    { speed: 1, powerUsage: 5 },
+    { speed: 2, powerUsage: 10 },
+    { speed: 3, powerUsage: 15 },
+    { speed: 4, powerUsage: 20 },
+    { speed: 5, powerUsage: 25 },
+    { speed: 6, powerUsage: 30 },
+    { speed: 7, powerUsage: 35 },
+    { speed: 8, powerUsage: 45 },
+    { speed: 9, powerUsage: 60 },
+  ];
 
   protected currentPosition = computed(() => {
     const state = this.starshipStateService.getStarshipState();
